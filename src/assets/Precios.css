@@ -1,0 +1,152 @@
+/* styles.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #eee;
+    color: black;
+    padding: 1px 20px;
+}
+
+.contenedor {
+    padding: 16px;
+}
+
+.titulo {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 36px;
+    
+}
+
+.filtro-item {
+    display: flex;
+    align-items: center;
+   
+     margin: 0 auto;
+}
+
+.etiqueta {
+    margin-right: 8px;
+}
+
+.seleccion, .input-fecha, .input-rango {
+    border: 1px solid hsl(240, 5.9%, 90%);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.input-rango {
+    width: 128px;
+}
+
+.flex-container {
+    display: flex;
+    gap: 16px;
+    flex-direction: row;
+}
+
+.contenedor-tarjetas {
+    width: 70%; 
+    overflow-y: auto;
+
+}
+
+.tarjeta {
+    background-color:#ffffff;
+    border: 1px solid hsl(240, 5.9%, 90%);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 150px;
+}
+
+.contenido-tarjeta {
+    display: flex;
+    align-items: center;
+  margin: 0 auto;
+    
+}
+
+.imagen-tarjeta {
+    width: 120px;
+    height: 120px;
+    border-radius: 4px;
+    margin-right: 20px;
+    object-fit: contain;
+}
+
+.info-tarjeta {
+    flex-grow: 1;
+    margin-right: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}
+
+
+.titulo-tarjeta {
+    font-weight: 600;
+    text-overflow: ellipsis; /* continuacion...*/
+   
+    overflow: hidden; /* desbordamientos off */
+}
+
+
+.descripcion-tarjeta, .id-tarjeta, .fecha-tarjeta {
+    font-size: 14px;
+    color: hsl(240, 3.8%, 46.1%);
+}
+
+.precio-tarjeta {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.acciones-tarjeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.grupo-botones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 8px;
+    border-radius: 4px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.modificar {
+    background-color:#F2AB6D;
+    color: white;
+}
+
+.eliminar {
+    background-color: hsl(0, 73%, 55%);
+}
+
+.agregar {
+    background-color:#82D9B0;
+    color: white;
+}
+
+input[type="range"] {
+    accent-color:#8086F2; /* Color del rango xd*/
+}
