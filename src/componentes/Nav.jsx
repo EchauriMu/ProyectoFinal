@@ -1,7 +1,8 @@
+// Nav.js
 import React from 'react';
 import '../assets/Nav.css';
 
-const Nav = () => {
+const Nav = ({ setActiveTab }) => {
   return (
     <nav className="nav-fondo">
       <div className="nav-contenedor">
@@ -11,18 +12,18 @@ const Nav = () => {
         </div>
 
         <div className="nav-pestañas">
-          <button className="nav-pestaña">Tab 1</button>
-          <button className="nav-pestaña">Tab 2</button>
-          <button className="nav-pestaña">Tab 3</button>
+          <button onClick={() => setActiveTab('tab1')} className="nav-pestaña">Precios</button>
+          <button onClick={() => setActiveTab('tab2')} className="nav-pestaña">Tab 2</button>
+          <button onClick={() => setActiveTab('tab3')} className="nav-pestaña">Tab 3</button>
         </div>
 
         <div className="nav-usuario">
-          <img src="https://static.vecteezy.com/system/resources/previews/007/033/146/non_2x/profile-icon-login-head-icon-vector.jpg" alt="User Photo" className="nav-foto " />
+          <img src="https://static.vecteezy.com/system/resources/previews/007/033/146/non_2x/profile-icon-login-head-icon-vector.jpg" alt="User Photo" className="nav-foto" />
           <span className="nav-nombre">Eduardo</span>
         </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Nav;
