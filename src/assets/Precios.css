@@ -1,7 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-/* styles.css */
 html, body {
     height: 100%;
     margin: 0;
@@ -24,9 +23,10 @@ html, body {
 
 .filtros {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 36px;
+    
+    justify-content: space-around;
     
 }
 
@@ -39,12 +39,14 @@ html, body {
 
 .etiqueta {
     margin-right: 8px;
-}
+    font-size: 16px;
+   }
 
 .seleccion, .input-fecha, .input-rango {
     border: 1px solid hsl(240, 5.9%, 90%);
     padding: 8px;
     border-radius: 4px;
+    font-size: 14px;
 }
 
 .input-rango {
@@ -58,7 +60,7 @@ html, body {
 }
 
 .contenedor-tarjetas {
-    width: 70%; 
+    width: 65%; 
     overflow-y: auto;
 
 }
@@ -76,7 +78,7 @@ html, body {
 .contenido-tarjeta {
     display: flex;
     align-items: center;
-  margin: 0 auto;
+ justify-content: space-around;
     
 }
 
@@ -92,8 +94,7 @@ html, body {
     flex-grow: 1;
     margin-right: 16px;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
     max-width: 60%;
 }
 
@@ -101,7 +102,7 @@ html, body {
 .titulo-tarjeta {
     font-weight: 600;
     text-overflow: ellipsis; /* continuacion...*/
-   
+    line-height: 1;
     overflow: hidden; /* desbordamientos off */
 }
 
@@ -120,6 +121,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+
 }
 
 .grupo-botones {
@@ -153,3 +155,6 @@ html, body {
 input[type="range"] {
     accent-color:#8086F2; /* Color del rango xd*/
 }
+
+/* mexicanadas xd*/
+

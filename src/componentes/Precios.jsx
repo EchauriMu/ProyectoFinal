@@ -2,6 +2,7 @@ import React from 'react';
 import '../assets/Precios.css'; 
 import '../assets/Busqueda.css';
 import '../assets/Graficas.css';
+import '../assets/Querys.css';
 
 import Graficas from './Graficas'; // Importa el componente Graficas
 
@@ -45,10 +46,11 @@ const Precios = () => {
         </div>
     
     </div>
-    <h2 class="">Precios</h2> 
+
     <div class="flex-container">
 
         <div class="contenedor-tarjetas">
+        <h2 class="titulo-grafica">Precios</h2> 
             <div class="tarjeta">
                 <div class="contenido-tarjeta">
                     <img src="https://http2.mlstatic.com/D_NQ_NP_2X_694149-MLA75587187665_042024-F.webp" alt="imagen producto" class="imagen-tarjeta"/>
@@ -88,11 +90,15 @@ const Precios = () => {
                 </div>
             </div>
         </div>
+        <div className='contenedor-graficas'>
+        <h2 class="titulo-grafica">Graficas</h2> 
+       
         <div class="graficas">
-            <h2 class="titulo-graficas">Gráficas</h2>
+           
             <p class="info-grafica">Gráfica 1</p>
             <Graficas /> 
             <p class="info-grafica">Gráfica 2</p>
+        </div>
         </div>
     </div>
 </div>

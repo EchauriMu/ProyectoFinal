@@ -1,0 +1,113 @@
+
+
+@media (max-width: 1400px) {
+    .contenedor-tarjetas, .contenedor-graficas {
+        flex: 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
+    }
+    .flex-container{
+        flex-wrap: wrap;
+    }
+    .imagen-tarjeta {
+        width: 80px;
+        height: 80px;
+        border-radius: 4px;
+        margin-right: 0px;
+        object-fit: contain;
+    }
+ 
+    
+    .contenido-tarjeta {
+        display: flex;
+        align-items: center;
+    height: auto;
+    justify-content: space-around;
+    }
+    
+  
+    
+    .info-tarjeta {
+        flex-grow: 1;
+        margin-right: 16px;
+        white-space: nowrap;
+        max-width: 40%; 
+    }
+    
+    .titulo-tarjeta {
+        font-weight: 600;
+        font-size: 18px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .descripcion-tarjeta, .id-tarjeta, .fecha-tarjeta {
+        font-size: 14px; /* Reducido*/
+        color: hsl(240, 3.8%, 46.1%);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .precio-tarjeta {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    .acciones-tarjeta {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      
+    }
+    
+    .grupo-botones {
+       flex-direction: column;
+        gap: 8px;
+       
+    }
+    
+    .btn {
+        padding: 5px; /* Reducido  */
+        border-radius: 4px;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 15px; /* Reducido */
+    }
+  .nav-contenedor  .nav-imagen {
+        width: 20px;
+        height: 20px;
+    }
+    
+      
+    .nav-contenedor .nav-titulo {
+        font-weight: 600;
+        font-size: 14px; 
+      }
+
+      .nav-contenedor .nav-pestaña {
+        width: 70px;
+        background-color: #8086F2;
+        color: white;
+        padding: 5px;
+        border-radius: 6px 16px;
+        cursor: pointer;
+        border: none;
+        font-size: 12px;
+    }
+
+    .nav-contenedor .nav-foto {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .nav-contenedor .nav-nombre {
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .navbar li a i {
+        font-size: 15px !important;
+      }
+      
+}
+
