@@ -118,7 +118,9 @@
         
     }
 
-
+.nav-usuario2{
+    display: none !important;
+}
 
 
       
@@ -128,10 +130,34 @@
     
     .nav-contenedor{
         justify-content: center !important;
+        gap: 0px 20px;
     }
     .navbar li a{
-        width: 160px !important;
+        width: 100px !important;
       }
+      .nav-logo{
+       
+        justify-content: center;
+      }
+
+
+      .nav-usuario{
+        display: none !important;
+    }
+    .nav-usuario2{
+        display: flex !important;
+        align-items: center;
+        grid-area: 0.5rem;
+       
+    }
+
+}
+
+@media (max-width: 320px) {
+    .navbar li a{
+        width: 70px !important;
+      }
+
 
 }
 

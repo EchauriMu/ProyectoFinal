@@ -31,6 +31,7 @@ const Nav = ({ setActiveTab }) => {
           />
           <span className="nav-titulo">Ecommerce</span>
         </div>
+        <div class="nav-usuario2"><img src="https://i.pinimg.com/736x/f5/df/b4/f5dfb46f188e6b30f7bf6c81798c7c44.jpg" alt="Foto de perfil" class="nav-foto"/><span class="nav-nombre">Eduardo</span></div>
 
         <div className="navbar">
           <li className="active" title="Inicio">
