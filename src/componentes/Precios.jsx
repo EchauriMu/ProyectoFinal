@@ -1,4 +1,5 @@
-import React from 'react';
+// Importaciones necesarias
+import React, { useState } from 'react';
 import '../assets/Precios.css'; 
 import '../assets/Busqueda.css';
 import '../assets/Graficas.css';
@@ -6,105 +7,124 @@ import '../assets/Querys.css';
 
 import Graficas from './Graficas'; // Importa el componente Graficas
 
-
 const Precios = () => {
+  // Datos simulados de productos
+  const [precios] = useState([
+    { 
+      id: 1, 
+      nombre: "Teléfono Samsung Galaxy M15 5G 128 GB 4 GB Azul oscuro", 
+      precio: 0.00, 
+      descripcion: "Detalles Detalles Detalles??", 
+      fecha: "2:16pm 12/09/2024" 
+    },
+    { 
+      id: 2, 
+      nombre: "Apple iPhone 13 (128 GB) - Azul medianoche", 
+      precio: 1000.00, 
+      descripcion: "Detalles: Iphone es Iphone", 
+      fecha: "2:16pm 12/09/2024" 
+    },
+    { 
+      id: 3, 
+      nombre: "Xiaomi Redmi Note 10", 
+      precio: 300.00, 
+      descripcion: "Detalles: Excelente smartphone", 
+      fecha: "2:16pm 12/09/2024" 
+    },
+    { 
+      id: 4, 
+      nombre: "Huawei P30 Lite", 
+      precio: 0.00, 
+      descripcion: "Detalles: Gran cámara y batería", 
+      fecha: "2:16pm 12/09/2024" 
+    },
+    { 
+      id: 5, 
+      nombre: "Google Pixel 5", 
+      precio: 700.00, 
+      descripcion: "Detalles: Calidad de cámara excepcional", 
+      fecha: "2:16pm 12/09/2024" 
+    }
+  ]);
+
+  const [selectedRows, setSelectedRows] = useState([]); // Estado para filas seleccionadas
+
+  const handleRowClick = (id) => {
+    setSelectedRows(prevSelectedRows => {
+      if (prevSelectedRows.includes(id)) {
+        // Si la fila ya está seleccionada, se deselecciona
+        return prevSelectedRows.filter(rowId => rowId !== id);
+      } else {
+        // Si la fila no está seleccionada, se añade
+        return [...prevSelectedRows, id];
+      }
+    });
+  };
+
   return (
-    <div class="contenedor">
-    <h1 class="titulo">Centro de búsqueda</h1>
-    <div class="filtros">
-        <div class="filtro-item">
-            <label class="etiqueta">Categoría del Producto</label>
-            <select class="seleccion">
-                <option>Opción 1</option>
-                <option>Opción 2</option>
-            </select>
-        </div>
-        <div class="filtro-item">
-            <label class="etiqueta">Ordenar Por:</label>
-            <select class="seleccion">
-                <option>Últimos</option>
-                <option>Antiguos</option>
-            </select>
-        </div>
-        <div class="filtro-item">
-            <label class="etiqueta">Fecha:</label>
-            <input type="date" class="input-fecha" />
-        </div>
-        <div class="filtro-item">
-            <label class="etiqueta">Rango de Precios</label>
-            <input type="range" class="input-rango" />
-        </div>
-        <div class="filtro-item">
-        <form action="#">
-                <div class="form-input">
-                    <input type="search" placeholder="Buscar..."/>
-                    <button class="search-btn" type="submit">   
-                        <img src="https://static-00.iconduck.com/assets.00/search-icon-2044x2048-psdrpqwp.png" alt="lupa" class="imagen-busqueda" />
-                    </button>
-                </div>
-            </form>
-        </div>
-    
-    </div>
+    <div className="contenedor">
+      <h1 className="titulo">Centro de búsqueda</h1>
 
-    <div class="flex-container">
+      {/* Filtros y contenedor principal omisos para brevedad */}
 
-        <div class="contenedor-tarjetas">
-        <h2 class="titulo-grafica">Precios</h2> 
-            <div class="tarjeta">
-                <div class="contenido-tarjeta">
-                    <img src="https://http2.mlstatic.com/D_NQ_NP_2X_694149-MLA75587187665_042024-F.webp" alt="imagen producto" class="imagen-tarjeta"/>
-                    <div class="info-tarjeta">
-                        <h2 class="titulo-tarjeta">Teléfono Samsung Galaxy M15 5G 128 GB 4 GB Azul oscuro</h2>
-                        <p class="descripcion-tarjeta">Detalles Detalles Detalles??</p>
-                        <p class="id-tarjeta">ID-Producto: 21400670</p>
-                        <p class="fecha-tarjeta">Fecha: 2:16pm 12/09/2024</p>
-                    </div>
-                    <div class="acciones-tarjeta">
-                        <p class="precio-tarjeta">$ 0.00</p>
-                        <div class="grupo-botones">
-                            <button class="btn modificar">Modificar</button>
-                            <button class="btn eliminar">Eliminar</button>
-                            <button class="btn agregar">Agregar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tarjeta">
-                <div class="contenido-tarjeta">
-                    <img src="https://http2.mlstatic.com/D_NQ_NP_2X_973345-MLA47781591382_102021-F.webp" alt="Producto" class="imagen-tarjeta" />
-                    <div class="info-tarjeta">
-                        <h2 class="titulo-tarjeta">Apple iPhone 13 (128 GB) - Azul medianoche</h2>
-                        <p class="descripcion-tarjeta">Detalles: Iphone es Iphone</p>
-                        <p class="id-tarjeta">ID-Producto: 21400641</p>
-                        <p class="fecha-tarjeta">Fecha: 2:16pm 12/09/2024</p>
-                    </div>
-                    <div class="acciones-tarjeta">
-                        <p class="precio-tarjeta">$ 0.00</p>
-                        <div class="grupo-botones">
-                            <button class="btn modificar">Modificar</button>
-                            <button class="btn eliminar">Eliminar</button>
-                            <button class="btn agregar">Agregar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div className="flex-container">
+
+        {/* Tabla de productos */}
+        <div className="precios">
+          <div className="encabezado">
+            <h3>Precios Recientes</h3>
+            <i className="bx bx-filter"></i>
+            <span className="EditarBtn">Editar</span>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre del Producto</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th className='thPrecio'><span className='SpanPrecio'>Precio</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {precios.map((producto) => (
+                <tr 
+                  key={producto.id} 
+                  onClick={() => handleRowClick(producto.id)}
+                  className={selectedRows.includes(producto.id) ? 'seleccionado' : ''}
+                >
+                  <td>
+                    <img 
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH39w-HG9z0SK5Ku7Joaj9UN6hXwpY2r-nGA&s" 
+                      alt={producto.nombre} 
+                    />
+                    <p>{producto.nombre}</p>
+                  </td>
+                  <td>{producto.descripcion}</td>
+                  <td>{producto.fecha}</td>
+                  <td className='precio-celda'>
+  <span className={producto.precio === 0 ? 'spanPrecioWarning' : 'SpanPrecio'}>
+    ${producto.precio.toFixed(2)}
+  </span>
+</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className='contenedor-graficas'>
-        <h2 class="titulo-grafica">Graficas</h2> 
-       
-        <div class="graficas">
-           
-            <p class="info-grafica">Gráfica 1</p>
-            <Graficas /> 
-            <p class="info-grafica">Gráfica 2</p>
+
+        {/* Contenedor de gráficas */}
+        <div className="contenedor-graficas">
+          <div className="graficas">
+            <h2 className="titulo-grafica">Gráficas</h2>
+            <p className="info-grafica">Gráfica 1</p>
+            <Graficas /> {/* Componente de gráficas */}
+            <p className="info-grafica">Gráfica 2</p>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
-</div>
   );
 };
 
 export default Precios;
-
-

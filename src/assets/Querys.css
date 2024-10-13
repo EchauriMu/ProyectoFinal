@@ -1,78 +1,12 @@
 
 
 @media (max-width: 1400px) {
-    .contenedor-tarjetas, .contenedor-graficas {
+    .precios, .contenedor-graficas {
         flex: 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
     }
-    .flex-container{
-        flex-wrap: wrap;
-    }
-    .imagen-tarjeta {
-        width: 80px;
-        height: 80px;
-        border-radius: 4px;
-        margin-right: 0px;
-        object-fit: contain;
-    }
- 
-    
-    .contenido-tarjeta {
-        display: flex;
-        align-items: center;
-    height: auto;
-    justify-content: space-around;
-    }
-    
-  
-    
-    .info-tarjeta {
-        flex-grow: 1;
-        margin-right: 16px;
-        white-space: nowrap;
-        max-width: 40%; 
-    }
-    
-    .titulo-tarjeta {
-        font-weight: 600;
-        font-size: 18px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .descripcion-tarjeta, .id-tarjeta, .fecha-tarjeta {
-        font-size: 14px; /* Reducido*/
-        color: hsl(240, 3.8%, 46.1%);
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .precio-tarjeta {
-        font-size: 16px;
-        font-weight: bold;
-    }
-    
-    .acciones-tarjeta {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-      
-    }
-    
-    .grupo-botones {
-       flex-direction: column;
-        gap: 8px;
-       
-    }
-    
-    .btn {
-        padding: 5px; /* Reducido  */
-        border-radius: 4px;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        font-size: 15px; /* Reducido */
-    }
+   .flex-container{
+    flex-wrap: wrap;
+   }
 
   .nav-contenedor  .nav-imagen {
         width: 20px;
@@ -114,7 +48,7 @@
     .navbar{
         margin: 20px 20px;
         flex-wrap: wrap;
-        gap: 30px;
+        gap: 0px 30px;
         
     }
 

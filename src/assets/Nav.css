@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
+    padding: 6px 16px;
     flex-wrap: wrap;
   }
   
@@ -74,16 +74,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+    gap:30px 90px;
+     margin: 10px;
   }
   
   .navbar li {
     list-style: none;
+    
   }
   
   .navbar  li a {
  
-    width: 130px;
+    width: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,7 +95,7 @@
   
   
   .navbar li a i {
-    font-size: 22px;
+    font-size: 25px;
     color: transparent;
     -webkit-text-stroke: 2px #8086F2;
     transition: 0.5s;
@@ -104,6 +106,9 @@
     color: #8086F2;
   }
   
+    .navbar  li.active a i {
+    color: #8086F2;
+  }
   .nav-usuario2{
     display: none;
 }

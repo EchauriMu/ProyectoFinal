@@ -1,19 +1,19 @@
 .graficas {
-   
-   
+  margin-top: 30px;
     background-color: hsl(0, 0%, 100%);
     border: 1px solid hsl(240, 5.9%, 90%);
     border-radius: 20px;
-    padding: 16px;
+    padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     
 }
 
 .contenedor-graficas{
-    width: 35%;
+    width: 40%;
 }
 .titulo-graficas {
     font-weight: 600;
+    margin: 0;
 }
 
 .info-grafica {

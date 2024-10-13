@@ -4,22 +4,24 @@ import '../assets/Nav.css';
 
 const Nav = ({ setActiveTab }) => {
   useEffect(() => {
-    // Seleccionamos todos los elementos li una vez que el componente está montado
-    let links = document.querySelectorAll("li");
+    const links = document.querySelectorAll(".navbar li");
+
+    const handleClick = (event) => {
+      links.forEach((item) => item.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+    };
+
     links.forEach((link) => {
-      link.addEventListener("click", () => {
-        links.forEach((item) => item.classList.remove("active"));
-        link.classList.add("active");
-      });
+      link.addEventListener("click", handleClick);
     });
-    // Cleanup: elimina los event listeners cuando el componente se desmonte
+
+    // Cleanup
     return () => {
       links.forEach((link) => {
-        link.removeEventListener("click", () => {});
+        link.removeEventListener("click", handleClick);
       });
     };
-  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
-
+  }, []);
   return (
     <nav className="nav-fondo">
       <div className="nav-contenedor">
