@@ -63,8 +63,42 @@ const Precios = () => {
 
   return (
     <div className="contenedor">
-      <h1 className="titulo">Centro de búsqueda</h1>
-
+     <h1 class="titulo">Centro de búsqueda</h1>
+    <div class="filtros">
+        <div class="filtro-item">
+            <label class="etiqueta">Categoría del Producto</label>
+            <select class="seleccion">
+                <option>Opción 1</option>
+                <option>Opción 2</option>
+            </select>
+        </div>
+        <div class="filtro-item">
+            <label class="etiqueta">Ordenar Por:</label>
+            <select class="seleccion">
+                <option>Últimos</option>
+                <option>Antiguos</option>
+            </select>
+        </div>
+        <div class="filtro-item">
+            <label class="etiqueta">Fecha:</label>
+            <input type="date" class="input-fecha" />
+        </div>
+        <div class="filtro-item">
+            <label class="etiqueta">Rango de Precios</label>
+            <input type="range" class="input-rango" />
+        </div>
+        <div class="filtro-item">
+        <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Buscar..."/>
+                    <button class="search-btn" type="submit">   
+                        <img src="https://static-00.iconduck.com/assets.00/search-icon-2044x2048-psdrpqwp.png" alt="lupa" class="imagen-busqueda" />
+                    </button>
+                </div>
+            </form>
+        </div>
+    
+    </div>
       {/* Filtros y contenedor principal omisos para brevedad */}
 
       <div className="flex-container">
@@ -72,14 +106,19 @@ const Precios = () => {
         {/* Tabla de productos */}
         <div className="precios">
           <div className="encabezado">
+          <i class="fa-solid fa-tag"></i>
             <h3>Precios Recientes</h3>
-            <i className="bx bx-filter"></i>
-            <span className="EditarBtn">Editar</span>
+           
+            <span className="EditarBtn">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                 Exportar
+            </span>
           </div>
 
           <table>
             <thead>
               <tr>
+                <th></th>
                 <th>Nombre del Producto</th>
                 <th>Descripción</th>
                 <th>Fecha</th>
@@ -94,19 +133,30 @@ const Precios = () => {
                   className={selectedRows.includes(producto.id) ? 'seleccionado' : ''}
                 >
                   <td>
-                    <img 
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH39w-HG9z0SK5Ku7Joaj9UN6hXwpY2r-nGA&s" 
+                  <img 
+                      src="https://placehold.co/50x50" 
                       alt={producto.nombre} 
                     />
+                  </td>
+                  <td className='nombre-celda'>
                     <p>{producto.nombre}</p>
                   </td>
-                  <td>{producto.descripcion}</td>
-                  <td>{producto.fecha}</td>
+                  <td className='descipcion-celda'>
+                  <p>{producto.descripcion}</p>
+                  </td>
+                  <td>
+                  <p>{producto.fecha}</p>
+                  </td>
                   <td className='precio-celda'>
+                    <div className='precio-flex'>
   <span className={producto.precio === 0 ? 'spanPrecioWarning' : 'SpanPrecio'}>
     ${producto.precio.toFixed(2)}
+
   </span>
+  <i class="fa-solid fa-pen"></i>
+  </div>
 </td>
+
                 </tr>
               ))}
             </tbody>
@@ -115,8 +165,12 @@ const Precios = () => {
 
         {/* Contenedor de gráficas */}
         <div className="contenedor-graficas">
+          
           <div className="graficas">
-            <h2 className="titulo-grafica">Gráficas</h2>
+          <div className="encabezado">
+          <i class="fa-solid fa-chart-simple"></i>
+            <h3 className="titulo-grafica">Gráficas</h3>
+            </div>
             <p className="info-grafica">Gráfica 1</p>
             <Graficas /> {/* Componente de gráficas */}
             <p className="info-grafica">Gráfica 2</p>

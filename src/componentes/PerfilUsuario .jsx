@@ -15,7 +15,7 @@ const PerfilDeUsuario = () => {
                     </div>
                     <div className="inputInfo">
                         <label htmlFor="email">Correo Electrónico:</label>
-                        <input id="email" type="text" value="admin@example.com" readOnly className="input" />
+                        <input id="email" type="text" value="Eduardo@ejemplo.com" readOnly className="input" />
                     </div>
                     <div className="inputInfo">
                         <label htmlFor="role">Rol:</label>
@@ -27,11 +27,11 @@ const PerfilDeUsuario = () => {
                     </div>
                     <div className="inputInfo">
                         <label htmlFor="registrationDate">Fecha de Registro:</label>
-                        <input id="registrationDate" type="text" value="01/01/2022" readOnly className="input" />
+                        <input id="registrationDate" type="text" value="01/01/2024" readOnly className="input" />
                     </div>
                     <div className="inputInfo">
                         <label htmlFor="lastLogin">Último Inicio de Sesión:</label>
-                        <input id="lastLogin" type="text" value="01/02/2022 10:30 AM" readOnly className="input" />
+                        <input id="lastLogin" type="text" value="01/02/2024 10:30 AM" readOnly className="input" />
                     </div>
                 </div>
             </div>

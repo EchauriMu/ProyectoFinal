@@ -15,7 +15,7 @@ const Nav = ({ setActiveTab }) => {
       link.addEventListener("click", handleClick);
     });
 
-    // Cleanup
+    // limpiar
     return () => {
       links.forEach((link) => {
         link.removeEventListener("click", handleClick);
@@ -60,11 +60,11 @@ const Nav = ({ setActiveTab }) => {
 
         <div className="nav-usuario">
           <img
-            src="https://i.pinimg.com/736x/f5/df/b4/f5dfb46f188e6b30f7bf6c81798c7c44.jpg"
+            src="https://64.media.tumblr.com/01b9b5b72a804dcb44c31bf8938fca68/c81805076c43c391-78/s540x810/d14e82cb90db3e8e81c84e48cc9bee9538f2e7f9.jpg"
             alt="Foto de perfil"
             className="nav-foto"
           />
-          <span className="nav-nombre">Eduardo</span>
+          <span className="nav-nombre">Eduardo Byte-Master</span>
         </div>
       </div>
     </nav>

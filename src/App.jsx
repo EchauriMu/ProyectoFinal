@@ -14,6 +14,7 @@ const App = () => {
         {activeTab === 'tab1' && <Precios />}
         {activeTab === 'tab2' && <PerfilUsuario />}
         {activeTab === 'tab3' && <p>Contenido para Tab 3</p>}
+        
       </div>
     </div>
   );

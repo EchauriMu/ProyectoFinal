@@ -61,7 +61,7 @@ html, body {
 
 
 .precios {
-    width: 60%; 
+    width: 55%; 
     overflow-x: auto;
     margin-top: 30px;
     background-color: hsl(0, 0%, 100%);
@@ -71,7 +71,7 @@ html, body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.precios .encabezado{
+ .encabezado{
     display: flex;
     align-items: center;
     grid-gap: 10px;
@@ -87,63 +87,79 @@ html, body {
 }
 
 .encabezado i {
-    font-size: 2.5rem;
-    cursor: pointer;
-    transition: transform 0.3s ease, color 0.3s ease;
+    font-size: 1.5rem;
 }
 
-.encabezado i:hover {
-    transform: scale(1.2);
-    color: hsl(240, 60%, 50%);
-}
 
 .encabezado .EditarBtn{
     font-size: 15px;
     padding: 6px 20px;
     color: white;
-    border-radius: 20px;
+    border-radius: 10px;
     font-weight: 700;
-    background: #6dcca0;
+    background: #4f42a7;
     cursor: pointer;
-    
     transition: transform 0.3s ease, color 0.3s ease;
 }
-
-.EditarBtn:hover {
-    transform: scale(1.1);
-   
+.EditarBtn i{
+    font-size: 1rem;
+    margin: 4px 6px 0px 0px ;
 }
+
+
 
 .precios table {
     width: 100%;
     border-collapse: collapse;
     margin: 0;
+    
 }
 
 .precios table th {
     padding-bottom: 12px;
     font-size: 14px;
-    text-align: left;
+    text-align:start;
     border-bottom: 1px solid var(--gris);
 }
 
+
 .precios table td {
-    padding: 16px 0;
+    padding: 16px 10px 16px 0px;
+    
 }
 
-.precios table tr td:first-child {
-    display: flex;
-    align-items: center;
+
+.precios .nombre-celda{
+  
     gap: 12px;
-    padding-left: 6px;
+    padding-right: 10px;
     max-width: 300px;
+
+}
+
+.nombre-celda p{
+    max-width: 200px;
+    white-space: nowrap;      /* Evita que el texto haga salto de línea */
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+}
+
+.descipcion-celda p{
+    max-width: 150px;
+    white-space: nowrap;      
+    overflow: hidden;         /* Oculta el contenido desbordado */
+    text-overflow: ellipsis;  
+
 }
 
 .precios table td img {
-    width: 36px;
-    height: 36px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 10px;
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
 .precios tbody tr {
@@ -152,32 +168,47 @@ html, body {
 }
 
 .precios tbody tr:hover {
-    background: #eee; /* Color de fondo al pasar el mouse */
+    background: #eee; 
 }
 
 .precios tbody tr.seleccionado {
-    background: #bdd7e9; /* Color de fondo al seleccionar */
+    background: #bdd7e9; 
   
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background 0.3s, transform 0.3s; 
 }
 
 .precio-celda {
     border-left: 2px solid hsl(0, 2%, 77%); 
 }
+.precio-flex{
+    display: flex;
+    align-items: center;
+}
 
+.precio-flex i{
+    color: #8086F2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-right: 15px;
+}
+
+.precio-flex i:hover{
+    transform: scale(1.3);
+}
 .thPrecio{
     border-left: 2px solid hsl(0, 2%, 77%); 
    
 }
 
 .SpanPrecio{
-    margin-left: 10px;
+    margin-left: 15px;
+    margin-right: auto;
     font-weight: bold;
 }
 
 .spanPrecioWarning{
-    margin-left: 10px;
+margin-right: auto;
+    margin-left: 15px;
     font-weight: bold;
     color: red;
 }
