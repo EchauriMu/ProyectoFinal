@@ -1,0 +1,158 @@
+/* Contenedor principal */
+.historial {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 2em;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  /* Encabezado */
+  .historial-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #ddd;
+  gap: 10px;
+  }
+  
+  .historial-header i {
+   font-size: 1.5rem; 
+  }
+  .historial-title {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-right: auto;
+    margin: 10px auto 10px 10px;
+  }
+  
+  .buscador {
+    padding: 0.5em;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .historial-header .EditarBtn{
+  font-size: 15px;
+  padding: 6px 20px 10px 20px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  background: #4f42a7;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .historial-header .EditarBtn i {
+    font-size: 1rem;
+    margin: 4px 6px 0px 0px;
+}
+  .botones-acciones .boton-filtro {
+    background-color: #2196F3;
+  }
+  
+  /* Tabla */
+  .tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tabla-historial th, .tabla-historial td {
+    padding: 1em;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .tabla-historial th {
+    color: #555;
+    font-weight: 600;
+  }
+  
+  .fila-llamada:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Estilo para el tipo de cambio de modificación */
+  .tipo-modificacion-agregado {
+    background-color: #c8f4ac;
+    font-weight: bold;
+    color: black;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: .8rem;
+  }
+  
+  .tipo-modificacion-eliminado {
+    background-color: #ff7d7d;
+    font-weight: bold;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: .8rem;
+  }
+  
+  .tipo-modificacion-editado {
+    background-color: #ecff83;
+    font-weight: bold;
+    color: black;
+    padding: 5px 18px;
+    border-radius: 15px;
+    font-size: .8rem;
+  }
+  
+  
+  /* Estilo para la información del usuario */
+  .info-usuario {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar-usuario {
+    background-color: #ddd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5em;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  /* Estilos para cada tipo de modificación */
+  .modificacion-agregado {
+    background-color: green;
+  }
+  
+  .modificacion-eliminado {
+    background-color: #fdecea;
+    color: red;
+  }
+  
+  .modificacion-editado {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  /* Popup básico */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 80%;
+  }
+  

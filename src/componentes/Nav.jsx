@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../assets/Nav.css';
 import Precios from './Precios'; // Componente para la pestaña "Lista"
 import Graficas from './Graficas'; // Componente para la pestaña "Historial"
+import Historial from './Historial';
 
 
 const Nav = () => {
@@ -14,7 +15,7 @@ const Nav = () => {
       case 'tab1':
         return <Precios />; // Componente para la pestaña "Lista"
       case 'tab2':
-        return <h2>Historial</h2>; // Componente para la pestaña "Historial"
+        return <Historial/>; // Componente para la pestaña "Historial"
       case 'tab3':
         return <h2>No se</h2>; // Otro componente para la pestaña "No se"
       default:
