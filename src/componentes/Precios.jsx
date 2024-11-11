@@ -6,7 +6,7 @@ import '../assets/Graficas.css';
 import '../assets/Querys.css';
 
 import Graficas from './Graficas'; // Importa el componente Graficas
-
+import Nav from './Nav'
 const Precios = () => {
   // Datos simulados de productos
   const [precios] = useState([
@@ -62,6 +62,7 @@ const Precios = () => {
   };
 
   return (
+
     <div className="contenedor">
      <h1 class="titulo">Centro de búsqueda</h1>
     <div class="filtros">

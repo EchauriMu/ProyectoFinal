@@ -187,7 +187,7 @@ html, body {
 }
 
 .precio-flex i{
-    color: #8086F2;
+    color: #4f42a7;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-right: 15px;
 }
