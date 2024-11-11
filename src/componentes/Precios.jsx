@@ -1,14 +1,12 @@
-// Importaciones necesarias
 import React, { useState } from 'react';
 import '../assets/Precios.css'; 
 import '../assets/Busqueda.css';
 import '../assets/Graficas.css';
 import '../assets/Querys.css';
+import PopUpPrecios from './PopUpPrecios'; // Importa el componente PopUpPrecios
+import Graficas from './Graficas';
 
-import Graficas from './Graficas'; // Importa el componente Graficas
-import Nav from './Nav'
 const Precios = () => {
-  // Datos simulados de productos
   const [precios] = useState([
     { 
       id: 1, 
@@ -47,72 +45,50 @@ const Precios = () => {
     }
   ]);
 
-  const [selectedRows, setSelectedRows] = useState([]); // Estado para filas seleccionadas
+  const [selectedRows, setSelectedRows] = useState([]); 
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
 
   const handleRowClick = (id) => {
     setSelectedRows(prevSelectedRows => {
       if (prevSelectedRows.includes(id)) {
-        // Si la fila ya está seleccionada, se deselecciona
         return prevSelectedRows.filter(rowId => rowId !== id);
       } else {
-        // Si la fila no está seleccionada, se añade
         return [...prevSelectedRows, id];
       }
     });
   };
 
+  const handleEditPriceClick = (producto) => {
+    setCurrentProduct(producto);
+    setIsPopupVisible(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
+
+  const handleSavePrice = (newPrice) => {
+    if (currentProduct) {
+      setCurrentProduct({ ...currentProduct, precio: parseFloat(newPrice) });
+      setIsPopupVisible(false);  // Cerrar el popup después de guardar
+    }
+  };
+
   return (
-
     <div className="contenedor">
-     <h1 class="titulo">Centro de búsqueda</h1>
-    <div class="filtros">
-        <div class="filtro-item">
-            <label class="etiqueta">Categoría del Producto</label>
-            <select class="seleccion">
-                <option>Opción 1</option>
-                <option>Opción 2</option>
-            </select>
-        </div>
-        <div class="filtro-item">
-            <label class="etiqueta">Ordenar Por:</label>
-            <select class="seleccion">
-                <option>Últimos</option>
-                <option>Antiguos</option>
-            </select>
-        </div>
-        <div class="filtro-item">
-            <label class="etiqueta">Fecha:</label>
-            <input type="date" class="input-fecha" />
-        </div>
-        <div class="filtro-item">
-            <label class="etiqueta">Rango de Precios</label>
-            <input type="range" class="input-rango" />
-        </div>
-        <div class="filtro-item">
-        <form action="#">
-                <div class="form-input">
-                    <input type="search" placeholder="Buscar..."/>
-                    <button class="search-btn" type="submit">   
-                        <img src="https://static-00.iconduck.com/assets.00/search-icon-2044x2048-psdrpqwp.png" alt="lupa" class="imagen-busqueda" />
-                    </button>
-                </div>
-            </form>
-        </div>
-    
-    </div>
+      <h1 className="titulo">Centro de búsqueda</h1>
+
       {/* Filtros y contenedor principal omisos para brevedad */}
-
+      
       <div className="flex-container">
-
         {/* Tabla de productos */}
         <div className="precios">
           <div className="encabezado">
-          <i class="fa-solid fa-tag"></i>
+            <i className="fa-solid fa-tag"></i>
             <h3>Precios Recientes</h3>
-           
             <span className="EditarBtn">
-            <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                 Exportar
+              <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
             </span>
           </div>
 
@@ -123,7 +99,9 @@ const Precios = () => {
                 <th>Nombre del Producto</th>
                 <th>Descripción</th>
                 <th>Fecha</th>
-                <th className='thPrecio'><span className='SpanPrecio'>Precio</span></th>
+                <th className="thPrecio">
+                  <span className="SpanPrecio">Precio</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -134,50 +112,55 @@ const Precios = () => {
                   className={selectedRows.includes(producto.id) ? 'seleccionado' : ''}
                 >
                   <td>
-                  <img 
+                    <img 
                       src="https://placehold.co/50x50" 
                       alt={producto.nombre} 
                     />
                   </td>
-                  <td className='nombre-celda'>
+                  <td className="nombre-celda">
                     <p>{producto.nombre}</p>
                   </td>
-                  <td className='descipcion-celda'>
-                  <p>{producto.descripcion}</p>
+                  <td className="descipcion-celda">
+                    <p>{producto.descripcion}</p>
                   </td>
                   <td>
-                  <p>{producto.fecha}</p>
+                    <p>{producto.fecha}</p>
                   </td>
-                  <td className='precio-celda'>
-                    <div className='precio-flex'>
-  <span className={producto.precio === 0 ? 'spanPrecioWarning' : 'SpanPrecio'}>
-    ${producto.precio.toFixed(2)}
-
-  </span>
-  <i class="fa-solid fa-pen"></i>
-  </div>
-</td>
-
+                  <td className="precio-celda">
+                    <div className="precio-flex">
+                      <span className={producto.precio === 0 ? 'spanPrecioWarning' : 'SpanPrecio'}>
+                        ${producto.precio.toFixed(2)}
+                      </span>
+                      <i className="fa-solid fa-pen" onClick={() => handleEditPriceClick(producto)}></i>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
+        
         {/* Contenedor de gráficas */}
         <div className="contenedor-graficas">
-          
           <div className="graficas">
-          <div className="encabezado">
-          <i class="fa-solid fa-chart-simple"></i>
-            <h3 className="titulo-grafica">Gráficas</h3>
+            <div className="encabezado">
+              <i className="fa-solid fa-chart-simple"></i>
+              <h3 className="titulo-grafica">Gráficas</h3>
             </div>
             <p className="info-grafica">Gráfica 1</p>
-            <Graficas /> {/* Componente de gráficas */}
+            <Graficas />
             <p className="info-grafica">Gráfica 2</p>
           </div>
         </div>
       </div>
+
+      {/* Mostrar popup si está visible */}
+      <PopUpPrecios 
+        isVisible={isPopupVisible} 
+        product={currentProduct} 
+        onClose={closePopup} 
+        onSave={handleSavePrice} 
+      />
     </div>
   );
 };
