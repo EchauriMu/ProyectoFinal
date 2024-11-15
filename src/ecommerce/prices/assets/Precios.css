@@ -21,37 +21,6 @@ html, body {
     
 }
 
-.filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    
-    justify-content: space-around;
-    
-}
-
-.filtro-item {
-    display: flex;
-    align-items: center;
-   
-    
-}
-
-.etiqueta {
-    margin-right: 8px;
-    font-size: 16px;
-   }
-
-.seleccion, .input-fecha, .input-rango {
-    border: 1px solid hsl(240, 5.9%, 90%);
-    padding: 8px;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.input-rango {
-    width: 128px;
-}
 
 .flex-container {
     display: flex;
@@ -61,7 +30,7 @@ html, body {
 
 
 .precios {
-    width: 55%; 
+    width: 60%; 
     overflow-x: auto;
     margin-top: 30px;
     background-color: hsl(0, 0%, 100%);
@@ -80,7 +49,7 @@ html, body {
 
 .precios .encabezado h3{
     margin-right: auto;
-    font-size: 1.6rem;
+    font-size: 24px;
     margin-top: 0;
     margin-bottom: 0;
     font-weight: 600;
@@ -91,7 +60,18 @@ html, body {
 }
 
 
-.encabezado .EditarBtn{
+.Exportarbtn.inactivo{
+    font-size: 15px;
+    padding: 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #e0dcff;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.Exportarbtn.activo{
     font-size: 15px;
     padding: 6px 20px;
     color: white;
@@ -101,7 +81,8 @@ html, body {
     cursor: pointer;
     transition: transform 0.3s ease, color 0.3s ease;
 }
-.EditarBtn i{
+
+.Exportarbtn i{
     font-size: 1rem;
     margin: 4px 6px 0px 0px ;
 }
@@ -116,8 +97,9 @@ html, body {
 }
 
 .precios table th {
+    font-size: 14px;
     background-color: #eee;
-    padding: 18px;
+    padding: 16px 14px 16px 6px;
     font-weight: 500;
     text-align:start;
     border-bottom: 1px solid var(--gris);
@@ -125,34 +107,13 @@ html, body {
 
 
 .precios table td {
-    padding: 4px 6px 4px 0px;
+    font-size: 14px;
+    padding: 6px 8px 6px 0px;
     border-bottom: 1px solid #ddd;
     
 }
 
 
-.precios .nombre-celda{
-  
-    gap: 12px;
-    padding-right: 10px;
-    max-width: 300px;
-
-}
-
-.nombre-celda p{
-    max-width: 200px;
-    white-space: nowrap;      /* Evita que el texto haga salto de línea */
-    overflow: hidden;         
-    text-overflow: ellipsis;  
-}
-
-.descipcion-celda p{
-    max-width: 150px;
-    white-space: nowrap;      
-    overflow: hidden;         /* Oculta el contenido desbordado */
-    text-overflow: ellipsis;  
-
-}
 
 .precios table td img {
     width: 50px;
@@ -194,25 +155,6 @@ html, body {
    
 }
 
-.SpanPrecio{
-    margin-left: 15px;
-    margin-right: auto;
-    font-weight: bold;
-}
-
-
-.SpanPrecioTitle{
-    margin-left: 5px;
-    margin-right: auto;
-    font-weight: bold;
-}
-.spanPrecioWarning{
-margin-right: auto;
-    margin-left: 15px;
-    font-weight: bold;
-    color: red;
-}
-
 
 /* Estilo del checkbox */
 .checkbox-container {
@@ -223,8 +165,8 @@ margin-right: auto;
   
   .checkbox-container input[type="checkbox"] {
     appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border: 2px solid #007bff;
     border-radius: 3px;
     background-color: #f0f0f0;
@@ -244,5 +186,64 @@ margin-right: auto;
     position: absolute;
     left: 2px;
     top: -2px;
+  }
+
+
+  .iconsActions i{
+margin: 0px 10px;
+font-size: 15px;
+}
+
+.iconsActions i:hover {
+    transform: scale(1.1); 
+  }
+
+  .precios table th:nth-child(2),
+.precios table td:nth-child(2) {
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+}
+
+.paginacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .registro-info {
+    font-weight: 500;
+    color: #333;
+    margin-right: 10px;
+  }
+  .items-por-page{
+    margin-right: 10px;
+  }
+  
+  .botones-paginacion button {
+    background-color: #4f42a7;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .botones-paginacion button:disabled {
+    background-color: #e0dcff;
+    cursor: not-allowed;
+    color: blue;
+  }
+  
+  .botones-paginacion button:hover:not(:disabled) {
+    background-color: #4f42a7;
   }
   

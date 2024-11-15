@@ -1,82 +1,121 @@
-import React, { useState } from 'react';
-import '../assets/Precios.css'; 
-import '../assets/Busqueda.css';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import '../assets/Precios.css';
 import '../assets/Graficas.css';
 import '../assets/Querys.css';
-import PopUpPrecios from './PopUpPrecios'; // Importa el componente PopUpPrecios
 import Graficas from './Graficas';
+import { fetchListasTablasGeneral } from '../../../actions/listasTablasGeneralActions';
 
 const Precios = () => {
-  const [precios] = useState([
-    { 
-      id: 1, 
-      nombre: "Teléfono Samsung Galaxy M15 5G 128 GB 4 GB Azul oscuro", 
-      precio: 0.00, 
-      descripcion: "Detalles Detalles Detalles??", 
-      fecha: "2:16pm 12/09/2024" 
-    },
-    { 
-      id: 2, 
-      nombre: "Apple iPhone 13 (128 GB) - Azul medianoche", 
-      precio: 1000.00, 
-      descripcion: "Detalles: Iphone es Iphone", 
-      fecha: "2:16pm 12/09/2024" 
-    },
-    { 
-      id: 3, 
-      nombre: "Xiaomi Redmi Note 10", 
-      precio: 300.00, 
-      descripcion: "Detalles: Excelente smartphone", 
-      fecha: "2:16pm 12/09/2024" 
-    },
-    { 
-      id: 4, 
-      nombre: "Huawei P30 Lite", 
-      precio: 0.00, 
-      descripcion: "Detalles: Gran cámara y batería", 
-      fecha: "2:16pm 12/09/2024" 
-    },
-    { 
-      id: 5, 
-      nombre: "Google Pixel 5", 
-      precio: 700.00, 
-      descripcion: "Detalles: Calidad de cámara excepcional", 
-      fecha: "2:16pm 12/09/2024" 
-    }
-  ]);
+  const dispatch = useDispatch();
+  const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Valor inicial de elementos por página
+  const [selectedItems, setSelectedItems] = useState([]); // Estado para almacenar elementos seleccionados
+  const [selectAll, setSelectAll] = useState(false); // Estado para manejar el checkbox de selección total
 
-  const handleEditPriceClick = (producto) => {
-    setCurrentProduct(producto);
-    setIsPopupVisible(true);
+  useEffect(() => {
+    dispatch(fetchListasTablasGeneral());
+  }, [dispatch]);
+
+  // Calcular el índice de inicio y fin para la paginación
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = listasTablasGeneral.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Manejar selección de un ítem
+  const handleCheckboxChange = (id) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((item) => item !== id) // Desmarcar
+        : [...prevSelected, id] // Marcar
+    );
   };
 
-  const closePopup = () => {
-    setIsPopupVisible(false);
-  };
-
-  const handleSavePrice = (newPrice) => {
-    if (currentProduct) {
-      setCurrentProduct({ ...currentProduct, precio: parseFloat(newPrice) });
-      setIsPopupVisible(false);  // Cerrar el popup después de guardar
+  // Manejar selección de todos los ítems visibles
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      // Seleccionar todos los ítems actuales
+      setSelectedItems(currentItems.map((item) => item._id));
+    } else {
+      // Deseleccionar todos
+      setSelectedItems([]);
     }
   };
+
+  // Función para cambiar el número de elementos por página
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reiniciar a la primera página cada vez que se cambia el número de elementos
+  };
+
+  // Función para cambiar de página
+  const handleNextPage = () => {
+    if (indexOfLastItem < listasTablasGeneral.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Función para exportar solo los elementos seleccionados a CSV
+  const exportToCSV = () => {
+    const selectedData = listasTablasGeneral.filter(producto => selectedItems.includes(producto._id));
+    
+    const headers = ['ID Institución', 'ID Lista', 'Nombre del Producto', 'Fecha Expira Inicio', 'Fecha Expira Fin'];
+
+    const rows = selectedData.map((producto) => [
+      producto.IdInstitutoOK,
+      producto.IdListaOK,
+      producto.IdListaBK,
+      new Date(producto.FechaExpiraIni).toLocaleDateString(),
+      new Date(producto.FechaExpiraFin).toLocaleDateString(),
+    ]);
+
+    const csvContent = [
+      headers.join(','), // Agregar las cabeceras
+      ...rows.map(row => row.join(',')), // Convertir cada fila en una cadena CSV
+    ].join('\n');
+
+    // Crear un Blob con el contenido CSV
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Crear un enlace temporal para iniciar la descarga
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'precios_seleccionados.csv'); // Nombre del archivo a descargar
+      link.click(); // Iniciar la descarga
+    }
+  };
+
+  // Verificar si hay elementos seleccionados para activar/desactivar el botón de exportación
+  const isExportButtonActive = selectedItems.length > 0;
+
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="contenedor">
       <h1 className="titulo">Centro de búsqueda</h1>
 
-      {/* Filtros y contenedor principal omisos para brevedad */}
-      
       <div className="flex-container">
         {/* Tabla de productos */}
         <div className="precios">
           <div className="encabezado">
             <i className="fa-solid fa-tag"></i>
             <h3>Precios Recientes</h3>
-            <span className="EditarBtn">
+            <span 
+              className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`} 
+              onClick={isExportButtonActive ? exportToCSV : null}
+            >
               <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
             </span>
           </div>
@@ -86,51 +125,68 @@ const Precios = () => {
               <tr>
                 <th>
                   <div className="checkbox-container">
-                    <input type="checkbox" />
+                    <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
                   </div>
                 </th>
+                <th>ID Institución</th>
+                <th>ID Lista</th>
                 <th>Nombre del Producto</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th className="thPrecio">
-                  <span className="SpanPrecioTitle">Precio</span>
-                </th>
+                <th>Fecha Expira Inicio</th>
+                <th>Fecha Expira Fin</th>
                 <th>Acción</th>
               </tr>
             </thead>
             <tbody>
-              {precios.map((producto) => (
-                <tr key={producto.id}>
+              {currentItems.map((producto) => (
+                <tr key={producto._id}>
                   <td>
                     <div className="checkbox-container">
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(producto._id)}
+                        onChange={() => handleCheckboxChange(producto._id)}
+                      />
                     </div>
                   </td>
-                  <td className="nombre-celda">
-                    <p>{producto.nombre}</p>
-                  </td>
-                  <td className="descipcion-celda">
-                    <p>{producto.descripcion}</p>
-                  </td>
-                  <td>
-                    <p>{producto.fecha}</p>
-                  </td>
-                  <td className="precio-celda">
-                    <div className="precio-flex">
-                      <span className={producto.precio === 0 ? 'spanPrecioWarning' : 'SpanPrecio'}>
-                        ${producto.precio.toFixed(2)}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <i className="fa-solid fa-pen" onClick={(e) => { e.stopPropagation(); handleEditPriceClick(producto); }}></i>
+                  <td>{producto.IdInstitutoOK}</td>
+                  <td>{producto.IdListaOK}</td>
+                  <td>{producto.IdListaBK}</td>
+                  <td>{new Date(producto.FechaExpiraIni).toLocaleDateString()}</td>
+                  <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
+                  <td className='iconsActions'>
+                    <i className="fa-solid fa-pen" style={{ color: 'blue' }}></i>
+                    <i className="fa-solid fa-trash" style={{ color: 'red' }}></i>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {/* Paginación */}
+          <div className="paginacion">
+            <div className="info-paginacion">
+              <span className="registro-info">
+                {indexOfFirstItem + 1} - {Math.min(indexOfLastItem, listasTablasGeneral.length)} de {listasTablasGeneral.length} registros
+              </span>
+              <select
+                className="items-por-page"
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
+              <span>registros por página</span>
+            </div>
+            <div className="botones-paginacion">
+              <button onClick={handlePrevPage} disabled={currentPage === 1}>Anterior</button>
+              <button onClick={handleNextPage} disabled={indexOfLastItem >= listasTablasGeneral.length}>Siguiente</button>
+            </div>
+          </div>
+
         </div>
-        
+
         {/* Contenedor de gráficas */}
         <div className="contenedor-graficas">
           <div className="graficas">
@@ -144,14 +200,6 @@ const Precios = () => {
           </div>
         </div>
       </div>
-
-      {/* Mostrar popup si está visible */}
-      <PopUpPrecios 
-        isVisible={isPopupVisible} 
-        product={currentProduct} 
-        onClose={closePopup} 
-        onSave={handleSavePrice} 
-      />
     </div>
   );
 };
