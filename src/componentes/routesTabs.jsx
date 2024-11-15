@@ -34,11 +34,11 @@ const RoutesTabs = () => {
             alt="logo"
             className="nav-imagen"
           />
-          <span className="nav-titulo">Ecommerce</span>
+          <span className="nav-titulo">Logo</span>
         </div>
     
         <NavLink to="/home" className="navbarRoutes-item" activeClassName="active">
-          <i className="fas fa-home"></i> Home
+        <i class="fa-solid fa-boxes-stacked"></i> Inventories
         </NavLink>
         <NavLink to="/orders" className="navbarRoutes-item" activeClassName="active">
           <i className="fas fa-box"></i> Orders

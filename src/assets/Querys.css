@@ -60,7 +60,7 @@
       
 }
 
-@media (max-width: 920px) {
+@media (max-width: 720px) {
     
     .nav-contenedor{
         justify-content: center !important;

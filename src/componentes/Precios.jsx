@@ -45,19 +45,8 @@ const Precios = () => {
     }
   ]);
 
-  const [selectedRows, setSelectedRows] = useState([]); 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
-
-  const handleRowClick = (id) => {
-    setSelectedRows(prevSelectedRows => {
-      if (prevSelectedRows.includes(id)) {
-        return prevSelectedRows.filter(rowId => rowId !== id);
-      } else {
-        return [...prevSelectedRows, id];
-      }
-    });
-  };
 
   const handleEditPriceClick = (producto) => {
     setCurrentProduct(producto);
@@ -95,27 +84,27 @@ const Precios = () => {
           <table>
             <thead>
               <tr>
-                <th></th>
+                <th>
+                  <div className="checkbox-container">
+                    <input type="checkbox" />
+                  </div>
+                </th>
                 <th>Nombre del Producto</th>
                 <th>Descripción</th>
                 <th>Fecha</th>
                 <th className="thPrecio">
-                  <span className="SpanPrecio">Precio</span>
+                  <span className="SpanPrecioTitle">Precio</span>
                 </th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody>
               {precios.map((producto) => (
-                <tr 
-                  key={producto.id} 
-                  onClick={() => handleRowClick(producto.id)}
-                  className={selectedRows.includes(producto.id) ? 'seleccionado' : ''}
-                >
+                <tr key={producto.id}>
                   <td>
-                    <img 
-                      src="https://placehold.co/50x50" 
-                      alt={producto.nombre} 
-                    />
+                    <div className="checkbox-container">
+                      <input type="checkbox" />
+                    </div>
                   </td>
                   <td className="nombre-celda">
                     <p>{producto.nombre}</p>
@@ -131,8 +120,10 @@ const Precios = () => {
                       <span className={producto.precio === 0 ? 'spanPrecioWarning' : 'SpanPrecio'}>
                         ${producto.precio.toFixed(2)}
                       </span>
-                      <i className="fa-solid fa-pen" onClick={() => handleEditPriceClick(producto)}></i>
                     </div>
+                  </td>
+                  <td>
+                    <i className="fa-solid fa-pen" onClick={(e) => { e.stopPropagation(); handleEditPriceClick(producto); }}></i>
                   </td>
                 </tr>
               ))}

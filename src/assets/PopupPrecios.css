@@ -93,6 +93,17 @@
   flex: 1;
 }
 
+.input-divActual{
+  color: #333;
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 1rem;
+padding-left: 30px;
+padding-right: auto;
+}
+
+
 .input-div{
   color: #333;
   border: 1.5px solid #4f42a7;
@@ -116,6 +127,7 @@ font-size: 1rem;
    border: none;   
    outline: none; 
 width: 90%;
+background: #fafafa;
 }
 
 

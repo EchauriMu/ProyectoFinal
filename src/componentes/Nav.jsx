@@ -17,7 +17,7 @@ const Nav = () => {
       case 'tab2':
         return <Historial/>; // Componente para la pestaña "Historial"
       case 'tab3':
-        return <h2>No se</h2>; // Otro componente para la pestaña "No se"
+        return <h2>Usuarios</h2>; // Otro componente para la pestaña "No se"
       default:
         return null;
     }
@@ -47,7 +47,7 @@ const Nav = () => {
               title="No se"
               onClick={() => setActiveTab('tab3')}
             >
-              <a>No se</a>
+              <a>Usuarios</a>
             </li>
           </ul>
         </div>
