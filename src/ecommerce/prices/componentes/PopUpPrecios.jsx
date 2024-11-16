@@ -11,7 +11,7 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
   const dispatch = useDispatch();
 
   // Acceso a la data desde el store usando 'precioData'
-  const { precioData, loading, error } = useSelector((state) => state.precio); // Asegúrate de que 'precio' es el nombre del slice en tu reducer
+  const { precioData, loading, error } = useSelector((state) => state.precio); //  'precio' es el nombre del slice en tu reducer
 
   // Hacer fetch cuando `product` cambia
   useEffect(() => {
@@ -140,76 +140,62 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
               {/* Precios */}
               <h4>Selecciona un nuevo precio</h4>
               <div className="button-group">
-                <div className="precio-act">
-                  <label htmlFor="costo-inicial">Costo Inicial</label>
-                  <div className="input-divActual">
-                    <span>$</span>
-                    <input
-                      type="text"
-                      id="costo-inicial"
-                      className="input-precioRec"
-                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoIni : ""}
-                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-                    />
-                  </div>
-                </div>
+              <div className="precio-act">
+  <label htmlFor="costo-inicial">Costo Inicial</label>
+  <div className="input-div">
+    <span>$</span>
+    <input
+      type="text"
+      id="costo-inicial"
+      className="input-precioRec"
+      value={precioData?.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoIni || ""}
+      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+    />
+  </div>
+</div>
 
-                <div className="precio-act">
-                  <label htmlFor="costo-final">Costo Final</label>
-                  <div className="input-divActual">
-                    <span>$</span>
-                    <input
-                      type="text"
-                      id="costo-final"
-                      className="input-precioRec"
-                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoFin : ""}
-                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-                    />
-                  </div>
-                </div>
+<div className="precio-act">
+  <label htmlFor="costo-final">Costo Final</label>
+  <div className="input-div">
+    <span>$</span>
+    <input
+      type="text"
+      id="costo-final"
+      className="input-precioRec"
+      value={precioData?.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoFin || ""}
+      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+    />
+  </div>
+</div>
 
-                <div className="precio-act">
-                  <label htmlFor="precio-actual">Precio Actual</label>
-                  <div className="input-divActual">
-                    <span>$</span>
-                    <input
-                      type="text"
-                      id="precio-actual"
-                      className="input-precioRec"
-                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.Precio : ""}
-                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-                    />
-                  </div>
-                </div>
+<div className="precio-act">
+  <label htmlFor="precio-actual">Precio Actual</label>
+  <div className="input-div">
+    <span>$</span>
+    <input
+      type="text"
+      id="precio-actual"
+      className="input-precioRec"
+      value={precioData?.find(item => item.IdPresentaOK === selectedPresentaId)?.Precio || ""}
+      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+    />
+  </div>
+</div>
 
-                <div className="precio-act">
-                  <label htmlFor="nuevo-precio">Nuevo Precio</label>
-                  <div className="input-div">
-                    <span>$</span>
-                    <input
-                      type="number"
-                      id="nuevo-precio"
-                      className="input-precioAct"
-                      value={nuevoPrecio}
-                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-                    />
-                  </div>
-                </div>
+<div className="precio-act">
+  <label htmlFor="nuevo-precio">Nuevo Precio</label>
+  <div className="input-div">
+    <span>$</span>
+    <input
+      type="number"
+      id="nuevo-precio"
+      className="input-precioAct"
+      value={nuevoPrecio || ""}
+      onChange={(e) => setNuevoPrecio(e.target.value)}
+    />
+  </div>
+</div>
 
-                {/* Fórmula como un input */}
-                <div className="precio-act">
-                  <label htmlFor="formula-precio">Fórmula</label>
-                  <div className="input-div">
-                
-                    <input
-                      type="text"
-                      id="formula-precio"
-                      className="input-precioAct"
-                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.Formula : ""}
-                      readOnly
-                    />
-                  </div>
-                </div>
               </div>
 
 

@@ -1,37 +1,52 @@
 import React, { useEffect } from 'react';
 import Chart from 'react-apexcharts';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
+import '../assets/Loaders.css';
+const Graficas = ({ product }) => {
+  const dispatch = useDispatch();
 
-const Graficas = () => {
+  // Acceso a los datos desde el store usando 'precioData'
+  const { precioData, loading, error } = useSelector((state) => state.precio); // 'precio' es el nombre del slice en tu reducer
+
+  // Hacer fetch cuando `product` cambia
+  useEffect(() => {
+    if (product?.IdListaOK) {
+      dispatch(fetchPrecioById(product.IdListaOK)); // Dispara la acción para obtener los precios
+    }
+  }, [product, dispatch]);
+
+  // Si estamos cargando o hay un error, no renderizamos el gráfico
+  if (loading) return <div className="contenedorLoader">
+  <div className="Cargando1"></div>
+</div>;
+  if (error) return <div>Error al cargar los datos: {error}</div>;
+
+  // Mapeo de los datos para el gráfico
   const opciones = {
     chart: {
-      id: 'grafico-basico',
+      id: 'grafico-precios',
       toolbar: {
         show: true,
         colors: ['#8086F2'],
       },
     },
     xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997],
+      categories: precioData.map(item => new Date(item.detail_row.detail_row_reg[0].FechaReg).toLocaleDateString()), // Fechas de registro
+      labels: {
+        rotate: -45, // Para evitar que las fechas se sobrepongan
+      },
     },
-    colors: ['#8086F2'], // color de la línea
+    colors: ['#8086F2'],
   };
 
+  // Los datos de la serie (precio)
   const series = [
     {
-      name: 'series-1',
-      data: [30, 40, 35, 50, 49, 60, 70],
+      name: 'Precio',
+      data: precioData.map(item => item.Precio), // Precios de los productos
     },
   ];
-
-  useEffect(() => {
-    // Cambiar textos después de que el gráfico se haya renderizado
-    const exportMenuItems = document.querySelectorAll('.apexcharts-menu-item');
-    exportMenuItems.forEach(item => {
-      if (item.textContent.includes('Download SVG')) item.textContent = 'Descargar SVG';
-      if (item.textContent.includes('Download PNG')) item.textContent = 'Descargar PNG';
-      if (item.textContent.includes('Download CSV')) item.textContent = 'Descargar CSV';
-    });
-  }, []);
 
   return (
     <div className="grafica">

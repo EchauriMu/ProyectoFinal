@@ -20,6 +20,7 @@ const Nav = () => {
         return <h2>Alertas? no se la nav esta en /componentes/Nav.jsx</h2>; // Otro componente para la pestaña "No se"
       default:
         return null;
+        
     }
   };
 
@@ -47,7 +48,7 @@ const Nav = () => {
               title="No se"
               onClick={() => setActiveTab('tab3')}
             >
-              <a>Usuarios</a>
+              <a>¿Alertas</a>
             </li>
           </ul>
         </div>

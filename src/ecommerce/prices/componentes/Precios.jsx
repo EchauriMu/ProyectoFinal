@@ -6,11 +6,25 @@ import '../assets/Querys.css';
 import Graficas from './Graficas';
 import { fetchListasTablasGeneral } from '../../../actions/listasTablasGeneralActions';
 import PopUpPrecios from './PopUpPrecios';
+import { deletePrecioAction } from '../../../actions/listasTablasGeneralActions';
+import Swal from 'sweetalert2';
+
 
 
 const Precios = () => {
   const dispatch = useDispatch();
   const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
+
+
+//const de graficas
+const [selectedGraphProduct, setSelectedGraphProduct] = useState(null);
+
+  // Manejador para seleccionar el producto de la gráfica
+  const handleRowClick = (producto) => {
+    setSelectedGraphProduct(producto); // Selecciona el producto para las gráficas
+    console.log("Producto seleccionado para gráficas:", producto.IdListaOK);
+  };
+
 
 //const para popups
   const [isPopupVisible, setIsPopupVisible] = useState(false); // Controla si el popup está visible
@@ -21,6 +35,34 @@ const Precios = () => {
     setIsPopupVisible(true);      // Muestra el popup
   };
   
+
+
+
+//const para os deletes
+const handleDeleteClick = (idListaOK) => {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "¡Este cambio no se puede revertir!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminarlo',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Llama a la acción de eliminación si el usuario confirma
+      dispatch(deletePrecioAction(idListaOK));
+      Swal.fire(
+        'Eliminado!',
+        'El precio ha sido eliminado.',
+        'success'
+      );
+    }
+  });
+};
+
+
 
 
 
@@ -153,7 +195,7 @@ const Precios = () => {
             </thead>
             <tbody>
               {currentItems.map((producto) => (
-                <tr key={producto._id}>
+                 <tr key={producto._id} onClick={() => handleRowClick(producto)}>
                   <td>
                     <div className="checkbox-container">
                       <input
@@ -172,11 +214,21 @@ const Precios = () => {
                   <i
     className="fa-solid fa-pen"
     style={{ color: 'blue', cursor: 'pointer' }}
-    onClick={() => handleEditClick(producto)}  // Llama a handleEditClick pasando el producto
+    onClick={(e) => {
+      e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
+      handleEditClick(producto);
+    }}
   ></i>
 
+<i
+  className="fa-solid fa-trash"
+  style={{ color: 'red', cursor: 'pointer' }}
+  onClick={(e) => {
+    e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
+    handleDeleteClick(producto.IdListaOK); // Llamada a la acción de eliminación
+  }}
+></i>
 
-                    <i className="fa-solid fa-trash" style={{ color: 'red' }}></i>
                   </td>
                 </tr>
               ))}
@@ -216,7 +268,9 @@ const Precios = () => {
               <h3 className="titulo-grafica">Gráficas</h3>
             </div>
             <p className="info-grafica">Gráfica 1</p>
-            <Graficas />
+
+            <Graficas product={selectedGraphProduct} />
+
             <p className="info-grafica">Gráfica 2</p>
           </div>
         </div>
