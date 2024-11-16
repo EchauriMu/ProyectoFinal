@@ -1,12 +1,9 @@
 // src/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import listasTablasGeneralReducer from './reducers/listasTablasGeneralReducer';
+import rootReducer from './reducers'; // Usamos el rootReducer combinado
 
-// Configuración del store con el reducer
 const store = configureStore({
-  reducer: {
-    listasTablasGeneral: listasTablasGeneralReducer, // Este es el reducer para la lista de datos que se obtiene desde l api
-  },
+  reducer: rootReducer, // Utilizamos el nuevo rootReducer
 });
 
 export default store;

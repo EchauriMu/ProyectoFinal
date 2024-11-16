@@ -18,4 +18,6 @@ const listasTablasGeneralReducer = (state = initialState, action) => {
   }
 };
 
+
+
 export default listasTablasGeneralReducer;

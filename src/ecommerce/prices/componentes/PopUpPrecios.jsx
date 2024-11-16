@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/PopUpPrecios.css';
+import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [nuevoPrecio, setNuevoPrecio] = useState("");
+  const [selectedProdServId, setSelectedProdServId] = useState("");
+  const [selectedPresentaId, setSelectedPresentaId] = useState("");
+  const dispatch = useDispatch();
 
-  if (!isVisible || !product) return null;
+  // Acceso a la data desde el store usando 'precioData'
+  const { precioData, loading, error } = useSelector((state) => state.precio); // Asegúrate de que 'precio' es el nombre del slice en tu reducer
 
+  // Hacer fetch cuando `product` cambia
+  useEffect(() => {
+    if (product?.IdListaOK) {
+      dispatch(fetchPrecioById(product.IdListaOK)); // Dispara la acción para obtener los precios
+    }
+  }, [product, dispatch]);
+
+  // Filtrar los precios cuando `precioData` o `product` cambian
+  useEffect(() => {
+    if (precioData.length > 0 && product?.IdProdServOK) {
+      const selectedPrices = precioData.filter(
+        (item) => item.IdProdServOK === product.IdProdServOK
+      );
+      if (selectedPrices.length > 0) {
+        setSelectedProdServId(selectedPrices[0].IdProdServOK);
+        setSelectedPresentaId(selectedPrices[0].IdPresentaOK);
+        setNuevoPrecio(selectedPrices[0].Precio);
+      }
+    }
+  }, [precioData, product]);
+
+  // Cambiar paso
   const handleNextStep = () => {
     if (currentStep === 1) {
       setCurrentStep(2);
@@ -24,6 +52,31 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
     }
   };
 
+  const handleSelectProduct = (e) => {
+    const selectedProductId = e.target.value;
+    setSelectedProdServId(selectedProductId);
+
+    // Filtrar precios para el producto seleccionado
+    const selectedPrices = precioData.filter(item => item.IdProdServOK === selectedProductId);
+    if (selectedPrices.length > 0) {
+      setSelectedPresentaId(selectedPrices[0].IdPresentaOK);
+      setNuevoPrecio(selectedPrices[0].Precio);
+    }
+  };
+
+  const handleSelectPresentacion = (e) => {
+    const selectedPresentaId = e.target.value;
+    setSelectedPresentaId(selectedPresentaId);
+
+    // Buscar el precio correspondiente a la presentación seleccionada
+    const selected = precioData.find(item => item.IdPresentaOK === selectedPresentaId);
+    if (selected) {
+      setNuevoPrecio(selected.Precio);
+    }
+  };
+
+  if (!isVisible || !product) return null;
+
   return (
     <div className="popup-position">
       <div className="popup-container">
@@ -31,6 +84,10 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
           <div className="header">
             <h2>Editar Precio - ID Lista: {product.IdListaOK}</h2>
           </div>
+
+          {/* Cargando o Error */}
+          {loading && <div>Cargando...</div>}
+          {error && <div>Error al cargar los datos: {error}</div>}
 
           {/* Wizard steps */}
           <div className="wizard">
@@ -42,12 +99,19 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
             <div className="content">
               {/* Dropdown Producto */}
               <div className="dropdown">
-                <h4>Producto</h4>
+                <h4>Selecciona Producto</h4>
                 <div className="presentacion-contenedor">
                   <div className="select-div">
-                    <select id="producto">
-                      <option value="9001-000000000001">9001-000000000001</option>
-                      <option value="9001-000000000002">Otro Producto</option>
+                    <select
+                      id="producto"
+                      value={selectedProdServId}
+                      onChange={handleSelectProduct}
+                    >
+                      {precioData && [...new Set(precioData.map(item => item.IdProdServOK))].map(productId => (
+                        <option key={productId} value={productId}>
+                          {productId}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -55,123 +119,135 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
 
               {/* Dropdown Presentación */}
               <div className="dropdown">
-                <h4>Presentación del producto</h4>
+                <h4>Selecciona Presentación</h4>
                 <div className="presentacion-contenedor">
                   <div className="select-div">
-                    <select id="presentacion">
-                      <option value="9001-000000000001-000000001">9001-000000000001-000000001</option>
-                      <option value="9001-000000000001-000000002">Otra Presentación</option>
+                    <select
+                      id="presentacion"
+                      value={selectedPresentaId}
+                      onChange={handleSelectPresentacion}
+                    >
+                      {precioData && precioData.map(item => (
+                        <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
+                          {item.IdPresentaOK}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
               </div>
 
-             {/* Precios */}
-          <h4>Selecciona un nuevo precio</h4>
-          <div className="button-group">
-            <div className="precio-act">
-              <label htmlFor="costo-inicial">Costo Inicial</label>
-              <div className="input-div">
-                <span>$</span>
-                <input
-                  type="number"
-                  id="costo-inicial"
-                  className="input-precioAct"
-                  value="15234.55"
-                  onChange={(e) => setCostoInicial(e.target.value)} // Implementar la lógica de estado si es necesario
-                />
-              </div>
-            </div>
-  
-            <div className="precio-act">
-              <label htmlFor="costo-final">Costo Final</label>
-              <div className="input-div">
-                <span>$</span>
-                <input
-                  type="number"
-                  id="costo-final"
-                  className="input-precioAct"
-                  value="25600.00"
-                  onChange={(e) => setCostoFinal(e.target.value)} // Implementar la lógica de estado si es necesario
-                />
-              </div>
-            </div>
-  
-            <div className="precio-act">
-              <label htmlFor="precio-actual">Precio Actual</label>
-              <div className="input-divActual">
-                <span>$</span>
-                <input
-                  type="text"
-                  id="precio-actual"
-                  className="input-precioRec"
-                  value="35605.50"
-                  readOnly
-                />
-              </div>
-            </div>
-  
-            <div className="precio-act">
-              <label htmlFor="nuevo-precio">Nuevo Precio</label>
-              <div className="input-div">
-                <span>$</span>
-                <input
-                  type="number"
-                  id="nuevo-precio"
-                  className="input-precioAct"
-                  value="35605.50"
-                  onChange={(e) => setNuevoPrecio(e.target.value)} // Implementar la lógica de estado si es necesario
-                />
-              </div>
-            </div>
-  
-            {/* Fórmula dentro del div de "Editar Precio" */}
-            <div className="precio-act">
-              <label htmlFor="formula">Fórmula</label>
-              <div className="input-div">
-                <input
-                  type="text"
-                  id="formula"
-                  className="input-precioAct"
-                  value="(CostoIni + CostoFin) / 2 * factor_demanda"
-                  onChange={(e) => setFormula(e.target.value)} // Implementar la lógica de estado si es necesario
-                />
-              </div>
-            </div>
-          </div>
+              {/* Precios */}
+              <h4>Selecciona un nuevo precio</h4>
+              <div className="button-group">
+                <div className="precio-act">
+                  <label htmlFor="costo-inicial">Costo Inicial</label>
+                  <div className="input-divActual">
+                    <span>$</span>
+                    <input
+                      type="text"
+                      id="costo-inicial"
+                      className="input-precioRec"
+                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoIni : ""}
+                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+                    />
+                  </div>
+                </div>
 
-              {/* Historial de modificaciones */}
-              <h4>Historial Modificaciones</h4>
-              <div className="resources">
-                <div className="resource-columns">
-                  <p>Modificación 1: Precio cambiado a $34,000 el 2023-05-01</p>
-                  <p>Modificación 2: Precio cambiado a $35,605.50 el 2023-06-15</p>
+                <div className="precio-act">
+                  <label htmlFor="costo-final">Costo Final</label>
+                  <div className="input-divActual">
+                    <span>$</span>
+                    <input
+                      type="text"
+                      id="costo-final"
+                      className="input-precioRec"
+                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoFin : ""}
+                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+                    />
+                  </div>
+                </div>
+
+                <div className="precio-act">
+                  <label htmlFor="precio-actual">Precio Actual</label>
+                  <div className="input-divActual">
+                    <span>$</span>
+                    <input
+                      type="text"
+                      id="precio-actual"
+                      className="input-precioRec"
+                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.Precio : ""}
+                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+                    />
+                  </div>
+                </div>
+
+                <div className="precio-act">
+                  <label htmlFor="nuevo-precio">Nuevo Precio</label>
+                  <div className="input-div">
+                    <span>$</span>
+                    <input
+                      type="number"
+                      id="nuevo-precio"
+                      className="input-precioAct"
+                      value={nuevoPrecio}
+                      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+                    />
+                  </div>
+                </div>
+
+                {/* Fórmula como un input */}
+                <div className="precio-act">
+                  <label htmlFor="formula-precio">Fórmula</label>
+                  <div className="input-div">
+                
+                    <input
+                      type="text"
+                      id="formula-precio"
+                      className="input-precioAct"
+                      value={precioData ? precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.Formula : ""}
+                      readOnly
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="actions">
-                <button className="go-back-btn" onClick={handleBack}>
-                  Regresar
-                </button>
-                <button className="done-btn" onClick={handleNextStep}>
-                  Guardar
-                </button>
+
+              
+              {/* Detail Row */}
+              <h4>Detalle de Registro</h4>
+              <div className="resources">
+                <div className="resource-columns">
+                  {precioData && precioData.find(item => item.IdPresentaOK === selectedPresentaId)?.detail_row?.detail_row_reg.map((reg, index) => (
+                    <p key={index}>
+                      Registro {index + 1}: Fecha de Registro: {new Date(reg.FechaReg).toLocaleDateString()} - Registrado por: {reg.UsuarioReg}
+                    </p>
+                  ))}
+                </div>
               </div>
+
             </div>
+
+
+
+
           ) : (
             <div className="content">
-              <h3>Confirmación</h3>
-              <p>¿Estás seguro de que quieres guardar los cambios?</p>
-              <div className="actions">
-                <button className="go-back-btn" onClick={handleBack}>
-                  Cancelar
-                </button>
-                <button className="confirm-btn" onClick={handleNextStep}>
-                  Confirmar
-                </button>
-              </div>
+              {/* Confirmación o Paso 2 */}
+              <h4>Confirmación</h4>
+              <p>¿Estás seguro de que deseas guardar este nuevo precio?</p>
             </div>
           )}
+
+          {/* Botones */}
+          <div className="actions">
+            <button className="go-back-btn" onClick={handleBack}>
+              Regresar
+            </button>
+            <button className="done-btn" onClick={handleNextStep}>
+              {currentStep === 1 ? 'Siguiente' : 'Guardar'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
