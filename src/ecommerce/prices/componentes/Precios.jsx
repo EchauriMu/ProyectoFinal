@@ -5,11 +5,26 @@ import '../assets/Graficas.css';
 import '../assets/Querys.css';
 import Graficas from './Graficas';
 import { fetchListasTablasGeneral } from '../../../actions/listasTablasGeneralActions';
+import PopUpPrecios from './PopUpPrecios';
+
 
 const Precios = () => {
   const dispatch = useDispatch();
   const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
 
+//const para popups
+  const [isPopupVisible, setIsPopupVisible] = useState(false); // Controla si el popup está visible
+  const [selectedProduct, setSelectedProduct] = useState(null);   // Guarda el producto seleccionado
+  
+  const handleEditClick = (producto) => {
+    setSelectedProduct(producto);  // Establece el producto seleccionado
+    setIsPopupVisible(true);      // Muestra el popup
+  };
+  
+
+
+
+  //const de la tabla
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10); // Valor inicial de elementos por página
   const [selectedItems, setSelectedItems] = useState([]); // Estado para almacenar elementos seleccionados
@@ -128,9 +143,9 @@ const Precios = () => {
                     <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
                   </div>
                 </th>
-                <th>ID Institución</th>
+                <th>ID Inst</th>
                 <th>ID Lista</th>
-                <th>Nombre del Producto</th>
+                <th>DesLista</th>
                 <th>Fecha Expira Inicio</th>
                 <th>Fecha Expira Fin</th>
                 <th>Acción</th>
@@ -154,7 +169,13 @@ const Precios = () => {
                   <td>{new Date(producto.FechaExpiraIni).toLocaleDateString()}</td>
                   <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
                   <td className='iconsActions'>
-                    <i className="fa-solid fa-pen" style={{ color: 'blue' }}></i>
+                  <i
+    className="fa-solid fa-pen"
+    style={{ color: 'blue', cursor: 'pointer' }}
+    onClick={() => handleEditClick(producto)}  // Llama a handleEditClick pasando el producto
+  ></i>
+
+
                     <i className="fa-solid fa-trash" style={{ color: 'red' }}></i>
                   </td>
                 </tr>
@@ -200,7 +221,20 @@ const Precios = () => {
           </div>
         </div>
       </div>
+
+
+
+      {/* PopUp Precios */}
+      <PopUpPrecios
+        isVisible={isPopupVisible}
+        product={selectedProduct}
+        onClose={() => setIsPopupVisible(false)}
+        onSave={() => {/* Lógica para guardar los cambios */}} 
+      />
+    
     </div>
+
+    
   );
 };
 

@@ -4,7 +4,7 @@ export const fetchListasTablasGeneral = () => {
     dispatch({ type: 'FETCH_LISTAS_TABLAS_GENERAL_REQUEST' });
 
     try {
-      const response = await fetch('http://localhost:3020/api/v1/listas-precios'); // Reemplaza con tu URL de API
+      const response = await fetch('http://localhost:3020/api/v1/listas-precios'); 
       const data = await response.json();
       dispatch({ type: 'FETCH_LISTAS_TABLAS_GENERAL_SUCCESS', payload: data });
     } catch (error) {

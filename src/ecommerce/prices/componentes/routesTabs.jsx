@@ -1,10 +1,19 @@
 // src/componentes/routesTabs.js
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../assets/routesTabs.css';
 
 const RoutesTabs = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  // Función para obtener el nombre del usuario
+  useEffect(() => {
+    const storedUserName = sessionStorage.getItem('usuario');
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -22,7 +31,7 @@ const RoutesTabs = () => {
             alt="Foto de perfil"
             className="nav-foto"
           />
-          <span className="nav-nombre2">Eduardo</span>
+          <span className="nav-nombre2">{userName || 'Usuario'}</span>
         </div>
 
       </div>
@@ -62,7 +71,7 @@ const RoutesTabs = () => {
             alt="Foto de perfil"
             className="nav-foto"
           />
-          <span className="nav-nombre">Eduardo</span>
+          <span className="nav-nombre">{userName || 'Usuario'}</span>
         </div>
 
 

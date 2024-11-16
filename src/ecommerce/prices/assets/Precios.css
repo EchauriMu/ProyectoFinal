@@ -179,14 +179,6 @@ html, body {
     border-color: #007bff;
   }
   
-  .checkbox-container input[type="checkbox"]:checked::before {
-    content: '✔';
-    color: #ffffff;
-    font-size: 14px;
-    position: absolute;
-    left: 2px;
-    top: -2px;
-  }
 
 
   .iconsActions i{
@@ -195,7 +187,7 @@ font-size: 15px;
 }
 
 .iconsActions i:hover {
-    transform: scale(1.1); 
+    transform: scale(1.2); 
   }
 
   .precios table th:nth-child(2),
@@ -211,8 +203,8 @@ font-size: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    padding: 10px 0;
+    margin-top: 30px;
+ 
     font-size: 14px;
     color: #555;
   }
