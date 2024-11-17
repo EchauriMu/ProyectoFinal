@@ -122,36 +122,42 @@ const handleDeleteClick = (idListaOK) => {
   };
 
   // Función para exportar solo los elementos seleccionados a CSV
-  const exportToCSV = () => {
-    const selectedData = listasTablasGeneral.filter(producto => selectedItems.includes(producto._id));
-    
-    const headers = ['ID Institución', 'ID Lista', 'Nombre del Producto', 'Fecha Expira Inicio', 'Fecha Expira Fin'];
+// Función para exportar solo los elementos seleccionados a CSV
+const exportToCSV = () => {
+  const selectedData = listasTablasGeneral.filter(producto => selectedItems.includes(producto._id));
+  
+  // Definir cabeceras
+  const headers = ['ID Institución', 'ID Lista', 'ID Lista BK', 'Fecha Expira Inicio', 'Fecha Expira Fin'];
 
-    const rows = selectedData.map((producto) => [
-      producto.IdInstitutoOK,
-      producto.IdListaOK,
-      producto.IdListaBK,
-      new Date(producto.FechaExpiraIni).toLocaleDateString(),
-      new Date(producto.FechaExpiraFin).toLocaleDateString(),
-    ]);
+  // Construir las filas de datos
+  const rows = selectedData.map((producto) => [
+    producto.IdInstitutoOK,
+    producto.IdListaOK,
+    producto.IdListaBK, // Incluye este campo en las cabeceras
+    new Date(producto.FechaExpiraIni).toLocaleDateString(),
+    new Date(producto.FechaExpiraFin).toLocaleDateString(),
+  ]);
 
-    const csvContent = [
-      headers.join(','), // Agregar las cabeceras
-      ...rows.map(row => row.join(',')), // Convertir cada fila en una cadena CSV
-    ].join('\n');
+  // Crear el contenido CSV
+  const csvContent = [
+    headers.join(','), // Agregar las cabeceras
+    ...rows.map(row => row.join(',')), // Convertir cada fila en una cadena CSV
+  ].join('\n');
 
-    // Crear un Blob con el contenido CSV
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  // Crear un Blob con el contenido CSV
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-    // Crear un enlace temporal para iniciar la descarga
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'precios_seleccionados.csv'); // Nombre del archivo a descargar
-      link.click(); // Iniciar la descarga
-    }
-  };
+  // Crear un enlace temporal para iniciar la descarga
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'precios_seleccionados.csv'); // Nombre del archivo a descargar
+    document.body.appendChild(link); // Asegurarte de que el enlace se agregue al DOM
+    link.click(); // Iniciar la descarga
+    document.body.removeChild(link); // Limpiar el enlace temporal
+  }z
+};
 
   // Verificar si hay elementos seleccionados para activar/desactivar el botón de exportación
   const isExportButtonActive = selectedItems.length > 0;
@@ -192,12 +198,14 @@ const handleDeleteClick = (idListaOK) => {
    Eliminar seleccion
   </span>
 
-
   <span
-    className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}
-  >
-    <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
-  </span>
+  className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}
+  onClick={() => {
+    if (isExportButtonActive) exportToCSV();
+  }}
+>
+  <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
+</span>
 
 
 </div>
