@@ -1,0 +1,67 @@
+/* Estilo base para ocultar el popup */
+.popup-agregar-lista {
+    display: none; /* Oculta el popup por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Estilo cuando el popup es visible */
+  .popup-agregar-lista.show {
+    display: flex; /* Muestra el popup */
+  }
+  
+  /* Contenido del popup */
+  .popup-agregar-lista-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilo para el botón de cerrar */
+  .popup-agregar-lista .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .popup-agregar-lista label {
+   
+    display: block;
+  }
+  
+  .popup-agregar-lista input {
+    width: 100%;
+    padding: 6px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .popup-agregar-lista button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .popup-agregar-lista button:hover {
+    background-color: #45a049;
+  }
+  

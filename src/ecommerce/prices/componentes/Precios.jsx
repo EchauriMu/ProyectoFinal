@@ -8,12 +8,20 @@ import { fetchListasTablasGeneral } from '../../../actions/listasTablasGeneralAc
 import PopUpPrecios from './PopUpPrecios';
 import { deletePrecioAction } from '../../../actions/listasTablasGeneralActions';
 import Swal from 'sweetalert2';
-
+import PopUpAgregarLista from './PopUpAgregarLista';
 
 
 const Precios = () => {
-  const dispatch = useDispatch();
-  const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
+
+//const para addlista
+// Estado para controlar la visibilidad del popup "Agregar una lista nueva"
+const [isAddListPopupVisible, setIsAddListPopupVisible] = useState(false);
+
+// Función para mostrar el popup al hacer clic en "Agregar una lista nueva"
+const handleAddList = () => {
+  setIsAddListPopupVisible(true); // Mostrar el popup
+};
+
 
 
 //const de graficas
@@ -66,7 +74,13 @@ const handleDeleteClick = (idListaOK) => {
 
 
 
-  //const de la tabla
+const dispatch = useDispatch();
+const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
+
+
+//const de la tabla
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10); // Valor inicial de elementos por página
   const [selectedItems, setSelectedItems] = useState([]); // Estado para almacenar elementos seleccionados
@@ -176,10 +190,15 @@ const exportToCSV = () => {
   <h3>Precios Recientes</h3>
 
 
-  <span className="Aggbtn"  title="Agregar una lista nueva" >
+  <span className="Aggbtn"  title="Agregar una lista nueva" onClick={handleAddList} >
   <i class="fa-solid fa-plus"></i>
-  </span>
+  {/* Mostrar el PopUp solo cuando isAddListPopupVisible es true */}
 
+  </span>
+  <PopUpAgregarLista 
+          isAddListPopupVisible={isAddListPopupVisible}
+          setIsAddListPopupVisible={setIsAddListPopupVisible}
+        />
 
   {/* Botón para refrescar datos */}
   <span
@@ -187,6 +206,7 @@ const exportToCSV = () => {
   title="Recargar tabla"
   onClick={() => dispatch(fetchListasTablasGeneral())} // Llama a la acción de actualizar listas cuando se hace clic en el botón
 >
+
   <i className="fa-solid fa-arrows-rotate"></i>
 </span>
 
