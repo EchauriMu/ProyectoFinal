@@ -19,9 +19,7 @@ export const fetchPrecioById = (id) => {
     dispatch({ type: 'FETCH_PRECIO_REQUEST' });
 
     try {
-      // Agregar un retraso de 3 segundos
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
+  
       const response = await fetch(`http://localhost:3020/api/v1/listas-precios/${id}`);
       const data = await response.json();
       

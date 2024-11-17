@@ -218,11 +218,19 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
 
 
           ) : (
-            <div className="content">
-              {/* Confirmación o Paso 2 */}
-              <h4>Confirmación</h4>
-              <p>¿Estás seguro de que deseas guardar este nuevo precio?</p>
+            <div className="ConfrimacionContainer">
+            {/* Confirmación o Paso 2 */}
+            <h4>Confirmación</h4>
+            <p>¿Estás seguro de que deseas guardar este nuevo precio?</p>
+            <div className="imageContainer">
+              <img 
+                src="https://w7.pngwing.com/pngs/673/47/png-transparent-yellow-emoji-drawing-emoji-discord-meme-android-imgur-thinking-orange-people-internet-thumbnail.png" 
+                alt="Emoji de pensamiento" 
+                className="emoji"
+              />
             </div>
+          </div>
+          
           )}
 
           {/* Botones */}

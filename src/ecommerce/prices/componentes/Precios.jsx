@@ -156,8 +156,6 @@ const handleDeleteClick = (idListaOK) => {
   // Verificar si hay elementos seleccionados para activar/desactivar el botón de exportación
   const isExportButtonActive = selectedItems.length > 0;
 
-  if (loading) return <div>Cargando...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="contenedor">
@@ -166,18 +164,54 @@ const handleDeleteClick = (idListaOK) => {
       <div className="flex-container">
         {/* Tabla de productos */}
         <div className="precios">
-          <div className="encabezado">
-            <i className="fa-solid fa-tag"></i>
-            <h3>Precios Recientes</h3>
-            <span 
-              className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`} 
-              onClick={isExportButtonActive ? exportToCSV : null}
-            >
-              <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
-            </span>
-          </div>
 
-          <table>
+        <div className="encabezado">
+  <i className="fa-solid fa-tag"></i>
+  <h3>Precios Recientes</h3>
+
+
+  <span className="Aggbtn"  title="Agregar una lista nueva" >
+  <i class="fa-solid fa-plus"></i>
+  </span>
+
+
+  {/* Botón para refrescar datos */}
+  <span
+  className="Refrescarbtn"
+  title="Recargar tabla"
+  onClick={() => dispatch(fetchListasTablasGeneral())} // Llama a la acción de actualizar listas cuando se hace clic en el botón
+>
+  <i className="fa-solid fa-arrows-rotate"></i>
+</span>
+
+  {/* Botón de Exportar */}
+
+    {/* Botón para eliminar seleccionados */}
+    <span 
+     className={`Eliminarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}>
+   Eliminar seleccion
+  </span>
+
+
+  <span
+    className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}
+  >
+    <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
+  </span>
+
+
+</div>
+
+{loading ? (
+  <div className="contenedorLoader">
+    <div className="Cargando1"></div>
+  </div>
+) : error ? (
+  <div className="contenedorLoader">
+    <div className="error-message">{`Error: ${error}`}</div>
+  </div>
+) : (
+  <table>
             <thead>
               <tr>
                 <th>
@@ -234,6 +268,9 @@ const handleDeleteClick = (idListaOK) => {
               ))}
             </tbody>
           </table>
+)}
+
+         
 
           {/* Paginación */}
           <div className="paginacion">
@@ -267,11 +304,11 @@ const handleDeleteClick = (idListaOK) => {
               <i className="fa-solid fa-chart-simple"></i>
               <h3 className="titulo-grafica">Gráficas</h3>
             </div>
-            <p className="info-grafica">Gráfica 1</p>
+            <p className="info-grafica">Precios </p>
 
             <Graficas product={selectedGraphProduct} />
 
-            <p className="info-grafica">Gráfica 2</p>
+          
           </div>
         </div>
       </div>
