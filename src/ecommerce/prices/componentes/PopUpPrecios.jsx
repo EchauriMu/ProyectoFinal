@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../assets/PopUpPrecios.css';
+import '../assets/PopupPrecios.css';
 import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
 import { useDispatch, useSelector } from 'react-redux';
 
