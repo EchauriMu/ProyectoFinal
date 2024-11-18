@@ -111,12 +111,13 @@
 }
 
 .popup-agregar-lista .regresar{
-    background-color: #c2b9ff !important;
-    color: blue !important;
-    font-size: 12px !important; /* Reducido */
-    padding: 8px 16px !important; /* Reducido */
-
-   
+    background-color: #c2b9ff;
+    color: white;
+    font-size: 12px;
+    padding: 8px 16px;
+    margin-top: 8px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .button-containerAddlist {

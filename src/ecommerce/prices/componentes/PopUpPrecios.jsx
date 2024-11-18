@@ -102,17 +102,20 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
                 <h4>Selecciona Producto</h4>
                 <div className="presentacion-contenedor">
                   <div className="select-div">
-                    <select
-                      id="producto"
-                      value={selectedProdServId}
-                      onChange={handleSelectProduct}
-                    >
-                      {precioData && [...new Set(precioData.map(item => item.IdProdServOK))].map(productId => (
-                        <option key={productId} value={productId}>
-                          {productId}
-                        </option>
-                      ))}
-                    </select>
+                  <select
+  id="producto"
+  value={selectedProdServId}
+  onChange={handleSelectProduct}
+>
+  <option value="">Selecciona algo</option>
+  {precioData && [...new Set(precioData.map(item => item.IdProdServOK))].map(productId => (
+    <option key={productId} value={productId}>
+      {productId}
+    </option>
+  ))}
+</select>
+
+
                   </div>
                 </div>
               </div>
@@ -122,17 +125,22 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
                 <h4>Selecciona Presentación</h4>
                 <div className="presentacion-contenedor">
                   <div className="select-div">
-                    <select
-                      id="presentacion"
-                      value={selectedPresentaId}
-                      onChange={handleSelectPresentacion}
-                    >
-                      {precioData && precioData.map(item => (
-                        <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
-                          {item.IdPresentaOK}
-                        </option>
-                      ))}
-                    </select>
+              
+
+                  <select
+  id="presentacion"
+  value={selectedPresentaId}
+  onChange={handleSelectPresentacion}
+>
+  <option value="">Selecciona algo</option>
+  {precioData && precioData.map(item => (
+    <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
+      {item.IdPresentaOK}
+    </option>
+  ))}
+</select>
+
+
                   </div>
                 </div>
               </div>

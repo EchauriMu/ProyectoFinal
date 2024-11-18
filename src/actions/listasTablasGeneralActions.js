@@ -54,12 +54,9 @@ export const deletePrecioAction = (id) => {
     }
   };
 };
-
-
-//crear list
 export const crearListaPrecios = (formData) => {
   return async (dispatch) => {
-    dispatch({ type: 'CREAR_LISTA_PRECIOS_REQUEST' }); // Inicia la solicitud
+    dispatch({ type: 'CREAR_LISTA_PRECIOS_REQUEST' });
 
     try {
       const response = await fetch('http://localhost:3020/api/v1/listas-precios/crear', {
@@ -78,17 +75,18 @@ export const crearListaPrecios = (formData) => {
 
       dispatch({
         type: 'CREAR_LISTA_PRECIOS_SUCCESS',
-        payload: data, // Datos de la respuesta
+        payload: data,
       });
 
-      // Vuelve a obtener la lista actualizada después de crear
-      dispatch(fetchListasTablasGeneral());
+      dispatch(fetchListasTablasGeneral()); // Obtener lista actualizada
     } catch (error) {
       dispatch({
         type: 'CREAR_LISTA_PRECIOS_FAILURE',
         error: error.message,
       });
+
+      // Re-lanzar el error para que el .catch del componente lo capture
+      throw error;
     }
   };
 };
-
