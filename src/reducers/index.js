@@ -3,8 +3,6 @@ import listasTablasGeneralReducer from './listasTablasGeneralReducer';
 import precioReducer from './precioReducer';
 import deletePrecioReducer from './deleteListReducer';
 import crearListaPreciosReducer from './crearListaPreciosReducer'; 
-import precioReducer from './precioReducer'; // Importamos el reducer original para manejar los precios
-import deletePrecioReducer from './deleteListReducer'; // Importamos el nuevo reducer para eliminar precios
 import putPrecioReducer from './putPrecioReducer'; // Importamos el nuevo reduces para actulizar un precio
 import postPrecioReducer from './postPrecioReducer'; // Importamos el nuevo reduces para eliminar una presentacion
 import deletePresentacionReducer from './deletePresentacionReducer';
