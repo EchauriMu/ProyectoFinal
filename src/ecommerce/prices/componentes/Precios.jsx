@@ -6,11 +6,33 @@ import '../assets/Querys.css';
 import Graficas from './Graficas';
 import { fetchListasTablasGeneral } from '../../../actions/listasTablasGeneralActions';
 import PopUpPrecios from './PopUpPrecios';
+import { deletePrecioAction } from '../../../actions/listasTablasGeneralActions';
+import Swal from 'sweetalert2';
+import PopUpAgregarLista from './PopUpAgregarLista';
 
 
 const Precios = () => {
-  const dispatch = useDispatch();
-  const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
+
+//const para addlista
+// Estado para controlar la visibilidad del popup "Agregar una lista nueva"
+const [isAddListPopupVisible, setIsAddListPopupVisible] = useState(false);
+
+// Función para mostrar el popup al hacer clic en "Agregar una lista nueva"
+const handleAddList = () => {
+  setIsAddListPopupVisible(true); // Mostrar el popup
+};
+
+
+
+//const de graficas
+const [selectedGraphProduct, setSelectedGraphProduct] = useState(null);
+
+  // Manejador para seleccionar el producto de la gráfica
+  const handleRowClick = (producto) => {
+    setSelectedGraphProduct(producto); // Selecciona el producto para las gráficas
+    console.log("Producto seleccionado para gráficas:", producto.IdListaOK);
+  };
+
 
 //const para popups
   const [isPopupVisible, setIsPopupVisible] = useState(false); // Controla si el popup está visible
@@ -24,7 +46,41 @@ const Precios = () => {
 
 
 
-  //const de la tabla
+//const para os deletes
+const handleDeleteClick = (idListaOK) => {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "¡Este cambio no se puede revertir!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminarlo',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Llama a la acción de eliminación si el usuario confirma
+      dispatch(deletePrecioAction(idListaOK));
+      Swal.fire(
+        'Eliminado!',
+        'El precio ha sido eliminado.',
+        'success'
+      );
+    }
+  });
+};
+
+
+
+
+
+const dispatch = useDispatch();
+const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
+
+
+//const de la tabla
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10); // Valor inicial de elementos por página
   const [selectedItems, setSelectedItems] = useState([]); // Estado para almacenar elementos seleccionados
@@ -80,42 +136,46 @@ const Precios = () => {
   };
 
   // Función para exportar solo los elementos seleccionados a CSV
-  const exportToCSV = () => {
-    const selectedData = listasTablasGeneral.filter(producto => selectedItems.includes(producto._id));
-    
-    const headers = ['ID Institución', 'ID Lista', 'Nombre del Producto', 'Fecha Expira Inicio', 'Fecha Expira Fin'];
+// Función para exportar solo los elementos seleccionados a CSV
+const exportToCSV = () => {
+  const selectedData = listasTablasGeneral.filter(producto => selectedItems.includes(producto._id));
+  
+  // Definir cabeceras
+  const headers = ['ID Institución', 'ID Lista', 'ID Lista BK', 'Fecha Expira Inicio', 'Fecha Expira Fin'];
 
-    const rows = selectedData.map((producto) => [
-      producto.IdInstitutoOK,
-      producto.IdListaOK,
-      producto.IdListaBK,
-      new Date(producto.FechaExpiraIni).toLocaleDateString(),
-      new Date(producto.FechaExpiraFin).toLocaleDateString(),
-    ]);
+  // Construir las filas de datos
+  const rows = selectedData.map((producto) => [
+    producto.IdInstitutoOK,
+    producto.IdListaOK,
+    producto.IdListaBK, // Incluye este campo en las cabeceras
+    new Date(producto.FechaExpiraIni).toLocaleDateString(),
+    new Date(producto.FechaExpiraFin).toLocaleDateString(),
+  ]);
 
-    const csvContent = [
-      headers.join(','), // Agregar las cabeceras
-      ...rows.map(row => row.join(',')), // Convertir cada fila en una cadena CSV
-    ].join('\n');
+  // Crear el contenido CSV
+  const csvContent = [
+    headers.join(','), // Agregar las cabeceras
+    ...rows.map(row => row.join(',')), // Convertir cada fila en una cadena CSV
+  ].join('\n');
 
-    // Crear un Blob con el contenido CSV
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  // Crear un Blob con el contenido CSV
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-    // Crear un enlace temporal para iniciar la descarga
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'precios_seleccionados.csv'); // Nombre del archivo a descargar
-      link.click(); // Iniciar la descarga
-    }
-  };
+  // Crear un enlace temporal para iniciar la descarga
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'precios_seleccionados.csv'); // Nombre del archivo a descargar
+    document.body.appendChild(link); // Asegurarte de que el enlace se agregue al DOM
+    link.click(); // Iniciar la descarga
+    document.body.removeChild(link); // Limpiar el enlace temporal
+  }z
+};
 
   // Verificar si hay elementos seleccionados para activar/desactivar el botón de exportación
   const isExportButtonActive = selectedItems.length > 0;
 
-  if (loading) return <div>Cargando...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="contenedor">
@@ -124,18 +184,62 @@ const Precios = () => {
       <div className="flex-container">
         {/* Tabla de productos */}
         <div className="precios">
-          <div className="encabezado">
-            <i className="fa-solid fa-tag"></i>
-            <h3>Precios Recientes</h3>
-            <span 
-              className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`} 
-              onClick={isExportButtonActive ? exportToCSV : null}
-            >
-              <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
-            </span>
-          </div>
 
-          <table>
+        <div className="encabezado">
+  <i className="fa-solid fa-tag"></i>
+  <h3>Precios Recientes</h3>
+
+
+  <span className="Aggbtn"  title="Agregar una lista nueva" onClick={handleAddList} >
+  <i class="fa-solid fa-plus"></i>
+  {/* Mostrar el PopUp solo cuando isAddListPopupVisible es true */}
+
+  </span>
+  <PopUpAgregarLista 
+          isAddListPopupVisible={isAddListPopupVisible}
+          setIsAddListPopupVisible={setIsAddListPopupVisible}
+        />
+
+  {/* Botón para refrescar datos */}
+  <span
+  className="Refrescarbtn"
+  title="Recargar tabla"
+  onClick={() => dispatch(fetchListasTablasGeneral())} // Llama a la acción de actualizar listas cuando se hace clic en el botón
+>
+
+  <i className="fa-solid fa-arrows-rotate"></i>
+</span>
+
+  {/* Botón de Exportar */}
+
+    {/* Botón para eliminar seleccionados */}
+    <span 
+     className={`Eliminarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}>
+   Eliminar seleccion
+  </span>
+
+  <span
+  className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}
+  onClick={() => {
+    if (isExportButtonActive) exportToCSV();
+  }}
+>
+  <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
+</span>
+
+
+</div>
+
+{loading ? (
+  <div className="contenedorLoader">
+    <div className="Cargando1"></div>
+  </div>
+) : error ? (
+  <div className="contenedorLoader">
+    <div className="error-message">{`Error: ${error}`}</div>
+  </div>
+) : (
+  <table>
             <thead>
               <tr>
                 <th>
@@ -153,7 +257,7 @@ const Precios = () => {
             </thead>
             <tbody>
               {currentItems.map((producto) => (
-                <tr key={producto._id}>
+                 <tr key={producto._id} onClick={() => handleRowClick(producto)}>
                   <td>
                     <div className="checkbox-container">
                       <input
@@ -172,16 +276,29 @@ const Precios = () => {
                   <i
     className="fa-solid fa-pen"
     style={{ color: 'blue', cursor: 'pointer' }}
-    onClick={() => handleEditClick(producto)}  // Llama a handleEditClick pasando el producto
+    onClick={(e) => {
+      e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
+      handleEditClick(producto);
+    }}
   ></i>
 
+<i
+  className="fa-solid fa-trash"
+  style={{ color: 'red', cursor: 'pointer' }}
+  onClick={(e) => {
+    e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
+    handleDeleteClick(producto.IdListaOK); // Llamada a la acción de eliminación
+  }}
+></i>
 
-                    <i className="fa-solid fa-trash" style={{ color: 'red' }}></i>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+)}
+
+         
 
           {/* Paginación */}
           <div className="paginacion">
@@ -215,9 +332,13 @@ const Precios = () => {
               <i className="fa-solid fa-chart-simple"></i>
               <h3 className="titulo-grafica">Gráficas</h3>
             </div>
-            <p className="info-grafica">Gráfica 1</p>
-            <Graficas />
-            <p className="info-grafica">Gráfica 2</p>
+            <p className="info-grafica">
+  Precios de: {selectedGraphProduct ? selectedGraphProduct.IdListaOK : "Selecciona un producto"}
+</p>
+
+            <Graficas product={selectedGraphProduct} />
+
+          
           </div>
         </div>
       </div>

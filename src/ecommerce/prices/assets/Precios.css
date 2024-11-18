@@ -67,7 +67,7 @@ html, body {
     border-radius: 10px;
     font-weight: 700;
     background: #e0dcff;
-    cursor: pointer;
+    cursor: not-allowed;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
@@ -87,6 +87,64 @@ html, body {
     margin: 4px 6px 0px 0px ;
 }
 
+
+.Eliminarbtn.inactivo {
+    font-size: 15px;
+    padding: 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #ffcccc; /* Color de fondo para inactivo */
+    cursor: not-allowed;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Estilo para el botón "Eliminar Seleccionados" activo */
+.Eliminarbtn.activo {
+    font-size: 15px;
+    padding: 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #d9534f; /* Color de fondo para activo */
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Estilo para el botón "Refrescar" */
+.Refrescarbtn {
+    font-size: 15px;
+   display: flex;
+   align-items: center;
+   padding: 6px 8px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #f0ad4e; /* Color de fondo para refrescar */
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+
+.Aggbtn{
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    padding: 6px 8px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #18ac00;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+.Aggbtn i, .Refrescarbtn i {
+    font-size: 20px;
+
+}
 
 
 .precios table {
@@ -183,7 +241,7 @@ html, body {
 
   .iconsActions i{
 margin: 0px 10px;
-font-size: 15px;
+font-size: 17px;
 }
 
 .iconsActions i:hover {
@@ -238,4 +296,6 @@ font-size: 15px;
   .botones-paginacion button:hover:not(:disabled) {
     background-color: #4f42a7;
   }
+  
+
   
