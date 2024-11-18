@@ -1,0 +1,129 @@
+/* Estilo base para ocultar el popup */
+.popup-agregar-lista {
+    display: none; /* Oculta el popup por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    justify-content: center;
+    align-items: center;
+    z-index: 9;
+}
+
+/* Estilo cuando el popup es visible */
+.popup-agregar-lista.show {
+    display: flex; /* Muestra el popup */
+}
+
+/* Contenido del popup */
+.popup-agregar-lista-content {
+    background-color: #fff;
+    padding: 20px; /* Reducido */
+    border-radius: 8px;
+    width: 600px; /* Reducido */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.popup-agregar-lista-content h4{
+    margin: 0;
+}
+
+.popup-agregar-lista label {
+    display: block;
+    font-size: 11px;
+   margin-top: 5px;
+    font-weight: 700;
+}
+
+.popup-agregar-lista input {
+    width: 100%;
+    font-size: 12px;
+    padding: 5px; /* Reducido */
+   margin-top: 3px;
+   margin-bottom: 3px;
+    border: .5px solid #4f42a7;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Estilo de los botones */
+.popup-agregar-lista button {
+    padding: 4px 10px; /* Reducido */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px; /* Reducido */
+}
+
+
+.popup-agregar-lista .precios-container {
+    display: flex;
+    gap: 16px; /* Reducido */
+    flex-wrap: nowrap; /* Evita que los elementos se acomoden en varias líneas */
+    overflow-x: auto; /* Desplazamiento horizontal si es necesario */
+}
+
+.popup-agregar-lista .precio-item {
+    flex: 0 0 auto;
+    min-width: 250px; /* Reducido */
+    margin-bottom: 10px; /* Reducido */
+    border: 1px solid #ddd;
+    padding: 8px; /* Reducido */
+    background-color: #f9f9f9;
+}
+
+.popup-agregar-lista .precio-item h4 {
+    margin: 0 0 5px; /* Reducido */
+    font-size: 12px; /* Reducido */
+}
+
+.popup-agregar-lista .precio-item label {
+    font-size: 11px; /* Reducido */
+   
+}
+
+.popup-agregar-lista .precio-item input {
+    font-size: 12px; /* Reducido */
+    padding: 4px; /* Reducido */
+   
+}
+
+.popup-agregar-lista .precio-item button {
+    background-color: red;
+    color: white;
+    font-size: 12px; /* Reducido */
+    margin-top: 8px; /* Reducido */
+    padding: 4px 8px; /* Reducido */
+}
+
+
+
+.popup-agregar-lista button[type="submit"] {
+    background-color: #4f42a7;
+    color: white;
+    font-size: 12px; /* Reducido */
+    padding: 8px 16px; /* Reducido */
+    margin-top: 8px; /* Reducido */
+}
+
+.popup-agregar-lista .regresar{
+    background-color: #c2b9ff;
+    color: white;
+    font-size: 12px;
+    padding: 8px 16px;
+    margin-top: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-containerAddlist {
+    display: flex;
+    gap: 10px; 
+    justify-content: space-between; 
+ 
+  }
+  

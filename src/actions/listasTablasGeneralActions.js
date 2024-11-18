@@ -54,3 +54,39 @@ export const deletePrecioAction = (id) => {
     }
   };
 };
+export const crearListaPrecios = (formData) => {
+  return async (dispatch) => {
+    dispatch({ type: 'CREAR_LISTA_PRECIOS_REQUEST' });
+
+    try {
+      const response = await fetch('http://localhost:3020/api/v1/listas-precios/crear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al crear la lista de precios');
+      }
+
+      const data = await response.json();
+
+      dispatch({
+        type: 'CREAR_LISTA_PRECIOS_SUCCESS',
+        payload: data,
+      });
+
+      dispatch(fetchListasTablasGeneral()); // Obtener lista actualizada
+    } catch (error) {
+      dispatch({
+        type: 'CREAR_LISTA_PRECIOS_FAILURE',
+        error: error.message,
+      });
+
+      // Re-lanzar el error para que el .catch del componente lo capture
+      throw error;
+    }
+  };
+};
