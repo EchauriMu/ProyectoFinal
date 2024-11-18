@@ -1,5 +1,5 @@
 // src/componentes/routesTabs.js
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../assets/routesTabs.css';
 
@@ -33,11 +33,10 @@ const RoutesTabs = () => {
           />
           <span className="nav-nombre2">{userName || 'Usuario'}</span>
         </div>
-
       </div>
-      
+
       <div className={`navbarRoutes-links ${isOpen ? 'open' : ''}`}>
-      <div className="nav-logo">
+        <div className="nav-logo">
           <img
             src="https://clubmate.fish/wp-content/uploads/2021/06/eCommerce-Icon-1.png"
             alt="logo"
@@ -45,23 +44,46 @@ const RoutesTabs = () => {
           />
           <span className="nav-titulo">Logo</span>
         </div>
-    
-        <NavLink to="/home" className="navbarRoutes-item" activeClassName="active">
-        <i class="fa-solid fa-boxes-stacked"></i> Inventories
+
+        <NavLink 
+          to="/home" 
+          className={({ isActive }) => `navbarRoutes-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-boxes-stacked"></i> Inventories
         </NavLink>
-        <NavLink to="/orders" className="navbarRoutes-item" activeClassName="active">
+
+        <NavLink 
+          to="/orders" 
+          className={({ isActive }) => `navbarRoutes-item ${isActive ? 'active' : ''}`}
+        >
           <i className="fas fa-box"></i> Orders
         </NavLink>
-        <NavLink to="/payments" className="navbarRoutes-item" activeClassName="active">
+
+        <NavLink 
+          to="/payments" 
+          className={({ isActive }) => `navbarRoutes-item ${isActive ? 'active' : ''}`}
+        >
           <i className="fas fa-credit-card"></i> Payments
         </NavLink>
-        <NavLink to="/prices" className="navbarRoutes-item" activeClassName="active">
-        <i class="fa-solid fa-tags"></i> Prices
+
+        <NavLink 
+          to="/prices" 
+          className={({ isActive }) => `navbarRoutes-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-tags"></i> Prices
         </NavLink>
-        <NavLink to="/products" className="navbarRoutes-item" activeClassName="active">
-        <i class="fa-solid fa-table-list"></i> Products
+
+        <NavLink 
+          to="/products" 
+          className={({ isActive }) => `navbarRoutes-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-table-list"></i> Products
         </NavLink>
-        <NavLink to="/shippings" className="navbarRoutes-item" activeClassName="active">
+
+        <NavLink 
+          to="/shippings" 
+          className={({ isActive }) => `navbarRoutes-item ${isActive ? 'active' : ''}`}
+        >
           <i className="fas fa-shipping-fast"></i> Shippings
         </NavLink>
 
@@ -73,8 +95,6 @@ const RoutesTabs = () => {
           />
           <span className="nav-nombre">{userName || 'Usuario'}</span>
         </div>
-
-
       </div>
     </nav>
   );
