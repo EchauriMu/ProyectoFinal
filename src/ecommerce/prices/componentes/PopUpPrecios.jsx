@@ -1,22 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
+import { useContexto } from './PreciosProvider';
+import SeleccionadorActivo from './SeleccionadorActivo';
 import '../assets/PopUpPrecios.css';
+import '../assets/Precios.css';
+import '../assets/Querys.css';
 import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
-import { useDispatch, useSelector } from 'react-redux';
+import { putPrecioById } from '../../../actions/PopUpPreciosGeneralActions';
+import { postPrecio } from '../../../actions/PopUpPreciosGeneralActions';
+import { deletePresentacionAction } from '../../../actions/PopUpPreciosGeneralActions';
+import { useSelector } from 'react-redux';
 
 const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
+
+
   const [currentStep, setCurrentStep] = useState(1);
-  const [nuevoPrecio, setNuevoPrecio] = useState("");
-  const [selectedProdServId, setSelectedProdServId] = useState("");
-  const [selectedPresentaId, setSelectedPresentaId] = useState("");
-  const dispatch = useDispatch();
+  
+	const { 
+    nuevoPrecio, setNuevoPrecio,
+    selectedProdServId, setSelectedProdServId,
+    selectedPresentaId, setSelectedPresentaId,
+		idPresentaOK, setIdPresentaOK,
+		idTipoFormulaOK, setIdTipoFormulaOK,
+		formula, setFormula,
+    costoIni, setCostoIni,
+    costoFin, setCostoFin,
+    userName, 
+    activo,
+    setActivo,
+    borrado,
+    setBorrado,
+    dispatch
+   } = useContexto();
+
+
+
 
   // Acceso a la data desde el store usando 'precioData'
   const { precioData, loading, error } = useSelector((state) => state.precio); //  'precio' es el nombre del slice en tu reducer
+  const { putPrecioData, putLoading, putError } = useSelector((state) => state.putPrecio); //  'putPrecio' es el nombre del slice en tu reducer
 
+	const { postPrecioData, postLoading, postError } = useSelector((state) => state.postPrecio); //  'postPrecio' es el nombre del slice en tu reducer
+
+	const {deltePrecioData, deleteLoading, deleteError} = useSelector((state) => state.deletePresentacion);
+	// Actualizar id
+	const actualizar = () =>{
+		dispatch(fetchPrecioById(product.IdListaOK));
+	}
+
+	// Llamada para actualizar el precio
+		const actualizarPrecio = (id, precioData) => {
+			dispatch(putPrecioById(id, precioData));
+		};
+
+	// Llamada para actualizar el precio
+	const crearPrecio = (id, precioData) => {
+		dispatch(postPrecio(id, precioData));
+	};
+
+	// Llamada para actualizar el precio
+	const deletePresentacion = (id, precioData) => {
+		dispatch(deletePresentacionAction(id, precioData));
+	};
   // Hacer fetch cuando `product` cambia
   useEffect(() => {
     if (product?.IdListaOK) {
-      dispatch(fetchPrecioById(product.IdListaOK)); // Dispara la acción para obtener los precios
+      actualizar; // Dispara la acción para obtener los precios
     }
   }, [product, dispatch]);
 
@@ -32,7 +80,63 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
         setNuevoPrecio(selectedPrices[0].Precio);
       }
     }
+		
   }, [precioData, product]);
+
+	// Actualizar precio
+	// Función para actualizar el precio
+const handleActualizarPrecio = () => {
+  if (true) {
+    const updatedPrecioData = {
+			
+				IdProdServOK: product.IdListaOK,
+				IdPresentaOK: selectedPresentaId,
+				IdTipoFormulaOK: idTipoFormulaOK,
+				Formula: formula,
+				CostoIni: costoIni,
+				CostoFin: costoFin,
+				Precio: nuevoPrecio,
+				detail_row: { Activo: activo, Borrado: borrado, 
+					detail_row_reg: [
+                        {
+                            FechaReg: new Date(),
+                            UsuarioReg: userName
+                        }
+                    ] }
+			};
+    actualizarPrecio(product.IdListaOK, updatedPrecioData); // Aquí actualizas el precio
+  }
+};
+
+const handleNuevoPrecio = () => {
+  if (true) {
+    const updatedPrecioData = {
+			
+				IdProdServOK: product.IdListaOK,
+				IdPresentaOK: idPresentaOK,
+				IdTipoFormulaOK: idTipoFormulaOK,
+				Formula: formula,
+				CostoIni: costoIni,
+				CostoFin: costoFin,
+				Precio: nuevoPrecio,
+				detail_row: { Activo: activo, Borrado: borrado, 
+					detail_row_reg: [
+                        {
+                            FechaReg: new Date(),
+                            UsuarioReg: userName
+                        }
+                    ] }
+			};
+			crearPrecio(product.IdListaOK, updatedPrecioData); // Aquí actualizas el precio
+			setIdPresentaOK("");
+			actualizar;
+  }
+};
+
+const handleDelete = () => {
+  deletePresentacion(product.IdListaOK, selectedPresentaId)
+};
+
 
   // Cambiar paso
   const handleNextStep = () => {
@@ -63,6 +167,26 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
       setNuevoPrecio(selectedPrices[0].Precio);
     }
   };
+	
+	//Actualiza los precios una vez que se cambia la presentación
+	useEffect(() => {
+		if (precioData && selectedPresentaId) {
+			const precioSeleccionado = precioData.find(
+				(item) => item.IdPresentaOK === selectedPresentaId
+			);
+			if (precioSeleccionado) {
+				setIdTipoFormulaOK(precioSeleccionado.IdTipoFormulaOK || "");
+				setFormula(precioSeleccionado.Formula || "");
+				setCostoIni(precioSeleccionado.CostoIni || "");
+				setCostoFin(precioSeleccionado.CostoFin || "");
+				setNuevoPrecio(precioSeleccionado.Precio || "");
+				setActivo(precioSeleccionado.detail_row.Activo || "S")
+				setBorrado(precioSeleccionado.detail_row.Borrado || "N")
+
+				 // Establece el valor inicial
+			}
+		}
+	}, [precioData, selectedPresentaId]);
 
   const handleSelectPresentacion = (e) => {
     const selectedPresentaId = e.target.value;
@@ -72,10 +196,12 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
     const selected = precioData.find(item => item.IdPresentaOK === selectedPresentaId);
     if (selected) {
       setNuevoPrecio(selected.Precio);
+			setCostoIni(selected.costoIni);
     }
   };
 
   if (!isVisible || !product) return null;
+
 
   return (
     <div className="popup-position">
@@ -88,40 +214,31 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
           {/* Cargando o Error */}
           {loading && <div>Cargando...</div>}
           {error && <div>Error al cargar los datos: {error}</div>}
+									<div>
+						{putLoading && <p>Cargando...</p>}
+						{putError && <p>Error: {putError}</p>}
 
+						{postLoading && <p>Cargando...</p>}
+						{postError && <p>Error: {putError}</p>}
+
+						{deleteLoading && <p>Cargando...</p>}
+						{deleteError && <p>Error: {putError}</p>}
+						
+					</div>
           {/* Wizard steps */}
           <div className="wizard">
             <span className={`step ${currentStep >= 1 ? 'completed' : ''} ${currentStep === 1 ? 'active' : ''}`}>1</span>
             <span className={`step ${currentStep === 2 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>2</span>
           </div>
-
+          
           {currentStep === 1 ? (
             <div className="content">
               {/* Dropdown Producto */}
               <div className="dropdown">
-                <h4>Selecciona Producto</h4>
-                <div className="presentacion-contenedor">
-                  <div className="select-div">
-                    <select
-                      id="producto"
-                      value={selectedProdServId}
-                      onChange={handleSelectProduct}
-                    >
-                      {precioData && [...new Set(precioData.map(item => item.IdProdServOK))].map(productId => (
-                        <option key={productId} value={productId}>
-                          {productId}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dropdown Presentación */}
-              <div className="dropdown">
-                <h4>Selecciona Presentación</h4>
-                <div className="presentacion-contenedor">
-                  <div className="select-div">
+							<h4>Selecciona Presentación</h4>
+							<div className="presentacion-contenedor">
+                
+                <div className="select-div">
                     <select
                       id="presentacion"
                       value={selectedPresentaId}
@@ -134,72 +251,137 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
                       ))}
                     </select>
                   </div>
+									</div>
+              </div>
+
+              {/* Dropdown Presentación */}
+							
+              <div className="dropdown">
+                <h4>Nueva Presentacion</h4>
+                <div className="presentacion-contenedor">
+										<div className="presentacion-id">
+										<div className="input-div">
+											<span>$</span>
+											<input
+												type="text"
+												id="nuevo-presentacion-id"
+												className="input-precioRec"
+												value={idPresentaOK || ""}
+												onChange={(e) => setIdPresentaOK(e.target.value)}
+											/>
+										</div>
+									</div>
+									<span className="Aggbtn"  
+								title="Agregar una lista nueva" 
+								onClick={handleNuevoPrecio}>
+								<i class="fa-solid fa-plus"></i>
+								Añadir
+								</span>
+
+
+								{/* Botón para refrescar datos */}
+								<span
+								className="Refrescarbtn"
+								title="Recargar tabla"
+								onClick={handleActualizarPrecio}// Llama a la acción de actualizar listas cuando se hace clic en el botón
+							>
+								<i className="fa-solid fa-arrows-rotate"></i>
+								Actualizar
+							</span>
+
+								{/* Botón de Exportar */}
+
+									{/* Botón para eliminar seleccionados */}
+									<span 
+									className="Eliminarbtn activo"
+									onClick={handleDelete}>
+								Eliminar Precio
+								</span>
                 </div>
+								
               </div>
 
               {/* Precios */}
               <h4>Selecciona un nuevo precio</h4>
+             
               <div className="button-group">
               <div className="precio-act">
-  <label htmlFor="costo-inicial">Costo Inicial</label>
-  <div className="input-div">
-    <span>$</span>
-    <input
-      type="text"
-      id="costo-inicial"
-      className="input-precioRec"
-      value={precioData?.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoIni || ""}
-      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-    />
-  </div>
-</div>
+								<label htmlFor="costo-inicial">Costo Inicial</label>
+								<div className="input-div">
+									<span>$</span>
+									<input
+										type="number"
+										id="costo-inicial"
+										className="input-precioRec"
+										value={costoIni}
+										onChange={(e) => setCostoIni(e.target.value)} // Hacer modificable
+									/>
+								</div>
+							</div>
 
-<div className="precio-act">
-  <label htmlFor="costo-final">Costo Final</label>
-  <div className="input-div">
-    <span>$</span>
-    <input
-      type="text"
-      id="costo-final"
-      className="input-precioRec"
-      value={precioData?.find(item => item.IdPresentaOK === selectedPresentaId)?.CostoFin || ""}
-      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-    />
-  </div>
-</div>
+							<div className="precio-act">
+								<label htmlFor="costo-final">Costo Final</label>
+								<div className="input-div">
+									<span>$</span>
+									<input
+										type="number"
+										id="costo-final"
+										className="input-precioRec"
+										value={costoFin}
+										onChange={(e) => setCostoFin(e.target.value)} // Hacer modificable
+									/>
+								</div>
+							</div>
 
-<div className="precio-act">
-  <label htmlFor="precio-actual">Precio Actual</label>
-  <div className="input-div">
-    <span>$</span>
-    <input
-      type="text"
-      id="precio-actual"
-      className="input-precioRec"
-      value={precioData?.find(item => item.IdPresentaOK === selectedPresentaId)?.Precio || ""}
-      onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
-    />
-  </div>
-</div>
+							<div className="precio-act">
+								<label htmlFor="precio-actual">Precio</label>
+								<div className="input-div">
+									<span>$</span>
+									<input
+										type="number"
+										id="precio-actual"
+										className="input-precioRec"
+										value={nuevoPrecio}
+										onChange={(e) => setNuevoPrecio(e.target.value)} // Hacer modificable
+									/>
+								</div>
+							</div>
 
-<div className="precio-act">
-  <label htmlFor="nuevo-precio">Nuevo Precio</label>
-  <div className="input-div">
-    <span>$</span>
-    <input
-      type="number"
-      id="nuevo-precio"
-      className="input-precioAct"
-      value={nuevoPrecio || ""}
-      onChange={(e) => setNuevoPrecio(e.target.value)}
-    />
-  </div>
-</div>
+
 
               </div>
+							
+							<div className="button-group">
+							<div className="formula-id">
+								<label htmlFor="formula-id">Formula id</label>
+								<div className="input-div">
+									<span>$</span>
+									<input
+										type="text"
+										id="nuevo-formula-id"
+										className="input-precioRec"
+										value={idTipoFormulaOK}
+										onChange={(e) => setIdTipoFormulaOK(e.target.value)}
+									/>
+								</div>
+							</div>
 
-
-              
+							<div className="formula-id">
+								<label htmlFor="formula-id">Formula id</label>
+								<div className="input-div">
+									<span>$</span>
+									<input
+										type="text"
+										id="nuevo-formula-id"
+										className="input-precioRec"
+										value={formula}
+										onChange={(e) => setFormula(e.target.value)}
+									/>
+								</div>
+							</div>
+								<SeleccionadorActivo/>
+								</div>
+						
               {/* Detail Row */}
               <h4>Detalle de Registro</h4>
               <div className="resources">
