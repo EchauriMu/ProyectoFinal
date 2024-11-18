@@ -332,7 +332,9 @@ const exportToCSV = () => {
               <i className="fa-solid fa-chart-simple"></i>
               <h3 className="titulo-grafica">Gráficas</h3>
             </div>
-            <p className="info-grafica">Precios </p>
+            <p className="info-grafica">
+  Precios de: {selectedGraphProduct ? selectedGraphProduct.IdListaOK : "Selecciona un producto"}
+</p>
 
             <Graficas product={selectedGraphProduct} />
 

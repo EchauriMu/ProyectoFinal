@@ -1,13 +1,14 @@
-// reducers/index.js
 import { combineReducers } from 'redux';
 import listasTablasGeneralReducer from './listasTablasGeneralReducer';
-import precioReducer from './precioReducer'; // Importamos el reducer original para manejar los precios
-import deletePrecioReducer from './deleteListReducer'; // Importamos el nuevo reducer para eliminar precios
+import precioReducer from './precioReducer';
+import deletePrecioReducer from './deleteListReducer';
+import crearListaPreciosReducer from './crearListaPreciosReducer'; // Nuevo reducer
 
 const rootReducer = combineReducers({
-  listasTablasGeneral: listasTablasGeneralReducer, // Mantén este reducer si es necesario
-  precio: precioReducer, // Agregamos el reducer para manejar los precios
-  deletePrecio: deletePrecioReducer, // Agregamos el reducer para manejar la eliminación de precios
+  listasTablasGeneral: listasTablasGeneralReducer,
+  precio: precioReducer,
+  deletePrecio: deletePrecioReducer,
+  crearListaPrecios: crearListaPreciosReducer, // Agregamos el reducer para crear listas
 });
 
 export default rootReducer;
