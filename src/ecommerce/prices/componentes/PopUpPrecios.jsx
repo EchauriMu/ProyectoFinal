@@ -106,6 +106,7 @@ const handleActualizarPrecio = () => {
                     ] }
 			};
     actualizarPrecio(product.IdListaOK, updatedPrecioData); // Aquí actualizas el precio
+    
   }
 };
 
@@ -288,7 +289,7 @@ const handleDelete = () => {
     <div className="presentacion-contenedor">
       <div className="presentacion-id">
         <div className="input-div">
-          <span>$</span>
+       
           <input
             type="text"
             id="nuevo-presentacion-id"

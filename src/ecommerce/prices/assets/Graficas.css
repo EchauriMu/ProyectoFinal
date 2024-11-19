@@ -20,3 +20,30 @@
 .info-grafica {
     color: grey;
 }
+
+
+.btn-refrescar-graf {
+    background-color: #f0ad4e;
+    color: white; 
+    border: none;
+    border-radius: 5px; 
+    padding: 5px 10px; 
+    font-size: 15px; /* Tamaño del texto */
+    cursor: pointer; /* Cambiar a un puntero */
+    transition: background-color 0.3s ease; /* Efecto de transición */
+  }
+  
+
+  .btn-refrescar-graf:disabled {
+    background-color: #9e9e9e; /* Color gris para estado deshabilitado */
+    cursor: not-allowed; /* Cambiar el cursor */
+  }
+  
+
+  .info-graf-container {
+    display: flex; /* Flexbox para alinear los elementos horizontalmente */
+    align-items: center; /* Centrar los elementos verticalmente */
+    justify-content: space-between; /* Espaciado entre texto y botón */
+    gap: 10px; /* Espaciado entre los elementos */
+    
+  }

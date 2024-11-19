@@ -171,7 +171,7 @@ const handleDeleteClick = (idListaOK) => {
 
   return (
     <div className="contenedor">
-      <h1 className="titulo">Centro de búsqueda</h1>
+      <h1 className="titulo">Listas de Precios</h1>
 
       <div className="flex-container">
         {/* Tabla de productos */}
@@ -246,7 +246,14 @@ const handleDeleteClick = (idListaOK) => {
             </thead>
             <tbody>
               {currentItems.map((producto) => (
-                 <tr key={producto._id} onClick={() => handleRowClick(producto)}>
+                <tr 
+                key={producto._id} 
+                onClick={(e) => {
+                  e.stopPropagation(); // Detiene la propagación del evento
+                  handleRowClick(producto);
+                }}
+              >
+
                   <td>
                     <div className="checkbox-container">
                       <input
@@ -321,7 +328,7 @@ const handleDeleteClick = (idListaOK) => {
               <i className="fa-solid fa-chart-simple"></i>
               <h3 className="titulo-grafica">Gráficas</h3>
             </div>
-            <p className="info-grafica">Precios </p>
+      
 
             <Graficas product={selectedGraphProduct} />
 
