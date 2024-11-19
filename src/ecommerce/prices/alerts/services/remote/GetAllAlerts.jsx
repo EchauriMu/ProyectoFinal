@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export function getAllAlerts() {
+export function getAllAlerts(id) {
     return new Promise((resolve, reject) => {
-        axios.get(`${import.meta.env.VITE_REST_API_ECOMMERCE}/listas-precios/9001-000000000001/alertas`)
+        axios.get(`${import.meta.env.VITE_REST_API_ECOMMERCE}/listas-precios/${id}/alertas`)
             .then((response) => {
                 const data = response.data;
                 if (!Array.isArray(data) || data.length === 0) {

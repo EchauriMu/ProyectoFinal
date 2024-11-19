@@ -7,7 +7,7 @@ import { addAlert } from '../../services/remote/post/AddAlert';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const AddAlertModal = ({ showModal, setShowModal }) => {
+const AddAlertModal = ({ showModal, setShowModal, id_lista_precios }) => {
     const [Loading, setLoading] = useState(false);
 
     const formik = useFormik({
@@ -37,7 +37,7 @@ const AddAlertModal = ({ showModal, setShowModal }) => {
             values.fecha = `${values.fecha}:00.000Z`;
             console.log("Valores enviados:", values);
             try {
-                await addAlert(values); // Llama a la API o función para agregar la alerta
+                await addAlert(id_lista_precios, values); // Llama a la API o función para agregar la alerta
                 setShowModal(false);
                 console.log("Alerta agregada con éxito:", values);
             } catch (error) {

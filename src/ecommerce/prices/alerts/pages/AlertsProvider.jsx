@@ -4,7 +4,7 @@ import { getAllAlerts } from '../services/remote/GetAllAlerts';
 
 const AlertsContext = createContext();
 
-export const AlertsProvider = ({ children }) => {
+export const AlertsProvider = ({ children, id_lista_precios }) => {
     const [alerts, setAlerts] = useState([]); // Estado de lista de alertas
     const [loadingTable, setLoadingTable] = useState(false); // Estado de carga
 
@@ -12,7 +12,7 @@ export const AlertsProvider = ({ children }) => {
     const fetchDataAlerts = async () => {
         setLoadingTable(true);
         try {
-            const allAlerts = await getAllAlerts();
+            const allAlerts = await getAllAlerts(id_lista_precios);
             setAlerts(allAlerts);
         } catch (error) {
             console.error("Error al obtener las alertas:", error);
@@ -29,6 +29,7 @@ export const AlertsProvider = ({ children }) => {
     return (
         <AlertsContext.Provider value={{ alerts, loadingTable, fetchDataAlerts }}>
             {children}
+            {id_lista_precios}
         </AlertsContext.Provider>
     );
 };

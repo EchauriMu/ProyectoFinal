@@ -18,18 +18,28 @@ const AlertsColumns = [
   { accessorKey: "mensaje", header: "Mensaje", size: 200 },
 ];
 
-const AlertsTable = () => {
+const AlertsTable = ({ selectedListaPrecios }) => {
   const [alerts, setAlerts] = useState([]);
-  const [loadingTable, setLoadingTable] = useState(true);
+  const [loadingTable, setLoadingTable] = useState(false);
   const [showAddAlertModal, setShowAddAlertModal] = useState(false);
   const [showUpdateAlertModal, setShowUpdateAlertModal] = useState(false);
   const [selectedAlert, setSelectedAlert] = useState(null); // Almacena la alerta seleccionada
   const [selectedRowId, setSelectedRowId] = useState(null); // Almacena el ID de la fila seleccionada
 
+  useEffect(() => {
+    if (selectedListaPrecios) {
+      fetchDataAlerts();
+    }
+  }, [selectedListaPrecios]); // Dependencia
+  
+  if (!selectedListaPrecios) {
+    return <div>Selecciona una lista de precios para ver las alertas.</div>;
+  }
+
   const fetchDataAlerts = async () => {
     setLoadingTable(true);
     try {
-      const allAlertsData = await getAllAlerts();
+      const allAlertsData = await getAllAlerts(selectedListaPrecios); // Usa el ID
       const formattedData = allAlertsData.map((alert) => ({
         _id: alert._id,
         fecha: new Date(alert.fecha).toLocaleDateString(),
@@ -45,10 +55,6 @@ const AlertsTable = () => {
     }
   };
 
-  useEffect(() => {
-    fetchDataAlerts();
-  }, []);
-
   const handleReload = async () => {
     await fetchDataAlerts();
   };
@@ -59,14 +65,17 @@ const AlertsTable = () => {
     );
     if (res) {
       try {
-        await delAlert(selectedAlert._id); // Llamada a la función de eliminación
+        const mensaje = await delAlert(selectedListaPrecios, selectedAlert._id); // Llamada a la función de eliminación
+        console.log(mensaje); // Confirmación opcional
         fetchDataAlerts(); // Recargar alertas
+        //showMensajeSuccess("Alerta eliminada exitosamente."); // Mensaje de éxito
       } catch (error) {
         console.error("Error al eliminar la alerta:", error);
         showMensajeError("No se pudo eliminar la alerta.");
       }
     }
   };
+  
 
   return (
     <Box>
@@ -119,10 +128,12 @@ const AlertsTable = () => {
           setShowAddAlertModal(open);
           if (!open) fetchDataAlerts();
         }}
+        id_lista_precios = {selectedListaPrecios}
       />
       <UpdateAlertModal
         showModal={showUpdateAlertModal}
         data={selectedAlert}
+        id_lista_precios = {selectedListaPrecios}
         setShowModal={(open) => {
           setShowUpdateAlertModal(open);
           if (!open) fetchDataAlerts();

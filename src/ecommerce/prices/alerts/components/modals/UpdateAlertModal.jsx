@@ -10,8 +10,7 @@ import { putAlert } from '../../services/remote/put/putAlert';
 //import MyAddLabels from "../elements/MyAddLabels"; 
 import axios from 'axios';
 
-
-const UpdateAlertModal = ({ showModal, setShowModal, data }) => {
+const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) => {
     const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
@@ -19,10 +18,14 @@ const UpdateAlertModal = ({ showModal, setShowModal, data }) => {
         
         initialValues: {
             _id: data?._id || "",
-            fecha: data?.fecha && !isNaN(new Date(data.fecha)) ? new Date(data.fecha).toISOString().slice(0, 16) : "2024-01-01T00:00",
+            //fecha: data?.fecha && !isNaN(new Date(data.fecha)) ? new Date(data.fecha).toISOString().slice(0, 16) : "2024-01-01T00:00",
+            fecha: data?.fecha && !isNaN(Date.parse(data.fecha))
+            ? `${new Date(data.fecha).getFullYear()}-${String(new Date(data.fecha).getMonth() + 1).padStart(2, '0')}-${String(new Date(data.fecha).getDate()).padStart(2, '0')}T${String(new Date(data.fecha).getHours()).padStart(2, '0')}:${String(new Date(data.fecha).getMinutes()).padStart(2, '0')}`
+            : "2024-01-01T00:00",
+
             Activo: data?.Activo || "S",
             Borrado: data?.Borrado || "N",
-            reporte: data?.reporte || true,
+            reporte: data?.reporte === "Sí" ? true : false,
             mensaje: data?.mensaje || "",
             detail_row_reg: data?.detail_row_reg || [
                 {
@@ -45,7 +48,7 @@ const UpdateAlertModal = ({ showModal, setShowModal, data }) => {
             
             try {
                 // Aquí se llamará a la API PUT
-                await putAlert(values._id,values); // Llama a la API para agregar el precio
+                await putAlert(id_lista_precios, values._id,values); // Llama a la API para agregar el precio
                 console.log("Alerta actulizada con éxito:", values);
 
                 setShowModal(false); // Cierra el modal al completar la solicitud
@@ -59,6 +62,7 @@ const UpdateAlertModal = ({ showModal, setShowModal, data }) => {
 
     useEffect(() => {
         console.log('Datos recibidos para edición:', data);
+        console.log('id lista precios: ', id_lista_precios);
     }, [data]);
 
     return (
