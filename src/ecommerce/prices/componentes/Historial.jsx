@@ -8,10 +8,59 @@ const Historial = () => {
   const [listas, setListas] = useState([]); // Para almacenar las listas
   const [selectedLista, setSelectedLista] = useState(null); // Para la lista seleccionada
   const [selectedPresentaOK, setSelectedPresentaOK] = useState(null); // Para el presentaOK seleccionado
+  const [editingRegistro, setEditingRegistro] = useState(null); // Registro en edición
+  const [formData, setFormData] = useState({
+    Id: '',
+    IdTipoFormulaOK: '',
+    Formula: '',
+    CostoIni: '',
+    CostoFin: '',
+    Precio: '',
+    detail_row: {
+      Activo: '',
+      Borrado: '',
+      detail_row_reg: [
+        {
+          FechaReg: '',
+          UsuarioReg: '',
+        },
+      ],
+    },
+  });
+  //Funcion para mostrar el formulario
+  const handleEditRegistro = (registro) => {
+    setEditingRegistro(registro.Id);
+    setFormData(registro); // Cargar datos del registro en el formulario
+  };
+
+  //FUNCION SOLICITUD de PUT
+  const handleUpdateRegistro = (e) => {
+    e.preventDefault();
+  
+    const { Id } = formData; // Obtén el ID del registro en edición
+    axios
+      .put(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${selectedPresentaOK.IdPresentaOK}/${Id}`, formData)
+      .then(() => {
+        // Actualiza la lista local con los nuevos datos
+        setSelectedPresentaOK((prev) => {
+          const updatedHistorial = prev.historial.map((item) =>
+            item.Id === Id ? formData : item
+          );
+          return { ...prev, historial: updatedHistorial };
+        });
+        setEditingRegistro(null);
+        console.log('Registro actualizado con éxito');
+      })
+      .catch((error) => {
+        console.error('Error al actualizar el registro:', error);
+      });
+  };
+  
+
 
   // Cargar listas desde la API
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_REST_API_PRECIOS}/listas-precios`)
+    axios.get(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/Listas/`)
       .then((response) => {
         console.log(`${import.meta.env.VITE_REST_API_PRECIOS}/listas-precios`);
         console.log(response.data);
@@ -162,6 +211,32 @@ const handleDeleteRegistro = (registroId) => {
                 ))}
               </tbody>
             </table>
+            {editingRegistro && (
+              <form onSubmit={handleUpdateRegistro}>
+                <label>ID:</label>
+                <input
+                  type="text"
+                  value={formData.Id}
+                  onChange={(e) => setFormData({ ...formData, Id: e.target.value })}
+                  disabled
+                />
+                <label>IdTipoFormulaOK:</label>
+                <input
+                  type="text"
+                  value={formData.IdTipoFormulaOK}
+                  onChange={(e) => setFormData({ ...formData, IdTipoFormulaOK: e.target.value })}
+                />
+                <label>Formula:</label>
+                <input
+                  type="text"
+                  value={formData.Formula}
+                  onChange={(e) => setFormData({ ...formData, Formula: e.target.value })}
+                />
+                {/* Añade más campos según sea necesario */}
+                <button type="submit">Guardar</button>
+                <button type="button" onClick={() => setEditingRegistro(null)}>Cancelar</button>
+              </form>
+            )}
 
             {selectedPresentaOK && (
               <div>
@@ -181,6 +256,10 @@ const handleDeleteRegistro = (registroId) => {
                         <td>{subHistorial.Id}</td>
                         <td>{subHistorial.detail_row?.detail_row_reg[0]?.FechaReg || 'Sin fecha'}</td>
                         <td>
+                        {/* Botón de Editar */}
+                        <button onClick={() => handleEditRegistro(subHistorial)}>Editar</button>
+                        </td>
+                        <td>
                         <button className="boton-eliminar" onClick={() => handleDeleteRegistro(subHistorial.Id)}>
                           Eliminar
                         </button>
@@ -197,6 +276,8 @@ const handleDeleteRegistro = (registroId) => {
         </div>
       )}
     </div>
+
+    
   );
 };
 
