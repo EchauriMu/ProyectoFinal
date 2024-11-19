@@ -159,3 +159,15 @@
     width: 80%;
   }
   
+  .boton-eliminar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .boton-eliminar:hover {
+    background-color: #c0392b;
+  }
