@@ -19,6 +19,7 @@ export const postPrecio = (id ,precioData) => {
 
       const data = await response.json();
       console.log("Respuesta del servidor:", data);
+      dispatch(fetchPrecioById(id));
       dispatch({ type: 'POST_PRECIO_SUCCESS', payload: data });
     } catch (error) {
       dispatch({ type: 'POST_PRECIO_FAILURE', error: error.message });

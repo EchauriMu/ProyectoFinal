@@ -45,9 +45,7 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
 
 	const {deltePrecioData, deleteLoading, deleteError} = useSelector((state) => state.deletePresentacion);
 	// Actualizar id
-	const actualizar = () =>{
-		dispatch(fetchPrecioById(product.IdListaOK));
-	}
+
 
 	// Llamada para actualizar el precio
 		const actualizarPrecio = (id, precioData) => {
@@ -63,13 +61,14 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
 	const deletePresentacion = (id, precioData) => {
 		dispatch(deletePresentacionAction(id, precioData));
 	};
-  // Hacer fetch cuando `product` cambia
+
+
+  // Hacer fetch cuando `product` cambia o simple al cargar
   useEffect(() => {
     if (product?.IdListaOK) {
-      actualizar; // Dispara la acción para obtener los precios
+      dispatch(fetchPrecioById(product.IdListaOK)); // Dispara la acción para obtener los precios
     }
   }, [product, dispatch]);
-
   // Filtrar los precios cuando `precioData` o `product` cambian
   useEffect(() => {
     if (precioData.length > 0 && product?.IdProdServOK) {
@@ -134,6 +133,10 @@ const handleNuevoPrecio = () => {
 			actualizar;
   }
 };
+
+
+const [showNewPresentacionInput, setShowNewPresentacionInput] = useState(false);
+
 
 const handleDelete = () => {
   deletePresentacion(product.IdListaOK, selectedPresentaId)
@@ -204,6 +207,7 @@ const handleDelete = () => {
 
   if (!isVisible || !product) return null;
 
+  
 
   return (
     <div className="popup-position">
@@ -241,17 +245,22 @@ const handleDelete = () => {
 							<div className="presentacion-contenedor">
                 
                 <div className="select-div">
-                    <select
-                      id="presentacion"
-                      value={selectedPresentaId}
-                      onChange={handleSelectPresentacion}
-                    >
-                      {precioData && precioData.map(item => (
-                        <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
-                          {item.IdPresentaOK}
-                        </option>
-                      ))}
-                    </select>
+				<select
+  id="presentacion"
+  value={selectedPresentaId}
+  onChange={handleSelectPresentacion}
+>
+  <option value="" >
+    Selecciona presentación
+  </option>
+  {precioData &&
+    precioData.map(item => (
+      <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
+        {item.IdPresentaOK}
+      </option>
+    ))}
+</select>
+
 
                   </div>
 									</div>
@@ -260,46 +269,59 @@ const handleDelete = () => {
               {/* Dropdown Presentación */}
 							
               <div className="dropdown">
-                <h4>Nueva Presentacion</h4>
+			  <h4>Nueva Presentación</h4>
                 <div className="presentacion-contenedor">
-										<div className="presentacion-id">
-										<div className="input-div">
-											<span>$</span>
-											<input
-												type="text"
-												id="nuevo-presentacion-id"
-												className="input-precioRec"
-												value={idPresentaOK || ""}
-												onChange={(e) => setIdPresentaOK(e.target.value)}
-											/>
-										</div>
-									</div>
-									<span className="Aggbtn"  
-								title="Agregar una lista nueva" 
-								onClick={handleNuevoPrecio}>
-								<i class="fa-solid fa-plus"></i>
-								Añadir
-								</span>
+						
+				
+				{!showNewPresentacionInput && (
+  <span 
+    className="AggbtnPop"  
+    title="Agregar una lista nueva" 
+    onClick={() => setShowNewPresentacionInput(true)}
+  >
+    Añadir Presentacion
+  </span>
+)}
+
+{showNewPresentacionInput && (
+  <div className="dropdown">
+    <div className="presentacion-contenedor">
+      <div className="presentacion-id">
+        <div className="input-div">
+          <span>$</span>
+          <input
+            type="text"
+            id="nuevo-presentacion-id"
+            className="input-precioRec"
+            value={idPresentaOK || ""}
+            onChange={(e) => setIdPresentaOK(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="button-group">
+        <button
+          className="confirmar-btn"
+          onClick={() => {
+            handleNuevoPrecio();
+            setShowNewPresentacionInput(false); // Oculta el input después de confirmar
+          }}
+        >
+          Confirmar
+        </button>
+        <button
+          className="cancelar-btn"
+          onClick={() => setShowNewPresentacionInput(false)} // Cancela y oculta el input
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
 
-								{/* Botón para refrescar datos */}
-								<span
-								className="Refrescarbtn"
-								title="Recargar tabla"
-								onClick={handleActualizarPrecio}// Llama a la acción de actualizar listas cuando se hace clic en el botón
-							>
-								<i className="fa-solid fa-arrows-rotate"></i>
-								Actualizar
-							</span>
 
-								{/* Botón de Exportar */}
 
-									{/* Botón para eliminar seleccionados */}
-									<span 
-									className="Eliminarbtn activo"
-									onClick={handleDelete}>
-								Eliminar Precio
-								</span>
                 </div>
 								
               </div>
@@ -370,7 +392,7 @@ const handleDelete = () => {
 							</div>
 
 							<div className="formula-id">
-								<label htmlFor="formula-id">Formula id</label>
+								<label htmlFor="formula-id">Formula</label>
 								<div className="input-div">
 									<span>$</span>
 									<input
@@ -383,6 +405,25 @@ const handleDelete = () => {
 								</div>
 							</div>
 								<SeleccionadorActivo/>
+								<span
+								className="actualizarPrecio"
+								title="Recargar tabla"
+								onClick={handleActualizarPrecio}// Llama a la acción de actualizar listas cuando se hace clic en el botón
+							>
+								
+								Actualizar
+							</span>
+
+								{/* Botón de Exportar */}
+
+									{/* Botón para eliminar seleccionados */}
+									<span 
+									className="EliminarPrecio"
+									onClick={handleDelete}>
+								Eliminar Precio
+								</span>
+								
+
 								</div>
 						
               {/* Detail Row */}

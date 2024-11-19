@@ -3,6 +3,7 @@ import Chart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
 import '../assets/Loaders.css';
+
 const Graficas = ({ product }) => {
   const dispatch = useDispatch();
 
@@ -17,9 +18,12 @@ const Graficas = ({ product }) => {
   }, [product, dispatch]);
 
   // Si estamos cargando o hay un error, no renderizamos el gráfico
-  if (loading) return <div className="contenedorLoader">
-  <div className="Cargando1"></div>
-</div>;
+  if (loading)
+    return (
+      <div className="contenedorLoader">
+        <div className="Cargando1"></div>
+      </div>
+    );
   if (error) return <div>Error al cargar los datos: {error}</div>;
 
   // Mapeo de los datos para el gráfico
@@ -32,9 +36,9 @@ const Graficas = ({ product }) => {
       },
     },
     xaxis: {
-      categories: precioData.map(item => new Date(item.detail_row.detail_row_reg[0].FechaReg).toLocaleDateString()), // Fechas de registro
+      categories: precioData.map(item => item.IdPresentaOK), // IdPresentaOK como eje X
       labels: {
-        rotate: -45, // Para evitar que las fechas se sobrepongan
+        rotate: -45, // Para evitar que los valores se sobrepongan
       },
     },
     colors: ['#8086F2'],

@@ -33,7 +33,7 @@
 .container {
   background-color: #fff;
   width: 900px;
-  height: 600px;
+  height: 650px;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -85,7 +85,7 @@
 .button-group {
   display: flex;
   gap: 10px;
-
+align-items: center;
 }
 
 .precio-act{
@@ -289,4 +289,78 @@ justify-content: start;
     height: 100px !important;
     width: 100px !important;
   }
+}
+
+.selector-activo *{
+  margin: 4px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.selector-activo label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.selector-activo select {
+  padding: 8px;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.selector-activo select.activo {
+  background-color: #85e39b; /* Verde para "Activo" */
+  color: green;
+}
+
+.selector-activo select.borrado {
+  background-color: #b05961; /* Rojo para "Borrado" */
+  color: white;
+}
+
+.selector-activo select:focus {
+  box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
+}
+
+
+.actualizarPrecio{
+  margin-top: 23px;
+  font-size: 15px;
+  padding: 6px 8px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  background: #f0ad4e;
+  cursor: pointer;
+}
+
+.EliminarPrecio{
+  margin-top: 23px;
+  font-size: 15px;
+  padding: 6px 8px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  background: #d9534f;
+  cursor: pointer;
+}
+
+.AggbtnPop{
+  font-size: 15px;
+  padding: 6px 8px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  background: #18ac00;
+  cursor: pointer;
+}
+
+.dropdown{
+  margin: 15px 0px;
 }

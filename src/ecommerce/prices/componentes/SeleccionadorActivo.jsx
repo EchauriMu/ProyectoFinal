@@ -9,26 +9,32 @@ const SeleccionadorActivo = () => {
     setBorrado
    } = useContexto();
 
-  const handleActivoChange = (e) => {
-    setActivo(e.target.value);
+  const handleEstadoChange = (e) => {
+    const value = e.target.value;
+    if (value === "Activo") {
+      setActivo("S");
+      setBorrado("N");
+    } else if (value === "Borrado") {
+      setActivo("N");
+      setBorrado("S");
+    }
   };
 
-  const handleBorradoChange = (e) => {
-    setBorrado(e.target.value);
-  };
+  // Determinar el color de fondo según el valor de "activo"
+  const selectClass = activo === "S" ? 'activo' : 'borrado';
 
   return (
-    <div>
+    <div className='contendor-selecActivo'>
       <div className="selector-activo">
-        <label htmlFor="activo">Activo</label>
-        <select id="activo" value={activo} onChange={handleActivoChange}>
-          <option value="S">Sí</option>
-          <option value="N">No</option>
-        </select>
-        <label htmlFor="borrado">Borrado</label>
-        <select id="borrado" value={borrado} onChange={handleBorradoChange}>
-          <option value="N">No</option>
-          <option value="S">Sí</option>
+        <label htmlFor="estado">Estado</label>
+        <select 
+          id="estado" 
+          value={activo === "S" ? "Activo" : "Borrado"} 
+          onChange={handleEstadoChange} 
+          className={selectClass}
+        >
+          <option value="Activo">Activo</option>
+          <option value="Borrado">Borrado</option>
         </select>
       </div>
     </div>
