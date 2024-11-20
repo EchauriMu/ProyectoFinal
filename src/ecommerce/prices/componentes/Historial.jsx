@@ -13,9 +13,9 @@ const Historial = () => {
     Id: '',
     IdTipoFormulaOK: '',
     Formula: '',
-    CostoIni: '',
-    CostoFin: '',
-    Precio: '',
+    CostoIni: 0,
+    CostoFin: 0,
+    Precio: 0,
     detail_row: {
       Activo: '',
       Borrado: '',
@@ -27,6 +27,25 @@ const Historial = () => {
       ],
     },
   });
+
+  //
+  useEffect(() => {
+    setEditingRegistro(null); // Cerrar formulario
+    setFormData({
+      Id: '',
+      IdTipoFormulaOK: '',
+      Formula: '',
+      CostoIni: 0,
+      CostoFin: 0,
+      Precio: 0,
+      detail_row: {
+        Activo: '',
+        Borrado: '',
+        detail_row_reg: [{ FechaReg: '', UsuarioReg: '' }],
+      },
+    });
+  }, [selectedLista, selectedPresentaOK]);
+  
   //Funcion para mostrar el formulario
   const handleEditRegistro = (registro) => {
     setEditingRegistro(registro.Id);
@@ -200,8 +219,7 @@ const handleDeleteRegistro = (registroId) => {
                 {selectedLista.historial.map((item) => (
                   <tr key={item.IdPresentaOK} onClick={() => handlePresentaOKClick(item.IdPresentaOK)}>
                     <td>{item.IdPresentaOK}</td>
-                    <td>{item.tipoCambio}</td>
-                    <td>{item.fecha}</td>
+                    
                     <td>
                       <button className="boton-eliminar" onClick={() => handleDeleteHistorial(item.IdPresentaOK)}>
                         Eliminar
@@ -211,7 +229,42 @@ const handleDeleteRegistro = (registroId) => {
                 ))}
               </tbody>
             </table>
+
+
+            {selectedPresentaOK && (
+              <div>
+                <h4>Registros de {selectedPresentaOK.IdPresentaOK}</h4>
+                <table>
+                  <thead>
+                    <tr>
+                      
+                      <th>ID</th>
+                      <th>Fecha</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedPresentaOK.historial.map((subHistorial) => (
+                      <tr key={subHistorial.Id}>
+                        <td>{subHistorial.Id}</td>
+                        <td>{subHistorial.detail_row?.detail_row_reg[0]?.FechaReg || 'Sin fecha'}</td>
+                        <td>
+                        {/* Botón de Editar */}
+                        <button className="editar-btn" onClick={() => handleEditRegistro(subHistorial)}>Editar</button>
+                        
+                        <button className="boton-eliminar" onClick={() => handleDeleteRegistro(subHistorial.Id)}>
+                          Eliminar
+                        </button>
+                      </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
             {editingRegistro && (
+              <div>
               <form onSubmit={handleUpdateRegistro}>
                 <label>ID:</label>
                 <input
@@ -232,46 +285,35 @@ const handleDeleteRegistro = (registroId) => {
                   value={formData.Formula}
                   onChange={(e) => setFormData({ ...formData, Formula: e.target.value })}
                 />
-                {/* Añade más campos según sea necesario */}
+                <label>CostoIni:</label>
+                <input
+                  type="number"
+                  value={formData.CostoIni}
+                  onChange={(e) => setFormData({ ...formData, CostoIni: e.target.value })}
+                />
+                <label>CostoFin:</label>
+                <input
+                  type="number"
+                  value={formData.CostoFin}
+                  onChange={(e) => setFormData({ ...formData, CostoFin: e.target.value })}
+                />
+                <label>Precio:</label>
+                <input
+                  type="number"
+                  value={formData.Precio}
+                  onChange={(e) => setFormData({ ...formData, Precio: e.target.value })}
+                />
+                
                 <button type="submit">Guardar</button>
                 <button type="button" onClick={() => setEditingRegistro(null)}>Cancelar</button>
               </form>
-            )}
-
-            {selectedPresentaOK && (
-              <div>
-                <h4>Registros de {selectedPresentaOK.IdPresentaOK}</h4>
-                <table>
-                  <thead>
-                    <tr>
-                      
-                      <th>ID</th>
-                      <th>Fecha</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedPresentaOK.historial.map((subHistorial) => (
-                      <tr key={subHistorial.Id}>
-                        <td>{subHistorial.Id}</td>
-                        <td>{subHistorial.detail_row?.detail_row_reg[0]?.FechaReg || 'Sin fecha'}</td>
-                        <td>
-                        {/* Botón de Editar */}
-                        <button onClick={() => handleEditRegistro(subHistorial)}>Editar</button>
-                        </td>
-                        <td>
-                        <button className="boton-eliminar" onClick={() => handleDeleteRegistro(subHistorial.Id)}>
-                          Eliminar
-                        </button>
-                      </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             )}
 
-            <button onClick={closePopup}>Cerrar</button>
+
+
+
+            <button className="CERRAR" onClick={closePopup}>Cerrar</button>
           </div>
         </div>
       )}
