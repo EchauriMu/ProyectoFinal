@@ -9,6 +9,7 @@ import { putAlert } from '../../services/remote/put/putAlert';
 //import { addPrice } from '../../services/remote/post/AddPrice';
 //import MyAddLabels from "../elements/MyAddLabels"; 
 import axios from 'axios';
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) => {
     const [loading, setLoading] = useState(false);
@@ -18,11 +19,10 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
         
         initialValues: {
             _id: data?._id || "",
-            //fecha: data?.fecha && !isNaN(new Date(data.fecha)) ? new Date(data.fecha).toISOString().slice(0, 16) : "2024-01-01T00:00",
-            fecha: data?.fecha && !isNaN(Date.parse(data.fecha))
+            fecha: data?.fecha && !isNaN(new Date(data.fecha)) ? new Date(data.fecha).toISOString().slice(0, 16) : "2024-01-01T00:00",
+            /*fecha: data?.fecha && !isNaN(Date.parse(data.fecha))
             ? `${new Date(data.fecha).getFullYear()}-${String(new Date(data.fecha).getMonth() + 1).padStart(2, '0')}-${String(new Date(data.fecha).getDate()).padStart(2, '0')}T${String(new Date(data.fecha).getHours()).padStart(2, '0')}:${String(new Date(data.fecha).getMinutes()).padStart(2, '0')}`
-            : "2024-01-01T00:00",
-
+            : "2024-01-01T00:00",*/
             Activo: data?.Activo || "S",
             Borrado: data?.Borrado || "N",
             reporte: data?.reporte === "Sí" ? true : false,
@@ -84,6 +84,7 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
                         onBlur={formik.handleBlur}
                         error={formik.touched._id && Boolean(formik.errors._id)}
                         helperText={formik.touched._id && formik.errors._id}
+                        disabled
                     />
                     <TextField
                         id="fecha"
@@ -97,6 +98,7 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
                         error={formik.touched.fecha && Boolean(formik.errors.fecha)}
                         helperText={formik.touched.fecha && formik.errors.fecha}
                     />
+
                     <TextField
                         id="reporte"
                         label="Reporte"
