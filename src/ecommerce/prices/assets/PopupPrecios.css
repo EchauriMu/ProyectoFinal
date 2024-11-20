@@ -44,15 +44,21 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 15px;
+  gap: 10px;
 }
 
 .header h2 {
-  font-size: 14px;
+  font-size: 18px;
   color: #333;
-  
+  font-weight: 500;
+}
+
+.header span{
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .wizard {

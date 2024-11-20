@@ -240,7 +240,9 @@ const handleDelete = () => {
       <div className="popup-container">
         <div className="container">
           <div className="header">
-            <h2>Editar Precio - ID Lista: {product.IdListaOK}</h2>
+            <h2>Añadir/Modificar/Eliminar SubDoc Precios de: </h2>
+              
+              <span >ID Lista: {product.IdListaOK}</span>
           </div>
 
           {/* Cargando o Error */}
