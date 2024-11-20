@@ -4,6 +4,7 @@ import '../assets/Nav.css';
 import Precios from './Precios'; // Componente para la pestaña "Lista"
 import Graficas from './Graficas'; // Componente para la pestaña "Historial"
 import Historial from './Historial';
+import Promotions from '../promotions/components/tabs/PromotionsTab';
 
 
 const Nav = () => {
@@ -18,6 +19,8 @@ const Nav = () => {
         return <Historial/>; // Componente para la pestaña "Historial"
       case 'tab3':
         return <h2>Usuarios</h2>; // Otro componente para la pestaña "No se"
+      case 'tab4':
+        return <Promotions/>; // Componente para la pestaña "Promociones"
       default:
         return null;
     }
@@ -48,6 +51,13 @@ const Nav = () => {
               onClick={() => setActiveTab('tab3')}
             >
               <a>Usuarios</a>
+            </li>
+            <li 
+              className={activeTab === 'tab4' ? 'active' : ''} 
+              title="Promociones"
+              onClick={() => setActiveTab('tab4')}
+            >
+              <a>Promociones</a>
             </li>
           </ul>
         </div>
