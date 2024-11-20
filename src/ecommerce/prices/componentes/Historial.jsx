@@ -179,7 +179,6 @@ const handleDeleteRegistro = (registroId) => {
         <i className="fa-solid fa-clock-rotate-left"></i>
         <h3 className="historial-title">Historial de Modificaciones</h3>
 
-       
       </header>
 
       <table className="tabla-historial">
