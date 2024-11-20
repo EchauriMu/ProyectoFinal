@@ -5,6 +5,7 @@ import SeleccionadorActivo from './SeleccionadorActivo';
 import '../assets/PopupPrecios.css';
 import '../assets/Precios.css';
 import '../assets/Querys.css';
+import Swal from 'sweetalert2';
 
 import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
 import { putPrecioById } from '../../../actions/PopUpPreciosGeneralActions';
@@ -12,11 +13,10 @@ import { postPrecio } from '../../../actions/PopUpPreciosGeneralActions';
 import { deletePresentacionAction } from '../../../actions/PopUpPreciosGeneralActions';
 import { useSelector } from 'react-redux';
 
-const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
+const PopUpPrecios = ({ isVisible, product, onClose }) => {
 
 
-  const [currentStep, setCurrentStep] = useState(1);
-  
+
 	const { 
     nuevoPrecio, setNuevoPrecio,
     selectedProdServId, setSelectedProdServId,
@@ -86,93 +86,114 @@ const PopUpPrecios = ({ isVisible, product, onClose, onSave }) => {
 
 	// Actualizar precio
 	// Función para actualizar el precio
-const handleActualizarPrecio = () => {
-  if (true) {
-    const updatedPrecioData = {
-			
-				IdProdServOK: product.IdListaOK,
-				IdPresentaOK: selectedPresentaId,
-				IdTipoFormulaOK: idTipoFormulaOK,
-				Formula: formula,
-				CostoIni: costoIni,
-				CostoFin: costoFin,
-				Precio: nuevoPrecio,
-				detail_row: { Activo: activo, Borrado: borrado, 
-					detail_row_reg: [
-                        {
-                            FechaReg: new Date(),
-                            UsuarioReg: userName
-                        }
-                    ] }
-			};
-    actualizarPrecio(product.IdListaOK, updatedPrecioData); // Aquí actualizas el precio
-    
-  }
-};
+  const handleActualizarPrecio = () => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres actualizar este precio?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, actualizar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedPrecioData = {
+          IdProdServOK: product.IdListaOK,
+          IdPresentaOK: selectedPresentaId,
+          IdTipoFormulaOK: idTipoFormulaOK,
+          Formula: formula,
+          CostoIni: costoIni,
+          CostoFin: costoFin,
+          Precio: nuevoPrecio,
+          detail_row: { 
+            Activo: activo, 
+            Borrado: borrado, 
+            detail_row_reg: [
+              {
+                FechaReg: new Date(),
+                UsuarioReg: userName
+              }
+            ] 
+          }
+        };
+  
+        actualizarPrecio(product.IdListaOK, updatedPrecioData); // Aquí actualizas el precio
+  
+        Swal.fire('¡Actualizado!', 'El precio ha sido actualizado.', 'success');
+      }
+    });
+  };
 
-const handleNuevoPrecio = () => {
-  if (true) {
-    const updatedPrecioData = {
-			
-				IdProdServOK: product.IdListaOK,
-				IdPresentaOK: idPresentaOK,
-				IdTipoFormulaOK: idTipoFormulaOK,
-				Formula: formula,
-				CostoIni: costoIni,
-				CostoFin: costoFin,
-				Precio: nuevoPrecio,
-				detail_row: { Activo: activo, Borrado: borrado, 
-					detail_row_reg: [
-                        {
-                            FechaReg: new Date(),
-                            UsuarioReg: userName
-                        }
-                    ] }
-			};
-			crearPrecio(product.IdListaOK, updatedPrecioData); // Aquí actualizas el precio
-			setIdPresentaOK("");
-			actualizar;
-  }
-};
+
+
+
+  //handke ara precio nuevo
+  const handleNuevoPrecio = () => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres agregar este nuevo precio?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, agregar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedPrecioData = {
+          IdProdServOK: product.IdListaOK,
+          IdPresentaOK: idPresentaOK,
+          IdTipoFormulaOK: idTipoFormulaOK,
+          Formula: formula,
+          CostoIni: costoIni,
+          CostoFin: costoFin,
+          Precio: nuevoPrecio,
+          detail_row: { 
+            Activo: activo, 
+            Borrado: borrado, 
+            detail_row_reg: [
+              {
+                FechaReg: new Date(),
+                UsuarioReg: userName
+              }
+            ] 
+          }
+        };
+  
+        crearPrecio(product.IdListaOK, updatedPrecioData); // Aquí creas el nuevo precio
+        setIdPresentaOK(""); // Limpiamos el estado
+        Swal.fire('¡Creado!', 'El nuevo precio ha sido agregado.', 'success');
+      }
+    });
+  };
 
 
 const [showNewPresentacionInput, setShowNewPresentacionInput] = useState(false);
 
 
 const handleDelete = () => {
-  deletePresentacion(product.IdListaOK, selectedPresentaId)
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "¡Este precio se eliminará!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Solo llama a la función deletePresentacion si el usuario confirma
+      deletePresentacion(product.IdListaOK, selectedPresentaId);
+      Swal.fire('¡Eliminado!', 'El precio ha sido eliminado.', 'success');
+    }
+  });
 };
 
 
-  // Cambiar paso
-  const handleNextStep = () => {
-    if (currentStep === 1) {
-      setCurrentStep(2);
-    } else {
-      onSave({ nuevoPrecio });
-      onClose();
-    }
-  };
-
   const handleBack = () => {
-    if (currentStep === 2) {
-      setCurrentStep(1);
-    } else {
       onClose();
-    }
   };
 
-  const handleSelectProduct = (e) => {
-    const selectedProductId = e.target.value;
-    setSelectedProdServId(selectedProductId);
 
-    // Filtrar precios para el producto seleccionado
-    const selectedPrices = precioData.filter(item => item.IdProdServOK === selectedProductId);
-    if (selectedPrices.length > 0) {
-      setSelectedPresentaId(selectedPrices[0].IdPresentaOK);
-      setNuevoPrecio(selectedPrices[0].Precio);
-    }
-  };
 	
 	//Actualiza los precios una vez que se cambia la presentación
 	useEffect(() => {
@@ -233,12 +254,8 @@ const handleDelete = () => {
 						
 					</div>
           {/* Wizard steps */}
-          <div className="wizard">
-            <span className={`step ${currentStep >= 1 ? 'completed' : ''} ${currentStep === 1 ? 'active' : ''}`}>1</span>
-            <span className={`step ${currentStep === 2 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>2</span>
-          </div>
-          
-          {currentStep === 1 ? (
+       
+        
             <div className="content">
               {/* Dropdown Producto */}
               <div className="dropdown">
@@ -443,31 +460,14 @@ const handleDelete = () => {
 
 
 
-
-          ) : (
-            <div className="ConfrimacionContainer">
-            {/* Confirmación o Paso 2 */}
-            <h4>Confirmación</h4>
-            <p>¿Estás seguro de que deseas guardar este nuevo precio?</p>
-            <div className="imageContainer">
-              <img 
-                src="https://w7.pngwing.com/pngs/673/47/png-transparent-yellow-emoji-drawing-emoji-discord-meme-android-imgur-thinking-orange-people-internet-thumbnail.png" 
-                alt="Emoji de pensamiento" 
-                className="emoji"
-              />
-            </div>
-          </div>
           
-          )}
 
           {/* Botones */}
           <div className="actions">
             <button className="go-back-btn" onClick={handleBack}>
               Regresar
             </button>
-            <button className="done-btn" onClick={handleNextStep}>
-              {currentStep === 1 ? 'Siguiente' : 'Guardar'}
-            </button>
+         
           </div>
         </div>
       </div>
