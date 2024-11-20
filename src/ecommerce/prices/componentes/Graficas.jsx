@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
@@ -8,15 +8,15 @@ import '../assets/Graficas.css'; // Archivo CSS adicional
 const Graficas = ({ product }) => {
   const dispatch = useDispatch();
 
-  // Acceso a los datos desde el store usando 'precioData'
-  const { precioData, loading, error } = useSelector((state) => state.precio); // 'precio' es el nombre del slice en tu reducer
-
   // Hacer fetch cuando `product` cambia
   useEffect(() => {
     if (product?.IdListaOK) {
       dispatch(fetchPrecioById(product.IdListaOK)); // Dispara la acción para obtener los precios
     }
-  }, [product, dispatch]);
+  }, [product?.IdListaOK, dispatch]);
+
+  // Acceso a los datos desde el store usando 'precioData'
+  const { precioData, loading, error } = useSelector((state) => state.precio); // 'precio' es el nombre del slice en tu reducer
 
   const handleRefresh = () => {
     if (product?.IdListaOK) {
@@ -24,16 +24,11 @@ const Graficas = ({ product }) => {
     }
   };
 
-  // Si estamos cargando o hay un error, no renderizamos el gráfico
-  if (loading)
-    return (
-      <div className="contenedorLoader">
-        <div className="Cargando1"></div>
-      </div>
-    );
-  if (error) return <div className="error">Error al cargar los datos: {error}</div>;
+  // Validar datos antes de mapearlos
+  const categorias = precioData?.length ? precioData.map((item) => item.IdPresentaOK) : [];
+  const datosSerie = precioData?.length ? precioData.map((item) => item.Precio) : [];
 
-  // Mapeo de los datos para el gráfico
+  // Configuración del gráfico
   const opciones = {
     chart: {
       id: 'grafico-precios',
@@ -42,33 +37,49 @@ const Graficas = ({ product }) => {
       },
     },
     xaxis: {
-      categories: precioData.map((item) => item.IdPresentaOK), // IdPresentaOK como eje X
+      categories: categorias, // Eje X
       labels: {
-        rotate: -45, // Para evitar que los valores se sobrepongan
+        rotate: -45, // Evitar superposición
       },
     },
     colors: ['#8086F2'],
   };
 
-  // Los datos de la serie (precio)
   const series = [
     {
       name: 'Precio',
-      data: precioData.map((item) => item.Precio), // Precios de los productos
+      data: datosSerie, // Datos de la serie
     },
   ];
 
+  // Renderizado según estado
+  if (loading)
+    return (
+      <div className="contenedorLoader">
+        <div className="Cargando1"></div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="error">
+        Error al cargar los datos: {error}
+        <button onClick={handleRefresh} className="btn-retry">
+          Reintentar
+        </button>
+      </div>
+    );
+
   return (
     <div className="grafica-container">
-<div className="info-graf-container">
-  <p className="info-grafica">
-    Precios de: {precioData?.IdListaOK ? precioData.IdListaOK : 'Selecciona un producto'}
-  </p>
-  <button className="btn-refrescar-graf" onClick={handleRefresh}>
-    <i className="fa-solid fa-arrow-rotate-right"></i>
-  </button>
-</div>
-
+      <div className="info-graf-container">
+        <p className="info-grafica">
+          Precios de: {product?.IdListaOK ? product.IdListaOK : 'Selecciona un producto'}
+        </p>
+        <button className="btn-refrescar-graf" onClick={handleRefresh}>
+          <i className="fa-solid fa-arrow-rotate-right"></i>
+        </button>
+      </div>
       <div className="grafica">
         <Chart options={opciones} series={series} type="line" width="100%" height="250px" />
       </div>

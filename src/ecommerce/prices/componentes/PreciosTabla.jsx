@@ -15,113 +15,90 @@ const PreciosTabla = () => {
   const dispatch = useDispatch();
   const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
 
-
-//const para addlista
-// Estado para controlar la visibilidad del popup "Agregar una lista nueva"
-const [isAddListPopupVisible, setIsAddListPopupVisible] = useState(false);
-
-// Función para mostrar el popup al hacer clic en "Agregar una lista nueva"
-const handleAddList = () => {
-  setIsAddListPopupVisible(true); // Mostrar el popup
-};
-
-
-
-
-//const de graficas
-const [selectedGraphProduct, setSelectedGraphProduct] = useState(null);
-
-  // Manejador para seleccionar el producto de la gráfica
-  const handleRowClick = (producto) => {
-    setSelectedGraphProduct(producto); // Selecciona el producto para las gráficas
-    console.log("Producto seleccionado para gráficas:", producto.IdListaOK);
-  };
-
-
-//const para popups
-  const [isPopupVisible, setIsPopupVisible] = useState(false); // Controla si el popup está visible
-  const [selectedProduct, setSelectedProduct] = useState(null);   // Guarda el producto seleccionado
-  
-  const handleEditClick = (producto) => {
-    setSelectedProduct(producto);  // Establece el producto seleccionado
-    setIsPopupVisible(true);      // Muestra el popup
-  };
-  
-
-
-
-//const para os deletes
-const handleDeleteClick = (idListaOK) => {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    text: "¡Este cambio no se puede revertir!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Sí, eliminarlo',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Llama a la acción de eliminación si el usuario confirma
-      dispatch(deletePrecioAction(idListaOK));
-      Swal.fire(
-        'Eliminado!',
-        'El precio ha sido eliminado.',
-        'success'
-      );
-    }
-  });
-};
-
-
-
-
-
-  //const de la tabla
+  // ======== ESTADOS ========
+  // Popup de agregar lista
+  const [isAddListPopupVisible, setIsAddListPopupVisible] = useState(false);
+  // Popup de edición
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Valor inicial de elementos por página
-  const [selectedItems, setSelectedItems] = useState([]); // Estado para almacenar elementos seleccionados
-  const [selectAll, setSelectAll] = useState(false); // Estado para manejar el checkbox de selección total
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  // Gráficas
+  const [selectedGraphProduct, setSelectedGraphProduct] = useState(null);
 
+  // ======== EFECTOS ========
   useEffect(() => {
     dispatch(fetchListasTablasGeneral());
   }, [dispatch]);
 
-  // Calcular el índice de inicio y fin para la paginación
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = listasTablasGeneral.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Manejar selección de un ítem
-  const handleCheckboxChange = (id) => {
-    setSelectedItems((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((item) => item !== id) // Desmarcar
-        : [...prevSelected, id] // Marcar
-    );
+  // ======== MANEJADORES DE EVENTOS ========
+  // Mostrar popup de agregar lista
+  const handleAddList = () => {
+    setIsAddListPopupVisible(true);
   };
 
-  // Manejar selección de todos los ítems visibles
+  // Seleccionar un producto para la gráfica
+  const handleRowClick = (producto) => {
+    setSelectedGraphProduct(producto);
+    console.log("Producto seleccionado para gráficas:", producto.IdListaOK);
+  };
+
+  // Mostrar popup de edición
+  const handleEditClick = (producto) => {
+    setSelectedProduct(producto);
+    setSelectedGraphProduct(producto);
+    setIsPopupVisible(true);
+  };
+
+  // Eliminar un producto con confirmación
+  const handleDeleteClick = (idListaOK) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡Este cambio no se puede revertir!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deletePrecioAction(idListaOK));
+        Swal.fire('Eliminado!', 'El precio ha sido eliminado.', 'success');
+      }
+    });
+  };
+
+  // Cambiar número de elementos por página
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(parseInt(e.target.value));
+    setCurrentPage(1);
+  };
+
+  // Seleccionar todos los ítems visibles
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
-      // Seleccionar todos los ítems actuales
       setSelectedItems(currentItems.map((item) => item._id));
     } else {
-      // Deseleccionar todos
       setSelectedItems([]);
     }
   };
 
-  // Función para cambiar el número de elementos por página
-  const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(parseInt(e.target.value));
-    setCurrentPage(1); // Reiniciar a la primera página cada vez que se cambia el número de elementos
+  // Seleccionar o deseleccionar un ítem
+  const handleCheckboxChange = (id) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((item) => item !== id)
+        : [...prevSelected, id]
+    );
   };
 
-  // Función para cambiar de página
-  const handleNextPage = () => {
+  // Navegar entre páginas
+  const handleNextPageTable = () => {
     if (indexOfLastItem < listasTablasGeneral.length) {
       setCurrentPage(currentPage + 1);
     }
@@ -133,39 +110,10 @@ const handleDeleteClick = (idListaOK) => {
     }
   };
 
-  // Función para exportar solo los elementos seleccionados a CSV
-  const exportToCSV = () => {
-    const selectedData = listasTablasGeneral.filter(producto => selectedItems.includes(producto._id));
-    
-    const headers = ['ID Institución', 'ID Lista', 'Nombre del Producto', 'Fecha Expira Inicio', 'Fecha Expira Fin'];
-
-    const rows = selectedData.map((producto) => [
-      producto.IdInstitutoOK,
-      producto.IdListaOK,
-      producto.IdListaBK,
-      new Date(producto.FechaExpiraIni).toLocaleDateString(),
-      new Date(producto.FechaExpiraFin).toLocaleDateString(),
-    ]);
-
-    const csvContent = [
-      headers.join(','), // Agregar las cabeceras
-      ...rows.map(row => row.join(',')), // Convertir cada fila en una cadena CSV
-    ].join('\n');
-
-    // Crear un Blob con el contenido CSV
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    // Crear un enlace temporal para iniciar la descarga
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'precios_seleccionados.csv'); // Nombre del archivo a descargar
-      link.click(); // Iniciar la descarga
-    }
-  };
-
-  // Verificar si hay elementos seleccionados para activar/desactivar el botón de exportación
+  // ======== CÁLCULOS ========
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = listasTablasGeneral.slice(indexOfFirstItem, indexOfLastItem);
   const isExportButtonActive = selectedItems.length > 0;
 
 
@@ -179,7 +127,7 @@ const handleDeleteClick = (idListaOK) => {
 
         <div className="encabezado">
   <i className="fa-solid fa-tag"></i>
-  <h3>Precios Recientes</h3>
+  <h3>Listas de precios:</h3>
 
 
   <span className="Aggbtn"  title="Agregar una lista nueva" onClick={handleAddList} >
@@ -191,6 +139,8 @@ const handleDeleteClick = (idListaOK) => {
           isAddListPopupVisible={isAddListPopupVisible}
           setIsAddListPopupVisible={setIsAddListPopupVisible}
         />
+
+
 
   {/* Botón para refrescar datos */}
   <span
@@ -210,11 +160,6 @@ const handleDeleteClick = (idListaOK) => {
   </span>
 
 
-  <span
-    className={`Exportarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}
-  >
-    <i className="fa-solid fa-arrow-up-from-bracket"></i> Exportar
-  </span>
 
 
 </div>
@@ -270,19 +215,29 @@ const handleDeleteClick = (idListaOK) => {
                   <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
                   <td className='iconsActions'>
                   <i
-    className="fa-solid fa-pen"
-    style={{ color: 'blue', cursor: 'pointer' }}
+                  
+    className="fa-solid fa-plus"
+    title='Agregar a la lista'
+    style={{ color: 'green', cursor: 'pointer', fontWeight: 'bold', fontSize:'20px' }}
     onClick={(e) => {
       e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
       handleEditClick(producto);
     }}
   ></i>
 
+
+  <i className="fa-solid fa-pen-to-square" 
+  style={{ color: 'blue', cursor: 'pointer', fontWeight: 'bold', fontSize:'20px' }}  >
+
+
+</i>
+
+
 <i
   className="fa-solid fa-trash"
   style={{ color: 'red', cursor: 'pointer' }}
   onClick={(e) => {
-    e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
+    e.preventDefault(); // Evita que el clic en el ícono afecte la fila
     handleDeleteClick(producto.IdListaOK); // Llamada a la acción de eliminación
   }}
 ></i>
@@ -315,7 +270,7 @@ const handleDeleteClick = (idListaOK) => {
             </div>
             <div className="botones-paginacion">
               <button onClick={handlePrevPage} disabled={currentPage === 1}>Anterior</button>
-              <button onClick={handleNextPage} disabled={indexOfLastItem >= listasTablasGeneral.length}>Siguiente</button>
+              <button onClick={handleNextPageTable} disabled={indexOfLastItem >= listasTablasGeneral.length}>Siguiente</button>
             </div>
           </div>
 
@@ -328,8 +283,7 @@ const handleDeleteClick = (idListaOK) => {
               <i className="fa-solid fa-chart-simple"></i>
               <h3 className="titulo-grafica">Gráficas</h3>
             </div>
-      
-
+       
             <Graficas product={selectedGraphProduct} />
 
           
@@ -344,7 +298,7 @@ const handleDeleteClick = (idListaOK) => {
         isVisible={isPopupVisible}
         product={selectedProduct}
         onClose={() => setIsPopupVisible(false)}
-        onSave={() => {/* Lógica para guardar los cambios */}} 
+       
       />
     
     </div>

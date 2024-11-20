@@ -11,7 +11,7 @@ import { fetchPrecioById } from '../../../actions/listasTablasGeneralActions';
 import { putPrecioById } from '../../../actions/PopUpPreciosGeneralActions';
 import { postPrecio } from '../../../actions/PopUpPreciosGeneralActions';
 import { deletePresentacionAction } from '../../../actions/PopUpPreciosGeneralActions';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const PopUpPrecios = ({ isVisible, product, onClose }) => {
 
@@ -63,12 +63,15 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
 	};
 
 
-  // Hacer fetch cuando `product` cambia o simple al cargar
+  // Hacer fetch cuando `product` cambia
   useEffect(() => {
     if (product?.IdListaOK) {
       dispatch(fetchPrecioById(product.IdListaOK)); // Dispara la acción para obtener los precios
     }
   }, [product, dispatch]);
+
+
+  
   // Filtrar los precios cuando `precioData` o `product` cambian
   useEffect(() => {
     if (precioData.length > 0 && product?.IdProdServOK) {
@@ -190,6 +193,7 @@ const handleDelete = () => {
 
 
   const handleBack = () => {
+    dispatch(fetchPrecioById(product.IdListaOK));
       onClose();
   };
 
