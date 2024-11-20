@@ -5,7 +5,7 @@ import '../assets/Graficas.css';
 import '../assets/Querys.css';
 import Graficas from './Graficas';
 import { fetchListasTablasGeneral } from '../../../actions/listasTablasGeneralActions';
-import PopUpPrecios from './PopUpPrecios';
+import PopUpPrecios from '../precios/components/PopUpPrecios';
 import { deletePrecioAction } from '../../../actions/listasTablasGeneralActions';
 import Swal from 'sweetalert2';
 import PopUpAgregarLista from './PopUpAgregarLista'

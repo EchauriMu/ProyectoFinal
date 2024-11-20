@@ -3,9 +3,9 @@ import listasTablasGeneralReducer from './listasTablasGeneralReducer';
 import precioReducer from './precioReducer';
 import deletePrecioReducer from './deleteListReducer';
 import crearListaPreciosReducer from './crearListaPreciosReducer'; 
-import putPrecioReducer from './putPrecioReducer'; // Importamos el nuevo reduces para actulizar un precio
-import postPrecioReducer from './postPrecioReducer'; // Importamos el nuevo reduces para eliminar una presentacion
-import deletePresentacionReducer from './deletePresentacionReducer';
+import putPrecioReducer from './precios/putPrecioReducer'; // Importamos el nuevo reduces para actulizar un precio
+import postPrecioReducer from './precios/postPrecioReducer'; // Importamos el nuevo reduces para eliminar una presentacion
+import deletePresentacionReducer from './precios/deletePresentacionReducer';
 
 const rootReducer = combineReducers({
   listasTablasGeneral: listasTablasGeneralReducer, // Mantén este reducer si es necesario

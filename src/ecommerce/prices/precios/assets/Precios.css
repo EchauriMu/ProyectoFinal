@@ -1,0 +1,301 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: #eee;
+    color: black;
+    
+}
+
+
+.contenedor {
+    padding: 5px 30px 0px 30px;
+}
+
+.titulo {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    
+}
+
+
+.flex-container {
+    display: flex;
+    gap: 16px;
+    flex-direction: row;
+}
+
+
+.precios {
+    width: 60%; 
+    overflow-x: auto;
+    margin-top: 30px;
+    background-color: hsl(0, 0%, 100%);
+    border: 1px solid hsl(240, 5.9%, 90%);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+ .encabezado{
+    display: flex;
+    align-items: center;
+    grid-gap: 10px;
+    margin-bottom: 24px;
+}
+
+.precios .encabezado h3{
+    margin-right: auto;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.encabezado i {
+    font-size: 1.5rem;
+}
+
+
+.Exportarbtn.inactivo{
+    font-size: 15px;
+    padding: 4px 20px 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #e0dcff;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.Exportarbtn.activo{
+    font-size: 15px;
+    padding: 4px 20px 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #4f42a7;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.Exportarbtn i{
+    font-size: 1rem;
+    margin: 4px 6px 0px 0px ;
+}
+
+
+.Eliminarbtn.inactivo {
+    font-size: 15px;
+    padding: 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #ffcccc; /* Color de fondo para inactivo */
+    cursor: not-allowed;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Estilo para el botón "Eliminar Seleccionados" activo */
+.Eliminarbtn.activo {
+    font-size: 15px;
+    padding: 6px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #d9534f; /* Color de fondo para activo */
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Estilo para el botón "Refrescar" */
+.Refrescarbtn {
+    font-size: 15px;
+   display: flex;
+   align-items: center;
+   padding: 6px 8px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #f0ad4e; /* Color de fondo para refrescar */
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+
+.Aggbtn{
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    padding: 6px 8px;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #18ac00;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+.Aggbtn i, .Refrescarbtn i {
+    font-size: 20px;
+
+}
+
+
+.precios table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    
+}
+
+.precios table th {
+    font-size: 14px;
+    background-color: #eee;
+    padding: 16px 14px 16px 6px;
+    font-weight: 500;
+    text-align:start;
+    border-bottom: 1px solid var(--gris);
+}
+
+
+.precios table td {
+    font-size: 14px;
+    padding: 6px 8px 6px 6px;
+    border-bottom: 1px solid #ddd;
+    
+}
+
+
+
+.precios table td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.precios tbody tr {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.precios tbody tr:hover {
+    background: #eee; 
+}
+
+.precios tbody tr.seleccionado {
+    background: #bdd7e9; 
+  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.3s; 
+}
+
+.precio-celda {
+    border-left: 2px solid hsl(0, 2%, 77%); 
+}
+.precio-flex{
+    display: flex;
+    align-items: center;
+}
+
+
+.thPrecio{
+    border-left: 2px solid hsl(0, 2%, 77%); 
+   
+}
+
+
+/* Estilo del checkbox */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .checkbox-container input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 3px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .checkbox-container input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+
+
+  .iconsActions i{
+margin: 0px 10px;
+font-size: 17px;
+}
+
+.iconsActions i:hover {
+    transform: scale(1.2); 
+  }
+
+  .precios table th:nth-child(2),
+.precios table td:nth-child(2) {
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+}
+
+.paginacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+ 
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .registro-info {
+    font-weight: 500;
+    color: #333;
+    margin-right: 10px;
+  }
+  .items-por-page{
+    margin-right: 10px;
+  }
+  
+  .botones-paginacion button {
+    background-color: #4f42a7;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .botones-paginacion button:disabled {
+    background-color: #e0dcff;
+    cursor: not-allowed;
+    color: blue;
+  }
+  
+  .botones-paginacion button:hover:not(:disabled) {
+    background-color: #4f42a7;
+  }
+  
+
+  
