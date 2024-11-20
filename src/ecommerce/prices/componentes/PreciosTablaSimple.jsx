@@ -7,31 +7,31 @@ const PreciosTablaSimple = ({ onRowClick }) => {
   const dispatch = useDispatch();
   const { listasTablasGeneral, loading, error } = useSelector(state => state.listasTablasGeneral);
 
-  //const de la tabla
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Valor inicial de elementos por página
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   useEffect(() => {
     dispatch(fetchListasTablasGeneral());
   }, [dispatch]);
 
-  // Calcular el índice de inicio y fin para la paginación
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = listasTablasGeneral.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleRowClick = (row) => {
-    console.log(row.IdListaOK); // Imprime el IdListaOK
-    onRowClick(row.IdListaOK); // Propaga el ID seleccionado al padre
+    console.log(row.IdListaOK);
+    onRowClick(row.IdListaOK);
   };
 
-  // Función para cambiar el número de elementos por página
+
+
   const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(parseInt(e.target.value));
-    setCurrentPage(1); // Reiniciar a la primera página cada vez que se cambia el número de elementos
+    setItemsPerPage(parseInt(e.target.value, 10));
+    setCurrentPage(1);
   };
 
-  // Función para cambiar de página
   const handleNextPage = () => {
     if (indexOfLastItem < listasTablasGeneral.length) {
       setCurrentPage(currentPage + 1);
@@ -46,20 +46,14 @@ const PreciosTablaSimple = ({ onRowClick }) => {
 
   return (
     <div className="contenedorListaAlertas">
-     
-
       <div className="flex-containerAlerts">
-        {/* Tabla de productos */}
         <div className="preciosAlerts">
-
           <div className="encabezado">
             <h3>Listas Disponibles:</h3>
-
-            {/* Botón para refrescar datos */}
             <span
               className="RefrescarbtnAlerts"
               title="Recargar tabla"
-              onClick={() => dispatch(fetchListasTablasGeneral())} // Llama a la acción de actualizar listas cuando se hace clic en el botón
+              onClick={() => dispatch(fetchListasTablasGeneral())}
             >
               <i className="fa-solid fa-arrows-rotate"></i>
             </span>
@@ -77,26 +71,29 @@ const PreciosTablaSimple = ({ onRowClick }) => {
             <table>
               <thead>
                 <tr>
+                
                   <th>ID Inst</th>
                   <th>ID Lista</th>
                   <th>DesLista</th>
-                 
+                  <th>Fecha Expira Inicio</th>
+                  <th>Fecha Expira Fin</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((producto) => (
                   <tr key={producto._id} onClick={() => handleRowClick(producto)}>
+                  
                     <td>{producto.IdInstitutoOK}</td>
                     <td>{producto.IdListaOK}</td>
                     <td>{producto.IdListaBK}</td>
-                   
+                    <td>{new Date(producto.FechaExpiraIni).toLocaleDateString()}</td>
+                    <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           )}
 
-          {/* Paginación */}
           <div className="paginacion">
             <div className="info-paginacion">
               <span className="registro-info">
@@ -118,7 +115,6 @@ const PreciosTablaSimple = ({ onRowClick }) => {
               <button onClick={handleNextPage} disabled={indexOfLastItem >= listasTablasGeneral.length}>Siguiente</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
