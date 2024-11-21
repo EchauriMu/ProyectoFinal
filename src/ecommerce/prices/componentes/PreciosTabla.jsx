@@ -78,24 +78,29 @@ const PreciosTabla = () => {
     setCurrentPage(1);
   };
 
-  // Seleccionar todos los ítems visibles
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    if (!selectAll) {
-      setSelectedItems(currentItems.map((item) => item._id));
-    } else {
-      setSelectedItems([]);
-    }
-  };
+// Función para seleccionar o deseleccionar todos los ítems visibles
+const handleSelectAll = () => {
+  // Invertir el valor de selectAll
+  setSelectAll(!selectAll);
+  
+  // Si no están todos seleccionados, seleccionamos todos los ítems
+  if (!selectAll) {
+    setSelectedItems(currentItems.map((item) => item._id));  // Seleccionamos todos los ítems visibles
+  } else {
+    setSelectedItems([]);  // Si ya están seleccionados todos, deseleccionamos
+  }
+};
 
-  // Seleccionar o deseleccionar un ítem
-  const handleCheckboxChange = (id) => {
-    setSelectedItems((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((item) => item !== id)
-        : [...prevSelected, id]
-    );
-  };
+// Función para seleccionar o deseleccionar un ítem individual
+const handleCheckboxChange = (id) => {
+  setSelectedItems((prevSelected) =>
+    // Si el ítem ya está seleccionado, lo deseleccionamos
+    prevSelected.includes(id)
+      ? prevSelected.filter((item) => item !== id)  // Filtramos el ítem a deseleccionar
+      : [...prevSelected, id]  // Si no está seleccionado, lo agregamos a la lista
+  );
+};
+
 
   // Navegar entre páginas
   const handleNextPageTable = () => {
