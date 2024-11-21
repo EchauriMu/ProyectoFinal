@@ -81,6 +81,7 @@ const UpdateNotesModal = ({ showModal, setShowModal, data , id_lista_precios}) =
                         onBlur={formik.handleBlur}
                         error={formik.touched._id && Boolean(formik.errors._id)}
                         helperText={formik.touched._id && formik.errors._id}
+                        disabled
                     />
                     <TextField
                         id="Usuario"
