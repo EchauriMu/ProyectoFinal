@@ -1,0 +1,97 @@
+
+
+@media (max-width: 1400px) {
+    .precios, .contenedor-graficas {
+        flex: 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
+    }
+   .flex-container{
+    flex-wrap: wrap;
+   }
+
+  .nav-contenedor  .nav-imagen {
+        width: 20px;
+        height: 20px;
+    }
+    
+      
+    .nav-contenedor .nav-titulo {
+        font-weight: 600;
+        font-size: 14px; 
+      }
+
+      .nav-contenedor .nav-pestaña {
+        width: 70px;
+        background-color: #8086F2;
+        color: white;
+        padding: 5px;
+        border-radius: 6px 16px;
+        cursor: pointer;
+        border: none;
+        font-size: 12px;
+    }
+
+    .nav-contenedor .nav-foto {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .nav-contenedor .nav-nombre {
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .navbar li a i {
+        font-size: 20px !important;
+      }
+
+ 
+    .navbar{
+        margin: 20px 20px;
+        flex-wrap: wrap;
+        gap: 0px 30px;
+        
+    }
+
+.nav-usuario2{
+    display: none !important;
+}
+
+
+      
+}
+
+@media (max-width: 720px) {
+    
+    .nav-contenedor{
+        justify-content: center !important;
+        gap: 0px 20px;
+    }
+    .navbar li a{
+        width: 100px !important;
+      }
+      .nav-logo{
+       
+        justify-content: center;
+      }
+
+
+      .nav-usuario{
+        display: none !important;
+    }
+    .nav-usuario2{
+        display: flex !important;
+        align-items: center;
+        grid-area: 0.5rem;
+       
+    }
+
+}
+
+@media (max-width: 320px) {
+    .navbar li a{
+        width: 70px !important;
+      }
+
+
+}
+

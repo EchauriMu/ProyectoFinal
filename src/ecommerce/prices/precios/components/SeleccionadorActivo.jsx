@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContexto } from './PreciosProvider';
+import { useContexto } from '../../componentes/PreciosProvider';
 
 const SeleccionadorActivo = () => {
   const { 

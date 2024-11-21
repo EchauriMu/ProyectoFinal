@@ -42,7 +42,7 @@ const AlertsTable = ({ selectedListaPrecios }) => {
       const allAlertsData = await getAllAlerts(selectedListaPrecios); // Usa el ID
       const formattedData = allAlertsData.map((alert) => ({
         _id: alert._id,
-        fecha: new Date(alert.fecha).toLocaleDateString(),
+        fecha: alert.fecha,
         reporte: alert.reporte ? "Sí" : "No",
         mensaje: alert.mensaje,
       }));
