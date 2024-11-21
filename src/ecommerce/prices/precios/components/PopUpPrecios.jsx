@@ -28,7 +28,8 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
     formula, setFormula,
     costoIni, setCostoIni,
     costoFin, setCostoFin,
-    userName, activo, setActivo,
+    userName, 
+    activo, setActivo,
     borrado, setBorrado,
     dispatch 
   } = useContexto();
@@ -223,8 +224,8 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
 
         {/* Nueva Presentación */}
         <div className="dropdown">
-          <h4>Nueva Presentación</h4>
-          <div className="presentacion-contenedor">
+          
+          <div className="presentacion-contenedor" >
             {!showNewPresentacionInput ? (
               <span
                 className="AggbtnPop"
@@ -234,36 +235,40 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                 Añadir Presentación
               </span>
             ) : (
-              <div>
+              <div className="button-group">
+                <div className="formula-id">
+                <label >Nueva presentación</label>
+                <div className="input-div">
                 <input
                   type="text"
                   className="input-precioRec"
                   value={idPresentaOK || ""}
                   onChange={(e) => setIdPresentaOK(e.target.value)}
-                  placeholder="Nueva presentación"
                 />
-                <button
-                  className="confirmar-btn"
+              </div>
+            </div>
+                
+                <span
+                  className="actualizarPrecio"
                   onClick={() => {
                     handleNuevoPrecio();
                     setShowNewPresentacionInput(false);
                   }}
                 >
                   Confirmar
-                </button>
-                <button
-                  className="cancelar-btn"
+                </span>
+                <span
+                  className="EliminarPrecio"
                   onClick={() => setShowNewPresentacionInput(false)}
                 >
                   Cancelar
-                </button>
+                </span>
               </div>
             )}
           </div>
         </div>
 
         {/* Inputs de precios */}
-        <h4>Selecciona un nuevo precio</h4>
         <div className="button-group">
           {[
             { id: "costo-inicial", label: "Costo Inicial", value: costoIni, setter: setCostoIni },
