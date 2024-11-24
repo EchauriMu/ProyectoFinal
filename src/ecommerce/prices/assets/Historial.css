@@ -258,16 +258,16 @@ border: 1px solid #ccc;
 border-radius: 4px;
 }
 
-button {
+.modal-form button {
 cursor: pointer;
 }
 
-button[type="submit"] {
+.modal-form button[type="submit"] {
 background-color: #4caf50;
 color: white;
 }
 
-button[type="button"] {
+.modal-form button[type="button"] {
 background-color: #f44336;
 color: white;
 }
@@ -280,7 +280,7 @@ padding: 5px 10px;
 border-radius: 4px;
 }
 
-button.editar-btn {
+.modal-form button.editar-btn {
 background-color: #3498db;
 color: white;
 border: none;

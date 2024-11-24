@@ -15,6 +15,7 @@ export const PreciosProvider = ({ children }) => {
 	const [costoFin, setCostoFin] = useState("");
   const [activo, setActivo] = useState("S");
   const [borrado, setBorrado] = useState("N");
+  const [botonesHabilitado, setBotonesHabilitado] = useState(true);
   const dispatch = useDispatch();
 	const [userName, setUserName] = useState('');
 	//Nombre del usuario
@@ -36,6 +37,7 @@ export const PreciosProvider = ({ children }) => {
     costoIni, setCostoIni,
     costoFin, setCostoFin,
     userName, setUserName,
+    botonesHabilitado, setBotonesHabilitado,
     activo,
     setActivo,
     borrado,

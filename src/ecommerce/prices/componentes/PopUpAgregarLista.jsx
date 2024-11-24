@@ -200,7 +200,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             onChange={handleInputChange}
             required
           />
-          <button type="button" onClick={handleAddPrecio}>Agregar Precio</button>
+          <button className='addPrice' onClick={handleAddPrecio}>Agregar Precio</button>
           <div>
             <label>Precios:</label>
             <div className="precios-container" style={{ overflowX: 'auto' }}>
