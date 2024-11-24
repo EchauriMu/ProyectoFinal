@@ -14,28 +14,26 @@ const UpdatePromotionModal = ({ showModal, setShowModal, data, id_lista_precios 
         enableReinitialize: true,
         initialValues: {
             _id: data?._id || "",
+            Activo: data?.Activo || "S",
             tipo: data?.tipo || "descuento_personalizado",
             descuento: data?.descuento || 0,
             condicion: data?.condicion || "No hay",
-            FechaReg: data?.FechaReg && !isNaN(Date.parse(data.FechaReg))
-                ? new Date(data.FechaReg).toISOString().slice(0, 16) // Formato YYYY-MM-DDTHH:mm
-                : "2024-01-01T00:00",
         },
         validationSchema: Yup.object({
+            Activo: Yup.string().required("El estado activo (S o N) de descuento es obligatorio"),
             tipo: Yup.string().required("El tipo de descuento es obligatorio"),
             descuento: Yup.number()
                 .typeError("El descuento debe ser un número")
                 .required("El descuento es obligatorio"),
             condicion: Yup.string().required("La condición es obligatoria"),
-            FechaReg: Yup.date().required("La fecha es obligatoria")
         }),
         onSubmit: async (values) => {
             setLoading(true);
             const preparedValues = {
+                Activo: values.Activo,
                 tipo: values.tipo,
                 descuento: Number(values.descuento),
-                condicion: values.condicion,
-                FechaReg: new Date(values.FechaReg).toISOString(), // Convertimos a formato ISO completo
+                condicion: values.condicion
             };
 
             try {
@@ -70,6 +68,22 @@ const UpdatePromotionModal = ({ showModal, setShowModal, data, id_lista_precios 
                             disabled
                             value={formik.values._id}
                         />
+                        <br></br>
+                        <TextField
+                            id="Activo"
+                            label="Estado de la promoción"
+                            select
+                            SelectProps={{ native: true }}
+                            required
+                            value={formik.values.Activo}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.Activo && Boolean(formik.errors.Activo)}
+                            helperText={formik.touched.Activo && formik.errors.Activo}
+                        >
+                            <option value="S">Promoción activa</option>
+                            <option value="N">Promoción inactiva</option>
+                        </TextField>
                         <br></br>
                         <TextField
                             id="tipo"
@@ -110,19 +124,6 @@ const UpdatePromotionModal = ({ showModal, setShowModal, data, id_lista_precios 
                             error={formik.touched.condicion && Boolean(formik.errors.condicion)}
                             helperText={formik.touched.condicion && formik.errors.condicion}
                         />
-                        <br></br>
-                        {/*<TextField
-                            id="FechaReg"
-                            label="Fecha"
-                            type="datetime-local"
-                            InputLabelProps={{ shrink: true }}
-                            required
-                            value={formik.values.FechaReg}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.FechaReg && Boolean(formik.errors.FechaReg)}
-                            helperText={formik.touched.FechaReg && formik.errors.FechaReg}
-                        /> */}
                 </DialogContent>
 
                 <DialogActions>
