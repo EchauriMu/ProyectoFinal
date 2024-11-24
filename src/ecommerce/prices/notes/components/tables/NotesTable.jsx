@@ -98,7 +98,7 @@ const NotesTable = ({ selectedListaPrecios }) => {
           },
           sx: {
             cursor: loadingTable ? "not-allowed" : "pointer",
-            backgroundColor: selectedRowId === row.id ? darken("#e4e400", 0.01) : "inherit",
+            backgroundColor: selectedRowId === row.id ? darken("#e0e0e0", 0.01) : "inherit",
           },
         })}
         renderTopToolbarCustomActions={() => (
