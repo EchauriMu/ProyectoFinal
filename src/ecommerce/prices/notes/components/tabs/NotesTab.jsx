@@ -14,7 +14,7 @@ const NotesTab = () => {
                 <PreciosTablaSimple onRowClick={setSelectedListaPrecios} />
             </PreciosProvider>
             <NotesProvider selectedListaPrecios={selectedListaPrecios}>
-                <div className='TablaAlertas'>
+                <div className='TablaNotas'>
                     <NotesTable selectedListaPrecios={selectedListaPrecios} />
                 </div>
             </NotesProvider>

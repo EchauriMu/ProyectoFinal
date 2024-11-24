@@ -1,8 +1,8 @@
-.contenedorAlertas{
+.contenedorNotas{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 99%;
     padding: 20px
 
 }
@@ -94,6 +94,6 @@
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.TablaAlertas{
+.TablaNotas{
     width: 60%;
 }
