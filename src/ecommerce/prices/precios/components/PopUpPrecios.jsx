@@ -3,14 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useContexto } from '../../componentes/PreciosProvider';
 import SeleccionadorActivo from './SeleccionadorActivo';
 import Swal from 'sweetalert2';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { 
-  putPrecioById, 
-  postPrecio, 
-  deletePresentacionAction 
-} from '../../../../actions/PopUpPreciosGeneralActions';
-
+import { addPrecio } from '../services/remote/post/addPrecio';
+import { deletePresentacion } from '../services/remote/del/deletePresentacion';
+import { putPrecio } from '../services/remote/put/putPrecio';
 import {fetchPrecioById} from '../../../../actions/listasTablasGeneralActions';
 
 import '../assets/PopupPrecios.css';
@@ -20,14 +19,8 @@ import '../assets/Querys.css';
 const PopUpPrecios = ({ isVisible, product, onClose }) => {
   // Contexto
   const { 
-    nuevoPrecio, setNuevoPrecio,
-    selectedProdServId, setSelectedProdServId,
     selectedPresentaId, setSelectedPresentaId,
-    idPresentaOK, setIdPresentaOK,
-    idTipoFormulaOK, setIdTipoFormulaOK,
-    formula, setFormula,
-    costoIni, setCostoIni,
-    costoFin, setCostoFin,
+    botonesHabilitado, setBotonesHabilitado,
     userName, 
     activo, setActivo,
     borrado, setBorrado,
@@ -36,9 +29,6 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
 
   // Estado global del store
   const { precioData, loading, error } = useSelector((state) => state.precio);
-  const { putLoading, putError } = useSelector((state) => state.putPrecio);
-  const { postLoading, postError } = useSelector((state) => state.postPrecio);
-  const { deleteLoading, deleteError } = useSelector((state) => state.deletePresentacion);
 
   // Estado local
   const [showNewPresentacionInput, setShowNewPresentacionInput] = useState(false);
@@ -47,6 +37,8 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
   useEffect(() => {
     if (product?.IdListaOK) {
       dispatch(fetchPrecioById(product.IdListaOK));
+      borrado_input();
+      formik.resetForm();
     }
   }, [product, dispatch]);
 
@@ -54,31 +46,46 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
     if (precioData.length > 0 && product?.IdProdServOK) {
       const selectedPrices = precioData.filter(item => item.IdProdServOK === product.IdProdServOK);
       if (selectedPrices.length > 0) {
-        const [firstPrice] = selectedPrices;
-        setSelectedProdServId(firstPrice.IdProdServOK);
-        setSelectedPresentaId(firstPrice.IdPresentaOK);
-        setNuevoPrecio(firstPrice.Precio);
+        setSelectedPresentaId(selectedPrices.IdPresentaOK);
       }
     }
   }, [precioData, product]);
 
-  useEffect(() => {
-    if (precioData && selectedPresentaId) {
-      const selected = precioData.find(item => item.IdPresentaOK === selectedPresentaId);
-      if (selected) {
-        setIdTipoFormulaOK(selected.IdTipoFormulaOK || "");
-        setFormula(selected.Formula || "");
-        setCostoIni(selected.CostoIni || "");
-        setCostoFin(selected.CostoFin || "");
-        setNuevoPrecio(selected.Precio || "");
-        setActivo(selected.detail_row?.Activo || "S");
-        setBorrado(selected.detail_row?.Borrado || "N");
+  //Validación de Yup
+  const validationSchema = Yup.object({
+    IdPresentaOK: Yup.string().required("La presentación es obligatoria."),
+    IdTipoFormulaOK: Yup.string().required("El tipo de fórmula es obligatorio."),
+    Formula: Yup.string().required("La fórmula es obligatoria."),
+    CostoIni: Yup.number().required("El costo inicial es obligatorio.").min(0, "El costo inicial debe ser mayor o igual a 0."),
+    CostoFin: Yup.number().required("El costo final es obligatorio.").min(Yup.ref('CostoIni'), "El costo final debe ser mayor o igual al costo inicial."),
+    Precio: Yup.number().required("El precio es obligatorio.").min(0, "El precio debe ser mayor o igual a 0."),
+  });
+
+  // Inicialización de Formik
+  const formik = useFormik({
+    initialValues: {
+      IdProdServOK :  "",
+      IdPresentaOK: '',
+      IdTipoFormulaOK: '',
+      Formula: '',
+      CostoIni: '',
+      CostoFin: '',
+      Precio: '',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      if (showNewPresentacionInput) {
+        handleNuevoPrecio(values);
+      } else {
+        handleActualizarPrecio(values);
       }
-    }
-  }, [precioData, selectedPresentaId]);
+    },
+  });
+
+
 
   // Handlers
-  const handleActualizarPrecio = () => {
+  const handleActualizarPrecio = (values) => {
     Swal.fire({
       title: '¿Estás seguro?',
       text: '¿Quieres actualizar este precio?',
@@ -86,29 +93,33 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
       showCancelButton: true,
       confirmButtonText: 'Sí, actualizar',
       cancelButtonText: 'Cancelar',
-    }).then(result => {
+    }).then(async result => {
       if (result.isConfirmed) {
         const updatedPrecioData = {
-          IdProdServOK: product.IdListaOK,
-          IdPresentaOK: selectedPresentaId,
-          IdTipoFormulaOK: idTipoFormulaOK,
-          Formula: formula,
-          CostoIni: costoIni,
-          CostoFin: costoFin,
-          Precio: nuevoPrecio,
+          ...values,
           detail_row: {
             Activo: activo,
             Borrado: borrado,
             detail_row_reg: [{ FechaReg: new Date(), UsuarioReg: userName }]
           }
         };
-        dispatch(putPrecioById(product.IdListaOK, updatedPrecioData));
-        Swal.fire('¡Actualizado!', 'El precio ha sido actualizado.', 'success');
+        try{
+          await putPrecio(product.IdListaOK, updatedPrecioData).then(
+            () =>{
+              Swal.fire('¡Actualizado!', 'El precio ha sido actualizado.', 'success');
+              dispatch(fetchPrecioById(product.IdListaOK))
+            }
+          );
+        }catch(e){
+          Swal.fire('¡Error!', 'La presentación no se pudo actualizar.', 'error');
+        }
+        
+        
       }
     });
   };
-
-  const handleNuevoPrecio = () => {
+  
+  const handleNuevoPrecio =  (values) => {
     Swal.fire({
       title: '¿Estás seguro?',
       text: '¿Quieres agregar este nuevo precio?',
@@ -116,25 +127,33 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
       showCancelButton: true,
       confirmButtonText: 'Sí, agregar',
       cancelButtonText: 'Cancelar',
-    }).then(result => {
+    }).then(async result => {
       if (result.isConfirmed) {
         const newPrecioData = {
-          IdProdServOK: product.IdListaOK,
-          IdPresentaOK: idPresentaOK,
-          IdTipoFormulaOK: idTipoFormulaOK,
-          Formula: formula,
-          CostoIni: costoIni,
-          CostoFin: costoFin,
-          Precio: nuevoPrecio,
+          ...values,
+          IdPresentaOK: formik.values.IdProdServOK+"-"+formik.values.IdPresentaOK,
           detail_row: {
             Activo: activo,
             Borrado: borrado,
             detail_row_reg: [{ FechaReg: new Date(), UsuarioReg: userName }]
           }
         };
-        dispatch(postPrecio(product.IdListaOK, newPrecioData));
-        setIdPresentaOK("");
-        Swal.fire('¡Creado!', 'El nuevo precio ha sido agregado.', 'success');
+        try{
+          console.log(newPrecioData)
+          await addPrecio(product.IdListaOK, newPrecioData).then(
+            () =>{
+              Swal.fire('¡Creado!', 'El nuevo precio ha sido agregado.', 'success');
+              borrado_input();
+              setShowNewPresentacionInput(false)
+              setBotonesHabilitado(false)
+              dispatch(fetchPrecioById(product.IdListaOK))
+              formik.resetForm();
+            }
+          );
+        }catch(e){
+          Swal.fire('¡Error!', 'La presentación no se pudo agregar.', 'error');
+        }
+        
       }
     });
   };
@@ -147,10 +166,19 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
-    }).then(result => {
+    }).then( async result => {
       if (result.isConfirmed) {
-        dispatch(deletePresentacionAction(product.IdListaOK, selectedPresentaId));
-        Swal.fire('¡Eliminado!', 'El precio ha sido eliminado.', 'success');
+        try{
+          await deletePresentacion(product.IdListaOK, selectedPresentaId).then(()=>{
+            Swal.fire('¡Eliminado!', 'El precio ha sido eliminado.', 'success');
+            dispatch(fetchPrecioById(product.IdListaOK))
+            borrado_input();
+          });
+        }catch(e){
+          Swal.fire('¡Error!', 'El precio no ha sido eliminado.', 'error')
+        }
+        
+        
       }
     });
   };
@@ -159,15 +187,49 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
     setSelectedPresentaId(e.target.value);
     const selected = precioData.find(item => item.IdPresentaOK === e.target.value);
     if (selected) {
-      setNuevoPrecio(selected.Precio);
-      setCostoIni(selected.CostoIni);
+      formik.setValues({
+        IdProdServOK :  selected.IdProdServOK,
+        IdPresentaOK: selected.IdPresentaOK,
+        IdTipoFormulaOK: selected.IdTipoFormulaOK,
+        Formula: selected.Formula,
+        CostoIni: selected.CostoIni,
+        CostoFin: selected.CostoFin,
+        Precio: selected.Precio,
+      });
+    }else{
+      borrado_input();
     }
+  };
+
+  const borrado_input = () => {
+      setActivo("S"); 
+      setBorrado("N");
+      formik.setValues({
+        IdProdServOK : product.IdListaOK ,
+        IdPresentaOK: '',
+        IdTipoFormulaOK: '',
+        Formula: '',
+        CostoIni: '',
+        CostoFin: '',
+        Precio: '',
+      });
+      
   };
 
   const handleBack = () => {
     dispatch(fetchPrecioById(product.IdListaOK));
     onClose();
   };
+
+  const menuDesplegable = () =>{
+    setShowNewPresentacionInput(false);
+    if (selectedPresentaId == ""){
+      setBotonesHabilitado(true)
+    }else{
+      setBotonesHabilitado(false)
+    }
+    
+  }
 
   if (!isVisible || !product) return null;
 
@@ -189,18 +251,8 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
       {loading && <div>Cargando...</div>}
       {error && <div>Error al cargar los datos: {error}</div>}
 
-      {/* Estados para acciones (POST, PUT, DELETE) */}
-      <div>
-        {putLoading && <p>Cargando actualización...</p>}
-        {putError && <p>Error en actualización: {putError}</p>}
-        {postLoading && <p>Cargando creación...</p>}
-        {postError && <p>Error en creación: {postError}</p>}
-        {deleteLoading && <p>Cargando eliminación...</p>}
-        {deleteError && <p>Error en eliminación: {deleteError}</p>}
-      </div>
-
       {/* Contenido principal */}
-      <div className="content">
+      <div onSubmit={formik.handleSubmit} className="content">
         {/* Selección de Presentación */}
         <div className="dropdown">
           <h4>Selecciona Presentación</h4>
@@ -210,8 +262,11 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                 id="presentacion"
                 value={selectedPresentaId}
                 onChange={handleSelectPresentacion}
+                onClick={() => {
+                  menuDesplegable();
+                }}
               >
-                <option value="">Selecciona presentación</option>
+                <option value="" >Selecciona presentación</option>
                 {precioData?.map((item) => (
                   <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
                     {item.IdPresentaOK}
@@ -223,14 +278,21 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
         </div>
 
         {/* Nueva Presentación */}
-        <div className="dropdown">
+        <div className="button-group">
           
           <div className="presentacion-contenedor" >
             {!showNewPresentacionInput ? (
               <span
                 className="AggbtnPop"
                 title="Agregar una lista nueva"
-                onClick={() => setShowNewPresentacionInput(true)}
+                value=""
+                onClick={(e) => {
+                  formik.resetForm();
+                  handleSelectPresentacion(e);
+                  setShowNewPresentacionInput(true);
+                  setSelectedPresentaId("");
+                  setBotonesHabilitado(true);
+                }}
               >
                 Añadir Presentación
               </span>
@@ -242,24 +304,33 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                 <input
                   type="text"
                   className="input-precioRec"
-                  value={idPresentaOK || ""}
-                  onChange={(e) => setIdPresentaOK(e.target.value)}
+                  id={"IdPresentaOK"}
+                  name = {"IdPresentaOK"}
+                  value={formik.values.IdPresentaOK}
+                  onChange={formik.handleChange}
                 />
+                
               </div>
+              {formik.errors.IdPresentaOK && formik.touched.IdPresentaOK && (
+                  <div className="error">*{formik.errors.IdPresentaOK}</div>
+                )}
             </div>
                 
                 <span
                   className="actualizarPrecio"
                   onClick={() => {
-                    handleNuevoPrecio();
-                    setShowNewPresentacionInput(false);
+                    formik.handleSubmit(); // Llama al envío del formulario
+                    
                   }}
                 >
                   Confirmar
                 </span>
                 <span
                   className="EliminarPrecio"
-                  onClick={() => setShowNewPresentacionInput(false)}
+                  onClick={() =>{ 
+                    setShowNewPresentacionInput(false);
+                    setBotonesHabilitado(false);
+                  }}
                 >
                   Cancelar
                 </span>
@@ -271,10 +342,10 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
         {/* Inputs de precios */}
         <div className="button-group">
           {[
-            { id: "costo-inicial", label: "Costo Inicial", value: costoIni, setter: setCostoIni },
-            { id: "costo-final", label: "Costo Final", value: costoFin, setter: setCostoFin },
-            { id: "precio-actual", label: "Precio", value: nuevoPrecio, setter: setNuevoPrecio },
-          ].map(({ id, label, value, setter }) => (
+            { id: "costo-inicial", label: "Costo Inicial", name:"CostoIni" },
+            { id: "costo-final", label: "Costo Final", name: "CostoFin" },
+            { id: "precio-actual", label: "Precio", name: "Precio" },
+          ].map(({ id, label, name }) => (
             <div className="precio-act" key={id}>
               <label htmlFor={id}>{label}</label>
               <div className="input-div">
@@ -283,10 +354,14 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                   type="number"
                   id={id}
                   className="input-precioRec"
-                  value={value}
-                  onChange={(e) => setter(e.target.value)}
+                  name = {name}
+                  value={formik.values[name]}
+                  onChange={formik.handleChange}
                 />
               </div>
+              {formik.errors[name] && formik.touched[name] && (
+                  <div className="error">*{formik.errors[name]}</div>
+                )}
             </div>
           ))}
         </div>
@@ -294,9 +369,9 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
         {/* Formulas */}
         <div className="button-group">
           {[
-            { id: "nuevo-formula-id", label: "Formula ID", value: idTipoFormulaOK, setter: setIdTipoFormulaOK },
-            { id: "nuevo-formula", label: "Formula", value: formula, setter: setFormula },
-          ].map(({ id, label, value, setter }) => (
+            { id: "nuevo-formula-id", label: "Formula ID",name: "IdTipoFormulaOK" },
+            { id: "nuevo-formula", label: "Formula", name: "Formula" },
+          ].map(({ id, label, name }) => (
             <div className="formula-id" key={id}>
               <label htmlFor={id}>{label}</label>
               <div className="input-div">
@@ -304,21 +379,40 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                   type="text"
                   id={id}
                   className="input-precioRec"
-                  value={value}
-                  onChange={(e) => setter(e.target.value)}
+                  name = {name}
+                  value={formik.values[name]}
+                  onChange={formik.handleChange}
                 />
               </div>
+              {formik.errors[name] && formik.touched[name] && (
+                  <div className="error">*{formik.errors[name]}</div>
+                )}
             </div>
           ))}
           <SeleccionadorActivo />
-          <span
+            <span
             className="actualizarPrecio"
+            type="submit"
             title="Recargar tabla"
-            onClick={handleActualizarPrecio}
+            onClick={() => {
+              if (!botonesHabilitado) {
+                formik.handleSubmit(); // Llama al envío del formulario solo si no están deshabilitados
+              }
+            }}
+            style={{ pointerEvents: botonesHabilitado ? 'none' : 'auto', opacity: botonesHabilitado ? 0.5 : 1 }}
           >
             Actualizar
           </span>
-          <span className="EliminarPrecio" onClick={handleDelete}>
+
+          <span
+            className="EliminarPrecio"
+            onClick={() => {
+              if (!botonesHabilitado) {
+                handleDelete(); // Llama al envío del formulario solo si no están deshabilitados
+              }
+            }}
+            style={{ pointerEvents: botonesHabilitado ? 'none' : 'auto', opacity: botonesHabilitado ? 0.5 : 1 }}
+          >
             Eliminar Precio
           </span>
         </div>
@@ -331,9 +425,17 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
               precioData
                 .find((item) => item.IdPresentaOK === selectedPresentaId)
                 ?.detail_row?.detail_row_reg.map((reg, index) => (
-                  <p key={index}>
-                    Registro {index + 1}: Fecha de Registro:{" "}
-                    {new Date(reg.FechaReg).toLocaleDateString()} - Registrado por:{" "}
+                  <p> 
+                    Fecha de Registro:{" "}
+                    {new Date(reg.FechaReg).toLocaleString('es-ES', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: false, // Usa formato de 24 horas
+                    })} - Registrado por:{" "}
                     {reg.UsuarioReg}
                   </p>
                 ))}
