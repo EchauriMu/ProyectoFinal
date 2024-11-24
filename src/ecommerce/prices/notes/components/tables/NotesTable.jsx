@@ -9,7 +9,7 @@ import { getAllNotes } from "../../services/remote/GetAllNotes";
 import AddNotesModal from "../modals/AddNotesModal";
 import UpdateNotesModal from "../modals/UpdateNotesModal";
 import { showMensajeError, showMensajeConfirm } from "../elements/messages/mySwalAlers";
-//import { delAlert } from "../../services/remote/del/DeleteAlert"; // Nueva función para eliminar alertas
+import { delNotes } from "../../services/remote/del/DeleteNotes"; // Nueva función para eliminar notas
 
 const NotesColumns = [
   { accessorKey: "_id", header: "ID Nota", size: 30 },
@@ -27,7 +27,7 @@ const NotesTable = ({ selectedListaPrecios }) => {
   const [loadingTable, setLoadingTable] = useState(false);
   const [showAddNotesModal, setShowAddNotesModal] = useState(false);
   const [showUpdateNotesModal, setShowUpdateNotesModal] = useState(false);
-  const [selectedNotes, setSelectedNotes] = useState(null); // Almacena la alerta seleccionada
+  const [selectedNotes, setSelectedNotes] = useState(null); // Almacena la nota seleccionada
   const [selectedRowId, setSelectedRowId] = useState(null); // Almacena el ID de la fila seleccionada
 
   useEffect(() => {
@@ -74,8 +74,8 @@ const NotesTable = ({ selectedListaPrecios }) => {
       try {
         const mensaje = await delNotes(selectedListaPrecios, selectedNotes._id); // Llamada a la función de eliminación
         console.log(mensaje); // Confirmación opcional
-        fetchDataNotes(); // Recargar alertas
-        //showMensajeSuccess("Alerta eliminada exitosamente."); // Mensaje de éxito
+        fetchDataNotes(); // Recargar notas
+        //showMensajeSuccess("nota eliminada exitosamente."); // Mensaje de éxito
       } catch (error) {
         console.error("Error al eliminar la nota:", error);
         showMensajeError("No se pudo eliminar la nota.");
@@ -98,7 +98,7 @@ const NotesTable = ({ selectedListaPrecios }) => {
           },
           sx: {
             cursor: loadingTable ? "not-allowed" : "pointer",
-            backgroundColor: selectedRowId === row.id ? darken("#EFF999", 0.01) : "inherit",
+            backgroundColor: selectedRowId === row.id ? darken("#e4e400", 0.01) : "inherit",
           },
         })}
         renderTopToolbarCustomActions={() => (

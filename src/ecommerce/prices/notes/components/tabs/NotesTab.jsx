@@ -3,7 +3,7 @@ import NotesTable from '../tables/NotesTable';
 import { NotesProvider } from '../../pages/NotesProvider'; 
 import { PreciosProvider } from '../../../componentes/PreciosProvider';
 import PreciosTablaSimple from '../../../componentes/PreciosTablaSimple';
-import '../../assets/alertas.css';
+import '../../assets/notes.css';
 
 const NotesTab = () => {
     const [selectedListaPrecios, setSelectedListaPrecios] = useState(null); // Mueve esto dentro del componente

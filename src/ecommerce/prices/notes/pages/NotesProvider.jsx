@@ -5,7 +5,7 @@ import { getAllNotes } from '../services/remote/GetAllNotes';
 const NotesContext = createContext();
 
 export const NotesProvider = ({ children, id_lista_precios }) => {
-    const [notes, setNotes] = useState([]); // Estado de lista de alertas
+    const [notes, setNotes] = useState([]); // Estado de lista de notas
     const [loadingTable, setLoadingTable] = useState(false); // Estado de carga
 
     // Función para cargar los precios
