@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, Typography, TextField, DialogActions } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,12 +9,22 @@ import * as Yup from "yup";
 
 const AddPromotionModal = ({ showModal, setShowModal, id_lista_precios }) => {
     const [Loading, setLoading] = useState(false);
+    const [userName, setUserName] = useState('');
+
+    // Función para obtener el nombre del usuario
+    useEffect(() => {
+        const storedUserName = sessionStorage.getItem('usuario');
+        if (storedUserName) {
+            setUserName(storedUserName);
+        }
+    }, []);
 
     const formik = useFormik({
         initialValues: {
             tipo: "descuento_personalizado",
             descuento: 0,
             condicion: "",
+            usuario: userName,
         },
         validationSchema: Yup.object({
             tipo: Yup.string().required("El tipo de descuento es obligatorio"),
@@ -29,6 +39,7 @@ const AddPromotionModal = ({ showModal, setShowModal, id_lista_precios }) => {
                 tipo: values.tipo,
                 descuento: Number(values.descuento), // Aseguramos que el descuento sea numérico
                 condicion: values.condicion,
+                usuario: userName,
             };
             console.log("Valores enviados:", preparedValues);
             try {

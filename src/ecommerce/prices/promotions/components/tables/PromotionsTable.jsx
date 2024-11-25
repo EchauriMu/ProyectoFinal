@@ -13,6 +13,7 @@ import { delPromotion } from "../../services/remote/del/DeletePromotion"; // Nue
 
 const PromotionColumns = [
   { accessorKey: "_id", header: "ID", size: 30 },
+  { accessorKey: "Activo", header: "Activo (S/N)", size: 30 },
   { accessorKey: "tipo", header: "Tipo", size: 100 },
   { accessorKey: "descuento", header: "Descuento (%)", size: 200 },
   { accessorKey: "condicion", header: "Condición", size: 200 },
@@ -22,13 +23,13 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
   const [promotions, setPromotions] = useState([]);
   const [loadingTable, setLoadingTable] = useState(false);
   const [showAddPromotionsModal, setShowAddPromotionsModal] = useState(false);
-  const [showUpdatePromotionsModal, setShowUpdateAlertModal] = useState(false);
+  const [showUpdatePromotionsModal, setShowUpdatePromotionModal] = useState(false);
   const [selectedPromotion, setSelectedPromotion] = useState(null); // Almacena la promoción seleccionada
   const [selectedRowId, setSelectedRowId] = useState(null); // Almacena el ID de la fila seleccionada
 
   useEffect(() => {
     if (selectedListaPrecios) {
-      fetchDataAlerts();
+      fetchDataPromotions();
     }
   }, [selectedListaPrecios]); // Dependencia
   
@@ -36,27 +37,28 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
     return <div>Selecciona una lista de precios para ver las promociones.</div>;
   }
 
-  const fetchDataAlerts = async () => {
+  const fetchDataPromotions = async () => {
     setLoadingTable(true);
     try {
-      const allAlertsData = await getAllPromotions(selectedListaPrecios); // Usa el ID
-      const formattedData = allAlertsData.map((idLista) => ({
+      const allPromotionsData = await getAllPromotions(selectedListaPrecios); // Usa el ID
+      const formattedData = allPromotionsData.map((idLista) => ({
         _id: idLista._id,
+        Activo: idLista.Activo,
         tipo: idLista.tipo,
         descuento: idLista.descuento,
         condicion: idLista.condicion,
       }));
       setPromotions(formattedData);
     } catch (error) {
-      console.error("Error al obtener las alertas:", error);
-      showMensajeError("Error al cargar las alertas.");
+      console.error("Error al obtener las promociones:", error);
+      showMensajeError("Error al cargar las promociones.");
     } finally {
       setLoadingTable(false);
     }
   };
 
   const handleReload = async () => {
-    await fetchDataAlerts();
+    await fetchDataPromotions();
   };
 
   const handleDelete = async () => {
@@ -67,7 +69,7 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
       try {
         const mensaje = await delPromotion(selectedListaPrecios, selectedPromotion._id); // Llamada a la función de eliminación
         console.log(mensaje); // Confirmación opcional
-        fetchDataAlerts(); // Recargar alertas
+        fetchDataPromotions(); // Recargar alertas
         //showMensajeSuccess("Alerta eliminada exitosamente."); // Mensaje de éxito
       } catch (error) {
         console.error("Error al eliminar la alerta:", error);
@@ -103,7 +105,7 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
             </Tooltip>
             <Tooltip title="Actualizar">
               <IconButton
-                onClick={() => selectedPromotion && setShowUpdateAlertModal(true)}
+                onClick={() => selectedPromotion && setShowUpdatePromotionModal(true)}
                 disabled={!selectedPromotion}
               >
                 <EditIcon />
@@ -126,7 +128,7 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
         showModal={showAddPromotionsModal}
         setShowModal={(open) => {
           setShowAddPromotionsModal(open);
-          if (!open) fetchDataAlerts();
+          if (!open) fetchDataPromotions();
         }}
         id_lista_precios = {selectedListaPrecios}
       />
@@ -135,8 +137,8 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
         data={selectedPromotion}
         id_lista_precios = {selectedListaPrecios}
         setShowModal={(open) => {
-          setShowUpdateAlertModal(open);
-          if (!open) fetchDataAlerts();
+          setShowUpdatePromotionModal(open);
+          if (!open) fetchDataPromotions();
         }}
       />
     </Box>

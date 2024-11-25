@@ -1,0 +1,16 @@
+.contenedorPromociones{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 105%;
+    padding: 20px
+
+}
+.TablaPromociones{
+    width: 40%;
+    margin-right: 130px;
+}
+
+.TablaPromociones{
+    width: 50%;
+}

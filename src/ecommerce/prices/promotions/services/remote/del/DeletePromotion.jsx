@@ -3,7 +3,7 @@ import axios from "axios";
 export function delPromotion(id_lista_precios, id_promotion) {
   return new Promise((resolve, reject) => {
     axios
-      .delete(`${import.meta.env.VITE_REST_API_ECOMMERCE}/listas-precios/${id_lista_precios}/alertas/${id_promotion}`)
+      .delete(`${import.meta.env.VITE_REST_API_ECOMMERCE}/listas-precios/${id_lista_precios}/promociones/${id_promotion}`)
       .then((response) => {
         const data = response.data;
 
