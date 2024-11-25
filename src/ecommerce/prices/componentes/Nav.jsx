@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import '../assets/Nav.css';
 import Precios from './Precios'; // Componente para la pestaña "Lista"
 //import Graficas from './Graficas'; // Componente para la pestaña "Historial"
-import Historial from './Historial';
+import Historial from '../Historial/Historial';
 
 import AlertsTab from '../alerts/components/tabs/AlertsTab';
 

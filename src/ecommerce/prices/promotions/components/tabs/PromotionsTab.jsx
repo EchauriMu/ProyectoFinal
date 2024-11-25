@@ -8,7 +8,7 @@ const PromotionsTab = () => {
     const [selectedListaPrecios, setSelectedListaPrecios] = useState(null); // Mueve esto dentro del componente
 
     return (
-        <div>
+        <div >
             <PreciosProvider> 
                 <PreciosTablaSimple onRowClick={setSelectedListaPrecios} />
             </PreciosProvider>
