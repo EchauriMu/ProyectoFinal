@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import '../assets/Nav.css';
 import Precios from './Precios'; // Componente para la pestaña "Lista"
 //import Graficas from './Graficas'; // Componente para la pestaña "Historial"
-import Historial from './Historial';
+import Historial from '../Historial/Historial';
 
-import AlertsTab from '../alerts/components/tabs/AlertsTab'
+import AlertsTab from '../alerts/components/tabs/AlertsTab';
+
+import NotesTab from '../notes/components/tabs/NotesTab';
 
 import Promotions from '../promotions/components/tabs/PromotionsTab';
 
@@ -27,6 +29,8 @@ const Nav = () => {
         return <h2>Usuarios</h2>; // Otro componente para la pestaña "No se"
       case 'tab4':
         return <Promotions/>; // Componente para la pestaña "Promociones"
+      case 'tab5':
+          return <NotesTab/>; // Componente para la pestaña "Notas"
 
       default:
         return null;
@@ -66,6 +70,13 @@ const Nav = () => {
               onClick={() => setActiveTab('tab4')}
             >
               <a>Promociones</a>
+            </li>
+            <li 
+              className={activeTab === 'tab5' ? 'active' : ''} 
+              title="Notas"
+              onClick={() => setActiveTab('tab5')}
+            >
+              <a>Notas</a>
             </li>
           </ul>
         </div>

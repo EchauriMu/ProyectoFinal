@@ -1,145 +1,115 @@
-/* Contenedor principal */
-.historial {
-  font-family: Arial, sans-serif;
-  color: #333;
-  margin: 2em;
-  background-color:  hsl(0, 0%, 100%);
-  border-radius: 8px;
-  padding: 10px 30px 30px 30px;
-}
-
-/* Encabezado */
-.historial-header {
+.contenedorListaHistorial {
   display: flex;
   align-items: center;
-  padding: 1rem 1rem;
-  border-bottom: 1px solid #ddd;
-gap: 10px;
-}
-
-.historial-header i {
- font-size: 1.5rem; 
-}
-.historial-title {
-  font-size: 1.6em;
-  font-weight: bold;
-  margin-right: auto;
-  margin: 10px auto 10px 10px;
-}
-
-.buscador {
-  padding: 0.5em;
-  width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-.historial-header .EditarBtn{
-font-size: 15px;
-padding: 6px 20px 10px 20px;
-color: white;
-border-radius: 10px;
-font-weight: 700;
-background: #4f42a7;
-cursor: pointer;
-transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.historial-header .EditarBtn i {
-  font-size: 1rem;
-  margin: 4px 6px 0px 0px;
-}
-.botones-acciones .boton-filtro {
-  background-color: #2196F3;
-}
-
-/* Tabla */
-.tabla-historial {
-  padding: 10px;
+  justify-content: space-between;
   width: 100%;
-  border-collapse: collapse;
+  padding: 20px;
+}
+.historial {
+  display: flex;
+  justify-content: space-between;  /* Asegura que ambas tablas estén alineadas horizontalmente */
+  width: 100%;
+  padding: 20px;
 }
 
-.tabla-historial th, .tabla-historial td {
-  padding: 1em;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
+
+
+
+
+.flex-containerHistorial {
+  width: 100%;
 }
 
-.tabla-historial th {
-  background-color: #f5f5f5;
-  color: black;
+.historialListas {
+  overflow-x: auto;
+  background-color: hsl(0, 0%, 100%);
+  border: 1px solid hsl(240, 5.9%, 90%);
+  border-radius: 3px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.historialListas .encabezado h3 {
+  margin-right: auto;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 20px;
   font-weight: 600;
 }
 
-.fila-llamada:hover {
+.encabezado i {
+  font-size: 20px;
+}
+
+.historialListas table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.historialListas table th {
+  font-size: 14px;
   background-color: #eee;
+  padding: 16px 14px 16px 6px;
+  font-weight: 500;
+  text-align: start;
+  border-bottom: 1px solid var(--gris);
 }
 
-/* Estilo para el tipo de cambio de modificación */
-.tipo-modificacion-agregado {
-  background-color: #c8f4ac;
-  font-weight: bold;
-  color: black;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-size: .8rem;
+.historialListas table td {
+  font-size: 14px;
+  padding: 6px 8px 6px 0px;
+  border-bottom: 1px solid #ddd;
 }
 
-.tipo-modificacion-eliminado {
-  background-color: #ff7d7d;
-  font-weight: bold;
-  color: black;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: .8rem;
+.historialListas tbody tr {
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.tipo-modificacion-editado {
-  background-color: #ecff83;
-  font-weight: bold;
-  color: black;
-  padding: 5px 18px;
-  border-radius: 15px;
-  font-size: .8rem;
+.historialListas tbody tr:hover {
+  background: #eee;
 }
 
+.historialListas tbody tr.seleccionado {
+  background: #bdd7e9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.3s;
+}
 
-/* Estilo para la información del usuario */
-.info-usuario {
+.RefrescarbtnHistorial {
   display: flex;
   align-items: center;
+  padding: 3px 4px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  background: #f0ad4e; /* Color de fondo para refrescar */
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.avatar-usuario {
-  background-color: #ddd;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
+.TablaHistorial {
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.5em;
-  font-weight: bold;
-  color: #555;
+  margin-right: 20px;
+}
+.action-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del ícono */
+  margin: 0 10px; /* Agrega espacio entre los íconos */
+  cursor: pointer;
 }
 
-/* Estilos para cada tipo de modificación */
-.modificacion-agregado {
-  background-color: green;
+.action-icon.edit {
+  color: blue; /* Color para el botón de editar */
 }
 
-.modificacion-eliminado {
-  background-color: #fdecea;
-  color: red;
+.action-icon.delete {
+  color: red; /* Color para el botón de eliminar */
 }
 
-.modificacion-editado {
-  background-color: #fff3cd;
-  color: #856404;
-}
 
-/* Popup básico */
-.popup-overlay {
+.editregistrohistorial-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -147,249 +117,198 @@ transition: transform 0.3s ease, color 0.3s ease;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.popup-content {
-  background-color: white;
+.editregistrohistorial-modal-content {
+  background: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 600px;
-  width: 80%;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.boton-eliminar {
-  background-color: #e74c3c;
+.editregistrohistorial-modal-content h4 {
+  margin-bottom: 20px;
+}
+
+.editregistrohistorial-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.editregistrohistorial-btn-submit {
+  background-color: #11bb4a;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.editregistrohistorial-btn-cancel {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.editregistrohistorial-btn-submit:hover,
+.editregistrohistorial-btn-cancel:hover {
+  opacity: 0.9;
+}
+
+.editregistrohistorial-input-error {
+  border: 1px solid red;
+  padding-right: -20px;
+}
+
+.editregistrohistorial-error-message {
+  color: red;
+  font-size: 0.9em;
+}
+
+.editregistrohistorial-input-disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+  padding-right: -20px;
+}
+
+/* Contenedor principal del modal */
+.editregistrohistorial-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Contenido del modal */
+.editregistrohistorial-modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos del formulario */
+.editregistrohistorial-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Agrupación de campos */
+.editregistrohistorial-form-group {
+  margin-bottom: 15px;
+}
+
+/* Campos de entrada */
+.editregistrohistorial-input {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  padding-right: 20px;
+}
+
+.editregistrohistorial-input-error {
+  border-color: red;
+  background: #ffe6e6;
+  padding-right: -20px;
+}
+
+/* Mensaje de error */
+.editregistrohistorial-error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Botones */
+.editregistrohistorial-btn-submit {
+  background-color: #28a745;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 3px;
+  margin-right: 10px;
 }
 
-.boton-eliminar:hover {
-  background-color: #c0392b;
+.editregistrohistorial-btn-submit:hover {
+  background-color: #218838;
 }
 
-/* Estilos generales para el contenedor del formulario */
-form {
-background-color: #f9f9f9;
-border: 1px solid #ddd;
-border-radius: 8px;
-padding: 20px;
-max-width: 400px;
-margin: 20px auto;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.editregistrohistorial-btn-cancel {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-/* Estilos para las etiquetas */
-form label {
-display: block;
-font-weight: bold;
-margin-bottom: 8px;
-color: #333;
+.editregistrohistorial-btn-cancel:hover {
+  background-color: #c82333;
 }
 
-/* Estilos para los inputs */
-form input {
-width: 100%;
-padding: 8px;
-margin-bottom: 16px;
-border: 1px solid #ccc;
-border-radius: 4px;
-font-size: 14px;
+/* Acciones del modal */
+.editregistrohistorial-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 
-/* Estilos para los botones */
-form button {
-padding: 10px 15px;
-border: none;
-border-radius: 4px;
-font-size: 14px;
-cursor: pointer;
-margin-right: 10px;
+.filtro-container {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  
 }
 
-/* Botón de guardar */
-form button[type="submit"] {
-background-color: #4CAF50;
-color: white;
+.input-filtro {
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 80%;
+  border: 1px solid transparent;
+  background-color: rgba(45, 101, 255, 0.1); /* Más opaco al pasar el ratón */
 }
 
-/* Botón de cancelar */
-form button[type="button"] {
-background-color: #f44336;
-color: white;
+.boton-filtro {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+  background-color: rgba(96, 57, 122, 0.7); /* Color morado con 60% de opacidad */
+  width: 20%;
+  border: 1px solid transparent;
+  transition: background-color 0.3s ease; /* Efecto de transición */
 }
 
-/* Hover effects para los botones */
-form button[type="submit"]:hover {
-background-color: #45a049;
+.boton-filtro:hover {
+  background-color: rgba(96, 57, 122, 1); /* Más opaco al pasar el ratón */
+
 }
 
-form button[type="button"]:hover {
-background-color: #d32f2f;
-}
-
-.historial .popup-content {
-max-width: 800px;
-max-height: 90vh;
-overflow-y: auto;
-background-color: #fff;
-padding: 20px;
-border-radius: 8px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal-form {
-margin-top: 10px;
-}
-
-.modal-form form {
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-.modal-form input {
-padding: 8px;
-border: 1px solid #ccc;
-border-radius: 4px;
-}
-
-button {
-cursor: pointer;
-}
-
-button[type="submit"] {
-background-color: #4caf50;
-color: white;
-}
-
-button[type="button"] {
-background-color: #f44336;
-color: white;
-}
-
-.boton-eliminar {
-background-color: #e74c3c;
-color: white;
-border: none;
-padding: 5px 10px;
-border-radius: 4px;
-}
-
-button.editar-btn {
-background-color: #3498db;
-color: white;
-border: none;
-padding: 5px 10px;
-border-radius: 4px;
-}
-button.CERRAR {
-background-color: #e74c3c; /* Rojo llamativo para atraer atención */
-color: white; /* Texto blanco para contraste */
-border: none; /* Sin borde */
-padding: 10px 20px; /* Tamaño del botón */
-font-size: 16px; /* Tamaño de la fuente */
-border-radius: 5px; /* Bordes redondeados */
-cursor: pointer; /* Cambiar cursor al pasar por encima */
-transition: background-color 0.3s ease; /* Animación de color */
-}
-
-button.CERRAR:hover {
-background-color: #c0392b; /* Más oscuro al pasar el mouse */
-}
-
-button.CERRAR:active {
-background-color: #a93226; /* Aún más oscuro al hacer clic */
-}
-
-button.CERRAR:focus {
-outline: none; /* Sin borde al enfocarse */
-box-shadow: 0 0 5px 2px rgba(231, 76, 60, 0.5); /* Efecto de enfoque */
-}
-/* Estilo general para la tabla */
-.popup-content table {
-width: 100%; /* Usar todo el ancho disponible */
-border-collapse: collapse; /* Unir bordes de celdas */
-margin-top: 10px; /* Separación superior */
-font-family: Arial, sans-serif;
-font-size: 14px;
-}
-
-.popup-content th, 
-.popup-content td {
-border: 1px solid #ddd; /* Bordes suaves */
-padding: 8px; /* Espaciado dentro de las celdas */
-text-align: left; /* Alinear texto a la izquierda */
-}
-
-.popup-content th {
-background-color: #f4f4f4; /* Color de fondo para encabezados */
-color: #333; /* Color del texto de los encabezados */
-font-weight: bold; /* Texto en negrita */
-}
-
-.popup-content tr:nth-child(even) {
-background-color: #f9f9f9; /* Fondo diferente para filas pares */
-}
-
-.popup-content tr:hover {
-background-color: #f1f1f1; /* Fondo al pasar el ratón */
-}
-
-/* Estilo para botones dentro de la tabla */
-.popup-content .boton-eliminar {
-background-color: #e74c3c; /* Rojo llamativo */
-color: white;
-border: none;
-padding: 5px 10px;
-border-radius: 3px;
-cursor: pointer;
-font-size: 12px;
-}
-
-.popup-content .editar-btn {
-background-color: #3498db; /* Azul para editar */
-color: white;
-border: none;
-padding: 5px 10px;
-border-radius: 3px;
-cursor: pointer;
-font-size: 12px;
-}
-
-.popup-content .boton-eliminar:hover {
-background-color: #c0392b; /* Más oscuro al pasar el mouse */
-}
-
-.popup-content .editar-btn:hover {
-background-color: #2980b9; /* Más oscuro al pasar el mouse */
-}
-
-/* Estilo para el contenedor de la modal */
-.popup-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1000;
-}
-
-.popup-content {
-background: white;
-padding: 20px;
-border-radius: 10px;
-max-width: 800px;
-width: 90%;
-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-overflow-y: auto;
-max-height: 90%; /* Limitar altura */
+.input-filtro:focus {
+  border: 1px solid rgba(96, 57, 122, 0.6); /* Borde morado claro y suave */
+  box-shadow: 0 0 5px rgba(96, 57, 122, 0.4); /* Sutil resplandor morado */
+  outline: none; /* Elimina el contorno predeterminado del navegador */
 }

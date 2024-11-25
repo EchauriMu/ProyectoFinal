@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import PromotionsTable from '../tables/PromotionsTable';
-import { PromotionsProvider } from '../../pages/PromotionsProvider'; 
+import NotesTable from '../tables/NotesTable';
+import { NotesProvider } from '../../pages/NotesProvider'; 
 import { PreciosProvider } from '../../../componentes/PreciosProvider';
 import PreciosTablaSimple from '../../../componentes/PreciosTablaSimple';
-import '../../assets/promotions.css';
+import '../../assets/notes.css';
 
-const PromotionsTab = () => {
+const NotesTab = () => {
     const [selectedListaPrecios, setSelectedListaPrecios] = useState(null); // Mueve esto dentro del componente
 
     return (
-        <div>
+        <div className='contenedorNotas'>
             <PreciosProvider> 
                 <PreciosTablaSimple onRowClick={setSelectedListaPrecios} />
             </PreciosProvider>
-            <PromotionsProvider selectedListaPrecios={selectedListaPrecios}>
-                <div className='TablaPromociones'>
-                    <PromotionsTable selectedListaPrecios={selectedListaPrecios} />
+            <NotesProvider selectedListaPrecios={selectedListaPrecios}>
+                <div className='TablaNotas'>
+                    <NotesTable selectedListaPrecios={selectedListaPrecios} />
                 </div>
-            </PromotionsProvider>
+            </NotesProvider>
         </div>
     );
 };
 
-export default PromotionsTab;
+export default NotesTab;
