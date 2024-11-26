@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
 
-const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro }) => {
+
+const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRegistro }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = registros.slice(indexOfFirstItem, indexOfLastItem); // Usar registros dinámicos
+
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(parseInt(e.target.value, 10));
     setCurrentPage(1);
   };
 
+
   const handleNextPage = () => {
     if (indexOfLastItem < presentaOK.historial.length) {
       setCurrentPage(currentPage + 1);
     }
   };
+
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -26,13 +31,18 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro }) => {
   };
 
 
+
+
   return (
     <div className="contenedorListaHistorial">
       <div className="flex-containerHistorial">
         <div className="historialListas">
-          <div className="encabezado">
-            <h4>Registros de {registros.length > 0 ? registros[0].IdPresentaOK : 'la presentación seleccionada'}</h4>
-          </div>
+        <div className="encabezado encabezadoagregar">
+          <h4>Registros de {registros.length > 0 ? registros[0].IdPresentaOK : 'la presentación seleccionada'}</h4>
+          <button className="btn-agregar-registro" onClick={onAddRegistro}>
+            <i className="fa-solid fa-plus"></i>
+          </button>
+        </div>
           <table>
             <thead>
               <tr>
@@ -61,6 +71,7 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro }) => {
               </tr>
             ))}
           </tbody>
+
 
           </table>
           <div className="paginacion">
@@ -92,5 +103,6 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro }) => {
     </div>
   );
 };
+
 
 export default RegistroHistorial;
