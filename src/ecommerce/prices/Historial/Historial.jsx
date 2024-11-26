@@ -7,87 +7,123 @@ import PresentacionHistorial from './PresentacionHistorial';
 import RegistroHistorial from './RegistroHistorial';
 import EditModal from './EditModal'; // Modal dedicada a la edición
 import '../assets/Historial.css';
+import AddRegistroModal from "./AddRegistroModal";
+
 
 const Historial = () => {
   const [listas, setListas] = useState([]);
   const [selectedLista, setSelectedLista] = useState(null);
+  const [presentaciones, setPresentaciones] = useState([]); // Estado para la segunda tabla
   const [selectedPresentaOK, setSelectedPresentaOK] = useState(null);
   const [editingRegistro, setEditingRegistro] = useState(null);
+  const [registros, setRegistros] = useState([]); // Nuevo estado para registros
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const maxId = registros.length > 0 ? Math.max(...registros.map((registro) => registro.Id), 0) : 0;
 
-  // Función para obtener datos
+
+  const fetchRegistros = useCallback((IdPresentaOK) => {
+    axios
+      .get(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${IdPresentaOK}`)
+      .then((response) => {
+        const registrosAplanados = response.data.flatMap((presentacion) =>
+          presentacion.historial.map((registro) => ({
+            ...registro,
+            IdPresentaOK: presentacion.IdPresentaOK, // Conserva el IdPresentaOK
+          }))
+        );
+        setRegistros(registrosAplanados);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los registros:', error);
+      });
+  }, [selectedLista]);
+  
+
+
+ 
+  // Función para obtener listas
   const fetchListas = useCallback(() => {
     axios
       .get(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/Listas/`)
       .then((response) => {
         setListas(response.data);
         setSelectedLista(null); // Resetea las selecciones si es necesario
-        setSelectedPresentaOK(null);
+        setPresentaciones([]); // Resetea las presentaciones
       })
       .catch((error) => {
         console.error('Error al obtener las listas:', error);
       });
   }, []);
 
-  useEffect(() => {
-    fetchListas(); // Llamada inicial
-  }, [fetchListas]);
 
-  const handleListaClick = (lista) => {
-    setSelectedLista(lista);
-    setSelectedPresentaOK(null); // Resetear la presentación seleccionada
+  // Función para obtener presentaciones
+  const fetchPresentaciones = (idListaOK) => {
+    axios
+      .get(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${idListaOK}/historial`)
+      .then((response) => {
+        setPresentaciones(response.data);
+        setSelectedPresentaOK(null); // Resetea la selección de presentaciones
+      })
+      .catch((error) => {
+        console.error('Error al obtener las presentaciones:', error);
+      });
   };
 
-  const handlePresentaOKClick = (presentaOK) => {
-    setSelectedPresentaOK(presentaOK);
-  };
 
   const handleEditRegistro = (registro) => {
     setEditingRegistro(registro);
   };
 
-  const handleDeleteHistorial = (idPresentaOK) => {
-    confirmAlert({
-      title: 'Confirmación de eliminación',
-      message: '¿Estás seguro de eliminar este historial?',
-      buttons: [
-        {
-          label: 'Sí',
-          onClick: () => {
-            axios
-              .delete(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${idPresentaOK}`)
-              .then(() => {
-                fetchListas(); // Refrescar después de eliminar
-              })
-              .catch((error) => console.error('Error al eliminar historial:', error));
-          },
+  const handleAddRegistro = () => {
+    setIsAddModalOpen(true);
+  };
+ 
+
+
+const handleDeleteRegistro = (registroId) => {
+  confirmAlert({
+    title: 'Confirmación de eliminación',
+    message: '¿Estás seguro de eliminar este registro?',
+    buttons: [
+      {
+        label: 'Sí',
+        onClick: () => {
+          axios
+            .delete(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${selectedPresentaOK.IdPresentaOK}/${registroId}`)
+            .then(() => {
+              setRegistros((prevRegistros) =>
+                prevRegistros.filter((registro) => registro.Id !== registroId)
+              );
+            })
+            .catch((error) => console.error('Error al eliminar registro:', error));
         },
-        { label: 'No' },
-      ],
-    });
+      },
+      { label: 'No' },
+    ],
+  });
+};
+
+
+  useEffect(() => {
+    fetchListas(); // Llamada inicial
+  }, [fetchListas]);
+
+
+  const handleListaClick = (lista) => {
+    setSelectedLista(lista);
+    fetchPresentaciones(lista.IdListaOK); // Obtén las presentaciones
   };
 
-  const handleDeleteRegistro = (registroId) => {
-    confirmAlert({
-      title: 'Confirmación de eliminación',
-      message: '¿Estás seguro de eliminar este registro?',
-      buttons: [
-        {
-          label: 'Sí',
-          onClick: () => {
-            axios
-              .delete(
-                `${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${selectedPresentaOK.IdPresentaOK}/${registroId}`
-              )
-              .then(() => {
-                fetchListas(); // Refrescar después de eliminar
-              })
-              .catch((error) => console.error('Error al eliminar registro:', error));
-          },
-        },
-        { label: 'No' },
-      ],
-    });
+
+  const handlePresentaOKClick = (presentaOK) => {
+    setSelectedPresentaOK(presentaOK);
+    fetchRegistros(presentaOK.IdPresentaOK); // Llamar a la función para obtener registros
   };
+
+
+
+
+
 
   return (
     <div className="historial">
@@ -95,24 +131,27 @@ const Historial = () => {
         <HistorialListas
           listas={listas}
           onListaClick={handleListaClick}
-           // Pasar la función de recarga como prop
         />
+
 
         {selectedLista && (
           <PresentacionHistorial
-            lista={selectedLista}
+            presentaciones={presentaciones}
             onPresentaOKClick={handlePresentaOKClick}
-            onDeleteHistorial={handleDeleteHistorial}
           />
         )}
+
 
         {selectedPresentaOK && (
           <RegistroHistorial
             presentaOK={selectedPresentaOK}
+            registros={registros} // Pasar los registros dinámicos
             onEditRegistro={handleEditRegistro}
             onDeleteRegistro={handleDeleteRegistro}
+            onAddRegistro={handleAddRegistro}
           />
         )}
+
 
         {editingRegistro && (
           <EditModal
@@ -120,12 +159,21 @@ const Historial = () => {
             onClose={() => setEditingRegistro(null)}
             selectedLista={selectedLista}
             selectedPresentaOK={selectedPresentaOK}
-            setSelectedPresentaOK={setSelectedPresentaOK}
+            setRegistros={setRegistros} // Pasar el setter
           />
         )}
+        {isAddModalOpen && (
+        <AddRegistroModal
+          onClose={() => setIsAddModalOpen(false)}
+          selectedLista={selectedLista}
+          selectedPresentaOK={selectedPresentaOK}
+          setRegistros={setRegistros}
+          maxId={Math.max(...registros.map((registro) => registro.Id), 0)} // Pasa el ID más alto
+        />
+      )}
+
       </div>
     </div>
   );
 };
-
 export default Historial;

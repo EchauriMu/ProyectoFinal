@@ -93,8 +93,15 @@ const NotesTable = ({ selectedListaPrecios }) => {
         initialState={{ density: "compact", showGlobalFilter: true }}
         muiTableBodyRowProps={({ row }) => ({
           onClick: () => {
-            setSelectedNotes(row.original);
-            setSelectedRowId(row.id);
+            // Si la fila actual es la seleccionada, deseleccionar
+            if (selectedRowId === row.id) {
+              setSelectedNotes(null);
+              setSelectedRowId(null);
+            } else {
+              // Si no, seleccionar la nueva fila
+              setSelectedNotes(row.original);
+              setSelectedRowId(row.id);
+            }
           },
           sx: {
             cursor: loadingTable ? "not-allowed" : "pointer",
