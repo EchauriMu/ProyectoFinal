@@ -9,7 +9,7 @@ const EditModal = ({
   onClose,
   selectedLista,
   selectedPresentaOK,
-  setSelectedPresentaOK,
+  setRegistros, // Recibe setRegistros como prop
 }) => {
   if (!registro) return null;
 
@@ -28,13 +28,12 @@ const EditModal = ({
         values
       )
       .then(() => {
-        // Actualiza el historial del registro seleccionado
-        setSelectedPresentaOK((prev) => ({
-          ...prev,
-          historial: prev.historial.map((item) =>
+        // Actualiza el estado de registros en Historial.jsx
+        setRegistros((prevRegistros) =>
+          prevRegistros.map((item) =>
             item.Id === Id ? { ...item, ...values } : item
-          ),
-        }));
+          )
+        );
         onClose(); // Cierra el modal
       })
       .catch((error) => console.error('Error al actualizar:', error));
