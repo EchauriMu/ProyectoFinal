@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import '../assets/historial.css'; // Asegúrate de que este archivo sea el correcto para el estilo de historial
+import React, { useState, useEffect } from 'react';
+import '../assets/historial.css';
 
-const PresentacionHistorial = ({ lista, onPresentaOKClick, onDeleteHistorial }) => {
+const PresentacionHistorial = ({ presentaciones, onPresentaOKClick }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [filter, setFilter] = useState(''); // Estado para el filtro
-  const [filteredData, setFilteredData] = useState(lista.historial); // Datos filtrados
+  const [filter, setFilter] = useState('');
+  const [filteredData, setFilteredData] = useState(presentaciones);
+
+  // Sincronizar filteredData con presentaciones cuando cambien
+  useEffect(() => {
+    setFilteredData(presentaciones);
+    setCurrentPage(1); // Reiniciar a la primera página
+  }, [presentaciones]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -29,16 +35,16 @@ const PresentacionHistorial = ({ lista, onPresentaOKClick, onDeleteHistorial }) 
   };
 
   const handleFilterChange = (e) => {
-    setFilter(e.target.value); // Actualiza el valor del filtro
+    setFilter(e.target.value);
   };
 
   const applyFilter = () => {
     const lowercasedFilter = filter.toLowerCase();
-    const filtered = lista.historial.filter((item) =>
+    const filtered = presentaciones.filter((item) =>
       item.IdPresentaOK.toLowerCase().includes(lowercasedFilter)
     );
     setFilteredData(filtered);
-    setCurrentPage(1); // Reinicia la paginación
+    setCurrentPage(1);
   };
 
   return (
@@ -46,9 +52,8 @@ const PresentacionHistorial = ({ lista, onPresentaOKClick, onDeleteHistorial }) 
       <div className="flex-containerHistorial">
         <div className="historialListas">
           <div className="encabezado">
-            <h3>Historial de la Lista: {lista.IdListaOK}</h3>
+            <h3>Presentaciones</h3>
           </div>
-          {/* Filtro */}
           <div className="filtro-container">
             <input
               type="text"
@@ -65,16 +70,12 @@ const PresentacionHistorial = ({ lista, onPresentaOKClick, onDeleteHistorial }) 
             <thead>
               <tr>
                 <th>IdPresentaOK</th>
-                {/*<th>Acciones</th>*/}
               </tr>
             </thead>
             <tbody>
               {currentItems.map((item) => (
                 <tr key={item.IdPresentaOK}>
                   <td onClick={() => onPresentaOKClick(item)}>{item.IdPresentaOK}</td>
-                  {/*<td>
-                  <i className="fa-solid fa-trash action-icon delete" style={{ color: 'red', cursor: 'pointer' }} onClick={() => onDeleteHistorial(item.IdPresentaOK)}></i>
-                  </td>*/}
                 </tr>
               ))}
             </tbody>
@@ -93,7 +94,7 @@ const PresentacionHistorial = ({ lista, onPresentaOKClick, onDeleteHistorial }) 
                 <option value={10}>10</option>
                 <option value={20}>20</option>
               </select>
-              <span>registros por página</span>
+              <span> registros por página</span>
             </div>
             <div className="botones-paginacion">
               <button onClick={handlePrevPage} disabled={currentPage === 1}>

@@ -4,14 +4,16 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import '../assets/Historial.css'; // Archivo CSS para estilos específicos
 
+
 const EditModal = ({
   registro,
   onClose,
   selectedLista,
   selectedPresentaOK,
-  setSelectedPresentaOK,
+  setRegistros, // Recibe setRegistros como prop
 }) => {
   if (!registro) return null;
+
 
   const validationSchema = Yup.object({
     Formula: Yup.string().required('La fórmula es requerida'),
@@ -20,25 +22,42 @@ const EditModal = ({
     Precio: Yup.number().required('El precio es requerido'),
   });
 
+
   const handleSubmit = (values) => {
-    const { Id } = registro;
+    const { Id } = registro; // Obtén el ID del registro actual
+    const payload = {
+      Id,
+      ...values,
+      detail_row: {
+        Activo: "S",
+        Borrado: "N",
+        detail_row_reg: [
+          {
+            FechaReg: new Date().toISOString(), // Fecha actual en formato ISO
+            UsuarioReg: "Carlos", // Usuario fijo (temporalmente)
+          },
+        ],
+      },
+    };
+  
+    console.log("Datos enviados para actualizar:", payload);
     axios
       .put(
         `${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${selectedPresentaOK.IdPresentaOK}/${Id}`,
-        values
+        payload
       )
       .then(() => {
-        // Actualiza el historial del registro seleccionado
-        setSelectedPresentaOK((prev) => ({
-          ...prev,
-          historial: prev.historial.map((item) =>
-            item.Id === Id ? { ...item, ...values } : item
-          ),
-        }));
+        // Actualiza el estado de registros en Historial.jsx
+        setRegistros((prevRegistros) =>
+          prevRegistros.map((item) =>
+            item.Id === Id ? { ...item, ...payload } : item
+          )
+        );
         onClose(); // Cierra el modal
       })
-      .catch((error) => console.error('Error al actualizar:', error));
+      .catch((error) => console.error("Error al actualizar:", error));
   };
+  
 
   return (
     <div className="editregistrohistorial-modal-overlay">
@@ -52,7 +71,10 @@ const EditModal = ({
           Precio: registro.Precio || '',
         }}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={(values, { resetForm }) => {
+          handleSubmit(values);
+          resetForm();
+        }}
       >
         {({ errors, touched }) => (
           <Form className="editregistrohistorial-form">
@@ -148,9 +170,11 @@ const EditModal = ({
         )}
       </Formik>
 
+
       </div>
     </div>
   );
 };
+
 
 export default EditModal;
