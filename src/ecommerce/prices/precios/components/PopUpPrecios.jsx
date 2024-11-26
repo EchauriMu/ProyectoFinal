@@ -36,6 +36,7 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
   useEffect(() => {
     if (product?.IdListaOK) {
       dispatch(fetchPrecioById(product.IdListaOK));
+      
       borrado_input();
       formik.resetForm();
     }
@@ -231,7 +232,6 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
         <span>ID Lista: {product.IdListaOK}</span>
       </div>
       {loading && <div>Cargando...</div>}
-      {error && <div>Error al cargar los datos: {error}</div>}
 
       {/* Contenido principal */}
       <div onSubmit={formik.handleSubmit} className="content">
@@ -248,12 +248,14 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                   menuDesplegable();
                 }}
               >
-                <option value="" >Selecciona presentación</option>
-                {precioData?.map((item) => (
+              <option value="">Selecciona presentación</option>
+              {!error && precioData && precioData.length > 0 ? (
+                precioData.map((item) => (
                   <option key={item.IdPresentaOK} value={item.IdPresentaOK}>
                     {item.IdPresentaOK}
                   </option>
-                ))}
+                ))
+              ) : null}
               </select>
             </div>
           </div>
@@ -284,7 +286,7 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
                 <label >Nueva presentación</label>
                 <div className="input-div">
                 <input
-                  type="text"
+                  type="number"
                   className="input-precioRec"
                   id={"IdPresentaOK"}
                   name = {"IdPresentaOK"}
