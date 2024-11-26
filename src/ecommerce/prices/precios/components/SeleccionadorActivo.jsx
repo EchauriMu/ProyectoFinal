@@ -5,7 +5,6 @@ const SeleccionadorActivo = () => {
   const { 
     activo,
     setActivo,
-    borrado,
     setBorrado
    } = useContexto();
 

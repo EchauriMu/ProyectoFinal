@@ -9,7 +9,7 @@ import PopUpPrecios from '../precios/components/PopUpPrecios';
 import { deletePrecioAction } from '../../../actions/listasTablasGeneralActions';
 import Swal from 'sweetalert2';
 import PopUpAgregarLista from './PopUpAgregarLista'
-
+import PopupEditList from './PopupEditList'
 
 const PreciosTabla = () => {
   const dispatch = useDispatch();
@@ -18,6 +18,10 @@ const PreciosTabla = () => {
   // ======== ESTADOS ========
   // Popup de agregar lista
   const [isAddListPopupVisible, setIsAddListPopupVisible] = useState(false);
+  //popup edit lista
+  const [isEditPopupVisible, setIsEditPopupVisible] = useState(false); // Para controlar la visibilidad del popup de edición
+const [productToEdit, setProductToEdit] = useState(null); // Para almacenar el producto seleccionado para editar
+
   // Popup de edición
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -115,6 +119,13 @@ const handleCheckboxChange = (id) => {
     }
   };
 
+  const handleEditListClick = (producto) => {
+    setProductToEdit(producto); // Guardamos el producto seleccionado
+    setIsEditPopupVisible(true); // Abrimos el popup de edición
+    console.log("Producto seleccionado para put:", producto.IdListaOK);
+  };
+  
+
   // ======== CÁLCULOS ========
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -156,7 +167,22 @@ const handleCheckboxChange = (id) => {
   <i className="fa-solid fa-arrows-rotate"></i>
 </span>
 
-  {/* Botón de Exportar */}
+  
+  {/* Botón para editar seleccionados */}
+<span 
+  className={`Editarbtn ${selectedItems.length === 1 ? 'activo' : 'inactivo'}`} 
+  onClick={() => {
+    if (selectedItems.length === 1) {
+      // Encuentra el producto seleccionado en la lista general
+      const productoSeleccionado = listasTablasGeneral.find(item => item._id === selectedItems[0]);
+      handleEditListClick(productoSeleccionado); // Llama a la función para abrir el popup de edición
+    }
+  }}
+>
+<i class="fa-solid fa-file-pen"></i>
+  Editar selección
+</span>
+
 
     {/* Botón para eliminar seleccionados */}
     <span 
@@ -168,6 +194,8 @@ const handleCheckboxChange = (id) => {
 
 
 </div>
+
+
 
 {loading ? (
   <div className="contenedorLoader">
@@ -215,13 +243,13 @@ const handleCheckboxChange = (id) => {
                   </td>
                   <td>{producto.IdInstitutoOK}</td>
                   <td>{producto.IdListaOK}</td>
-                  <td>{producto.IdListaBK}</td>
+                  <td>{producto.DesLista}</td>
                   <td>{new Date(producto.FechaExpiraIni).toLocaleDateString()}</td>
                   <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
                   <td className='iconsActions'>
                   <i
                   
-    className="fa-solid fa-plus"
+    className="fa-solid fa-pen-to-square"
     title='Agregar a la lista'
     style={{ color: 'green', cursor: 'pointer', fontWeight: 'bold', fontSize:'20px' }}
     onClick={(e) => {
@@ -229,13 +257,6 @@ const handleCheckboxChange = (id) => {
       handleEditClick(producto);
     }}
   ></i>
-
-
-  <i className="fa-solid fa-pen-to-square" 
-  style={{ color: 'blue', cursor: 'pointer', fontWeight: 'bold', fontSize:'20px' }}  >
-
-
-</i>
 
 
 <i
@@ -305,6 +326,18 @@ const handleCheckboxChange = (id) => {
         onClose={() => setIsPopupVisible(false)}
        
       />
+
+
+          {/* Componente PopupEditList */}
+      
+        <PopupEditList
+          isVisible={isEditPopupVisible}
+          setIsVisible={setIsEditPopupVisible}
+          productToEdit={productToEdit}
+          setProductToEdit={setProductToEdit}
+        />
+     
+  
     
     </div>
 

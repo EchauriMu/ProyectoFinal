@@ -4,8 +4,8 @@ import { useContexto } from '../../componentes/PreciosProvider';
 import SeleccionadorActivo from './SeleccionadorActivo';
 import Swal from 'sweetalert2';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux';
+
+
 
 import { addPrecio } from '../services/remote/post/addPrecio';
 import { deletePresentacion } from '../services/remote/del/deletePresentacion';
@@ -24,14 +24,13 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
     userName, 
     activo, setActivo,
     borrado, setBorrado,
-    dispatch 
+    dispatch,
+    precioData, loading, error,
+    showNewPresentacionInput, setShowNewPresentacionInput,
+    validationSchema
   } = useContexto();
 
-  // Estado global del store
-  const { precioData, loading, error } = useSelector((state) => state.precio);
 
-  // Estado local
-  const [showNewPresentacionInput, setShowNewPresentacionInput] = useState(false);
 
   // Efectos
   useEffect(() => {
@@ -42,24 +41,8 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
     }
   }, [product, dispatch]);
 
-  useEffect(() => {
-    if (precioData.length > 0 && product?.IdProdServOK) {
-      const selectedPrices = precioData.filter(item => item.IdProdServOK === product.IdProdServOK);
-      if (selectedPrices.length > 0) {
-        setSelectedPresentaId(selectedPrices.IdPresentaOK);
-      }
-    }
-  }, [precioData, product]);
 
-  //Validación de Yup
-  const validationSchema = Yup.object({
-    IdPresentaOK: Yup.string().required("La presentación es obligatoria."),
-    IdTipoFormulaOK: Yup.string().required("El tipo de fórmula es obligatorio."),
-    Formula: Yup.string().required("La fórmula es obligatoria."),
-    CostoIni: Yup.number().required("El costo inicial es obligatorio.").min(0, "El costo inicial debe ser mayor o igual a 0."),
-    CostoFin: Yup.number().required("El costo final es obligatorio.").min(Yup.ref('CostoIni'), "El costo final debe ser mayor o igual al costo inicial."),
-    Precio: Yup.number().required("El precio es obligatorio.").min(0, "El precio debe ser mayor o igual a 0."),
-  });
+  
 
   // Inicialización de Formik
   const formik = useFormik({
@@ -217,7 +200,6 @@ const PopUpPrecios = ({ isVisible, product, onClose }) => {
   };
 
   const handleBack = () => {
-    dispatch(fetchPrecioById(product.IdListaOK));
     onClose();
   };
 
