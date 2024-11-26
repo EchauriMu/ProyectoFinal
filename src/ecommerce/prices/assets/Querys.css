@@ -1,6 +1,6 @@
 
 
-@media (max-width: 1400px) {
+@media (max-width: 1000px) {
     .precios, .contenedor-graficas {
         flex: 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
     }

@@ -111,7 +111,7 @@ export const updateListaPrecios = (updatedData) => async (dispatch) => {
       payload: response.data,
       
     });
-    dispatch(fetchListasTablasGeneral()); // Obtener lista actualizada
+     dispatch(fetchListasTablasGeneral()); // Obtener lista actualizada
   } catch (error) {
     dispatch({
       type: 'LISTA_PRECIOS_UPDATE_FAIL',

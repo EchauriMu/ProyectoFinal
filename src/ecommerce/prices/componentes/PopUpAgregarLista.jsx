@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2'; // Asegúrate de importar SweetAlert2
+import Swal from 'sweetalert2';
 import '../assets/PopUpAggList.css';
 import { crearListaPrecios } from '../../../actions/listasTablasGeneralActions';
 
@@ -14,90 +14,43 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
     FechaExpiraFin: '',
     IdTipoListaOK: '',
     IdTipoGeneraListaOK: '',
-    precios: [
-      {
-        IdProdServOK: '',
-        IdPresentaOK: '',
-        CostoIni: '',
-        CostoFin: '',
-        Precio: '',
-        detail_row: {
-          Activo: 'S',
-          Borrado: 'N',
-          detail_row_reg: [
-            {
-              FechaReg: new Date().toISOString(),
-              UsuarioReg: sessionUser || 'defaultUser',
-            },
-          ],
-        },
-      },
-    ],
-    roles: ['admin', 'gestor_precios'],
+    precios: [], // Lista de precios vacía
     negocios: [],
     alertas: [],
     historial: [],
+    notas:[],
+    promociones:[]
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // Obtener usuario y fecha de registro desde sessionStorage
+  const usuarioReg = sessionStorage.getItem('usuario') || 'UsuarioDesconocido';
+  const fechaReg = new Date().toISOString(); // Fecha actual en formato ISO
 
-  const handlePrecioChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedPrecios = [...formData.precios];
-    updatedPrecios[index] = { ...updatedPrecios[index], [name]: value };
-    setFormData({
-      ...formData,
-      precios: updatedPrecios,
-    });
+  // Detalle para la lista y los precios
+  const detailRow = {
+    Activo: 'S',
+    Borrado: 'N',
+    detail_row_reg: [
+      {
+        FechaReg: fechaReg, // Pasa la fecha como cadena ISO
+        UsuarioReg: usuarioReg,
+      },
+    ],
   };
-
-  const handleAddPrecio = () => {
-    setFormData({
-      ...formData,
-      precios: [
-        ...formData.precios,
-        {
-          IdProdServOK: '',
-          IdPresentaOK: '',
-          CostoIni: '',
-          CostoFin: '',
-          Precio: '',
-          detail_row: {
-            Activo: 'S',
-            Borrado: 'N',
-            detail_row_reg: [
-              {
-                FechaReg: new Date().toISOString(),
-                UsuarioReg: sessionUser || 'defaultUser',
-              },
-            ],
-          },
-        },
-      ],
-    });
-  };
+  
 
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.crearListaPrecios);
 
-  const handleDeletePrecio = (index) => {
-    const updatedPrecios = formData.precios.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      precios: updatedPrecios,
-    });
-  };
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
+    // Insertar el detail_row en la lista principal
+    const formDataConDetail = {
+      ...formData,
+      detail_row: { ...detailRow }, // Insertar el detail_row en la lista principal
+    };
+
     Swal.fire({
       title: '¿Estás seguro?',
       text: '¿Quieres guardar esta lista de precios?',
@@ -107,7 +60,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(crearListaPrecios(formData))
+        dispatch(crearListaPrecios(formDataConDetail))
           .then(() => {
             Swal.fire({
               position: 'top-end',
@@ -119,7 +72,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             setIsAddListPopupVisible(false); // Cerrar el popup después de éxito
           })
           .catch((err) => {
-            console.error("Error al enviar:", err); // Log del error
+            console.error('Error al enviar:', err);
             Swal.fire({
               icon: 'error',
               title: 'Error al guardar',
@@ -129,19 +82,18 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
       }
     });
   };
-  
 
   return (
     <div className={`popup-agregar-lista ${isAddListPopupVisible ? 'show' : ''}`}>
       <div className="popup-agregar-lista-content">
         <h4>Agregar Nueva Lista de Precios</h4>
-        <form className='FormaggList' onSubmit={handleSubmit}>
+        <form className="FormaggList" onSubmit={handleSubmit}>
           <label>ID Institución:</label>
           <input
             type="text"
             name="IdInstitutoOK"
             value={formData.IdInstitutoOK}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, IdInstitutoOK: e.target.value })}
             required
           />
           <label>ID Lista:</label>
@@ -149,7 +101,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="text"
             name="IdListaOK"
             value={formData.IdListaOK}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, IdListaOK: e.target.value })}
             required
           />
           <label>ID Lista BK:</label>
@@ -157,7 +109,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="text"
             name="IdListaBK"
             value={formData.IdListaBK}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, IdListaBK: e.target.value })}
             required
           />
           <label>Descripción de la Lista:</label>
@@ -165,7 +117,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="text"
             name="DesLista"
             value={formData.DesLista}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, DesLista: e.target.value })}
             required
           />
           <label>Fecha Expira Inicio:</label>
@@ -173,7 +125,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="datetime-local"
             name="FechaExpiraIni"
             value={formData.FechaExpiraIni}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, FechaExpiraIni: e.target.value })}
             required
           />
           <label>Fecha Expira Fin:</label>
@@ -181,7 +133,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="datetime-local"
             name="FechaExpiraFin"
             value={formData.FechaExpiraFin}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, FechaExpiraFin: e.target.value })}
             required
           />
           <label>ID Tipo Lista OK:</label>
@@ -189,7 +141,7 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="text"
             name="IdTipoListaOK"
             value={formData.IdTipoListaOK}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, IdTipoListaOK: e.target.value })}
             required
           />
           <label>ID Tipo Genera Lista OK:</label>
@@ -197,61 +149,11 @@ const PopUpAgregarLista = ({ isAddListPopupVisible, setIsAddListPopupVisible, se
             type="text"
             name="IdTipoGeneraListaOK"
             value={formData.IdTipoGeneraListaOK}
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, IdTipoGeneraListaOK: e.target.value })}
             required
           />
-          <button className='addPrice' onClick={handleAddPrecio}>Agregar Precio</button>
-          <div>
-            <label>Precios:</label>
-            <div className="precios-container" style={{ overflowX: 'auto' }}>
-              {formData.precios.map((precio, index) => (
-                <div key={index} className="precio-item">
-                  <h4>Precio {index + 1}</h4>
-                  <label>ID Producto:</label>
-                  <input
-                    type="text"
-                    name="IdProdServOK"
-                    value={precio.IdProdServOK}
-                    onChange={(e) => handlePrecioChange(index, e)}
-                    required
-                  />
-                  <label>ID Presentación:</label>
-                  <input
-                    type="text"
-                    name="IdPresentaOK"
-                    value={precio.IdPresentaOK}
-                    onChange={(e) => handlePrecioChange(index, e)}
-                    required
-                  />
-                  <label>Costo Inicial:</label>
-                  <input
-                    type="number"
-                    name="CostoIni"
-                    value={precio.CostoIni}
-                    onChange={(e) => handlePrecioChange(index, e)}
-                    required
-                  />
-                  <label>Costo Final:</label>
-                  <input
-                    type="number"
-                    name="CostoFin"
-                    value={precio.CostoFin}
-                    onChange={(e) => handlePrecioChange(index, e)}
-                    required
-                  />
-                  <label>Precio:</label>
-                  <input
-                    type="number"
-                    name="Precio"
-                    value={precio.Precio}
-                    onChange={(e) => handlePrecioChange(index, e)}
-                    required
-                  />
-                  <button type="button" onClick={() => handleDeletePrecio(index)}>Eliminar Precio</button>
-                </div>
-              ))}
-            </div>
-          </div>
+
+          {/* No es necesario el formulario de precios si no los vas a manejar */}
           <div className="button-containerAddlist">
             <span type="" className="regresar" onClick={() => setIsAddListPopupVisible(false)}>
               Regresar
