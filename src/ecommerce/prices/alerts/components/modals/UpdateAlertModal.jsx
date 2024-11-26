@@ -8,8 +8,8 @@ import * as Yup from "yup";
 import { putAlert } from '../../services/remote/put/putAlert';
 //import { addPrice } from '../../services/remote/post/AddPrice';
 //import MyAddLabels from "../elements/MyAddLabels"; 
-import axios from 'axios';
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+//import axios from 'axios';
+//import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) => {
     const [loading, setLoading] = useState(false);
@@ -20,9 +20,6 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
         initialValues: {
             _id: data?._id || "",
             fecha: data?.fecha && !isNaN(new Date(data.fecha)) ? new Date(data.fecha).toISOString().slice(0, 16) : "2024-01-01T00:00",
-            /*fecha: data?.fecha && !isNaN(Date.parse(data.fecha))
-            ? `${new Date(data.fecha).getFullYear()}-${String(new Date(data.fecha).getMonth() + 1).padStart(2, '0')}-${String(new Date(data.fecha).getDate()).padStart(2, '0')}T${String(new Date(data.fecha).getHours()).padStart(2, '0')}:${String(new Date(data.fecha).getMinutes()).padStart(2, '0')}`
-            : "2024-01-01T00:00",*/
             Activo: data?.Activo || "S",
             Borrado: data?.Borrado || "N",
             reporte: data?.reporte === "Sí" ? true : false,
@@ -30,7 +27,7 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
             detail_row_reg: data?.detail_row_reg || [
                 {
                   _id: "67156acabc57b06756104d6b",
-                  FechaReg: "2024-10-15T00:00:00.628Z",
+                  FechaReg: "2025-01-25T00:00:00.628Z",
                   UsuarioReg: "aramis"
                 }
             ]
@@ -70,7 +67,7 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
             <form onSubmit={formik.handleSubmit}>
                 <DialogTitle>
                     <Typography > {/* Cambiado de h6 a h5 */}
-                        <strong>Actualizar Precio</strong>
+                        <strong>Actualizar Alerta</strong>
                     </Typography>
                 </DialogTitle>
 

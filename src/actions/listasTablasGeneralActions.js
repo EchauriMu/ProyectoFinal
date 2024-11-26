@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 // actions/listasTablasGeneralActions.js
 export const fetchListasTablasGeneral = () => {
   return async (dispatch) => {
@@ -91,4 +93,30 @@ export const crearListaPrecios = (formData) => {
       throw error;
     }
   };
+};
+
+
+export const updateListaPrecios = (updatedData) => async (dispatch) => {
+  try {
+    dispatch({ type: 'LISTA_PRECIOS_UPDATE_REQUEST' }); // Inicio de la solicitud
+
+    // Asegúrate de que la URL sea la correcta
+    const response = await axios.put(
+      `http://localhost:3020/api/v1/listas-precios/${updatedData.idListaOK}`,
+      updatedData
+    );
+
+    dispatch({
+      type: 'LISTA_PRECIOS_UPDATE_SUCCESS',
+      payload: response.data,
+      
+    });
+    dispatch(fetchListasTablasGeneral()); // Obtener lista actualizada
+  } catch (error) {
+    dispatch({
+      type: 'LISTA_PRECIOS_UPDATE_FAIL',
+      payload: error.message,
+    });
+    console.error('Error al actualizar la lista de precios:', error.message);
+  }
 };

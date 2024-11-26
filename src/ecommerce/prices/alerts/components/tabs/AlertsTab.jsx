@@ -6,7 +6,7 @@ import PreciosTablaSimple from '../../../componentes/PreciosTablaSimple';
 import '../../assets/alertas.css';
 
 const AlertsTab = () => {
-    const [selectedListaPrecios, setSelectedListaPrecios] = useState(null); // Mueve esto dentro del componente
+    const [selectedListaPrecios, setSelectedListaPrecios] = useState(null);
 
     return (
         <div className='contenedorAlertas'>

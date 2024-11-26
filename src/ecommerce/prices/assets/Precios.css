@@ -60,18 +60,18 @@ html, body {
 }
 
 
-.Exportarbtn.inactivo{
+.Editarbtn.inactivo{
     font-size: 15px;
     padding: 4px 20px 6px 20px;
     color: white;
     border-radius: 10px;
     font-weight: 700;
     background: #e0dcff;
-    cursor: pointer;
+    cursor: not-allowed;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.Exportarbtn.activo{
+.Editarbtn.activo{
     font-size: 15px;
     padding: 4px 20px 6px 20px;
     color: white;
@@ -82,7 +82,7 @@ html, body {
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.Exportarbtn i{
+.Editarbtn i{
     font-size: 1rem;
     margin: 4px 6px 0px 0px ;
 }
