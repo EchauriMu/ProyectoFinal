@@ -60,7 +60,7 @@ const [productToEdit, setProductToEdit] = useState(null); // Para almacenar el p
   // Eliminar un producto con confirmación
   const handleDeleteClick = (idListaOK) => {
     Swal.fire({
-      title: '¿Estás seguro?',
+      title: '¿Estás seguro que deses eliminar la lista?',
       text: "¡Este cambio no se puede revertir!",
       icon: 'warning',
       showCancelButton: true,
@@ -130,7 +130,6 @@ const handleCheckboxChange = (id) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = listasTablasGeneral.slice(indexOfFirstItem, indexOfLastItem);
-  const isExportButtonActive = selectedItems.length > 0;
 
 
   return (
@@ -149,7 +148,7 @@ const handleCheckboxChange = (id) => {
   <span className="Aggbtn"  title="Agregar una lista nueva" onClick={handleAddList} >
   <i class="fa-solid fa-plus"></i>
   {/* Mostrar el PopUp solo cuando isAddListPopupVisible es true */}
-
+   Agregar Lista
   </span>
   <PopUpAgregarLista 
           isAddListPopupVisible={isAddListPopupVisible}
@@ -165,6 +164,7 @@ const handleCheckboxChange = (id) => {
   onClick={() => dispatch(fetchListasTablasGeneral())} // Llama a la acción de actualizar listas cuando se hace clic en el botón
 >
   <i className="fa-solid fa-arrows-rotate"></i>
+  Refrescar
 </span>
 
   
@@ -184,18 +184,7 @@ const handleCheckboxChange = (id) => {
 </span>
 
 
-    {/* Botón para eliminar seleccionados */}
-    <span 
-     className={`Eliminarbtn ${isExportButtonActive ? 'activo' : 'inactivo'}`}>
-   Eliminar seleccion
-  </span>
-
-
-
-
 </div>
-
-
 
 {loading ? (
   <div className="contenedorLoader">
@@ -207,72 +196,99 @@ const handleCheckboxChange = (id) => {
   </div>
 ) : (
   <table>
-            <thead>
-              <tr>
-                <th>
-                  <div className="checkbox-container">
-                    <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-                  </div>
-                </th>
-                <th>ID Inst</th>
-                <th>ID Lista</th>
-                <th>DesLista</th>
-                <th>Fecha Expira Inicio</th>
-                <th>Fecha Expira Fin</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((producto) => (
-                <tr 
-                key={producto._id} 
-                onClick={(e) => {
-                  e.stopPropagation(); // Detiene la propagación del evento
-                  handleRowClick(producto);
+  <thead>
+    <tr>
+      <th>
+        <div className="checkbox-container">
+          <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+        </div>
+      </th>
+      <th>ID Inst</th>
+      <th>ID Lista</th>
+      <th>Descripción Lista</th>
+      <th>Fecha Expira Inicio</th>
+      <th>Fecha Expira Fin</th>
+      <th>Estado</th>
+      <th>Última Fecha Registro</th>
+      <th>Último Usuario Registro</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    {currentItems.map((producto) => {
+      const isActivo = producto.detail_row?.Activo === "S" && producto.detail_row?.Borrado === "N";
+
+      return (
+        <tr
+          key={producto._id}
+          onClick={(e) => {
+            e.stopPropagation(); // Detiene la propagación del evento
+            handleRowClick(producto);
+          }}
+        >
+          <td>
+            <div className="checkbox-container">
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(producto._id)}
+                onChange={() => handleCheckboxChange(producto._id)}
+              />
+            </div>
+          </td>
+          <td>{producto.IdInstitutoOK}</td>
+          <td>{producto.IdListaOK}</td>
+          <td>{producto.DesLista}</td>
+          <td>{new Date(producto.FechaExpiraIni).toLocaleDateString()}</td>
+          <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
+          <td>
+            <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+              <span
+                style={{
+                  width: "12px",
+                  height: "12px",
+                  borderRadius: "50%",
+                  backgroundColor: isActivo ? "green" : "red",
                 }}
-              >
+              ></span>
+              {isActivo ? "Activo" : "Inactivo"}
+            </span>
+          </td>
+          <td>
+            {producto.detail_row?.detail_row_reg?.[0]?.FechaReg
+              ? new Date(producto.detail_row.detail_row_reg[0].FechaReg).toLocaleDateString()
+              : "N/A"}
+          </td>
+          <td>{producto.detail_row?.detail_row_reg?.[0]?.UsuarioReg || "N/A"}</td>
+          <td className="iconsActions">
+            <i
+              className="fa-solid fa-pen-to-square"
+              title="Agregar a la lista"
+              style={{
+                color: "green",
+                cursor: "pointer",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}
+              onClick={(e) => {
+                e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
+                handleEditClick(producto);
+              }}
+            ></i>
+            <i
+              className="fa-solid fa-trash"
+              style={{ color: "red", cursor: "pointer" }}
+              onClick={(e) => {
+                e.preventDefault(); // Evita que el clic en el ícono afecte la fila
+                handleDeleteClick(producto.IdListaOK); // Llamada a la acción de eliminación
+              }}
+            ></i>
+          </td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
 
-                  <td>
-                    <div className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(producto._id)}
-                        onChange={() => handleCheckboxChange(producto._id)}
-                      />
-                    </div>
-                  </td>
-                  <td>{producto.IdInstitutoOK}</td>
-                  <td>{producto.IdListaOK}</td>
-                  <td>{producto.DesLista}</td>
-                  <td>{new Date(producto.FechaExpiraIni).toLocaleDateString()}</td>
-                  <td>{new Date(producto.FechaExpiraFin).toLocaleDateString()}</td>
-                  <td className='iconsActions'>
-                  <i
-                  
-    className="fa-solid fa-pen-to-square"
-    title='Agregar a la lista'
-    style={{ color: 'green', cursor: 'pointer', fontWeight: 'bold', fontSize:'20px' }}
-    onClick={(e) => {
-      e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
-      handleEditClick(producto);
-    }}
-  ></i>
-
-
-<i
-  className="fa-solid fa-trash"
-  style={{ color: 'red', cursor: 'pointer' }}
-  onClick={(e) => {
-    e.preventDefault(); // Evita que el clic en el ícono afecte la fila
-    handleDeleteClick(producto.IdListaOK); // Llamada a la acción de eliminación
-  }}
-></i>
-
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
 )}
 
          
