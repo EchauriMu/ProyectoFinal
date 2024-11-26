@@ -12,8 +12,10 @@ export const AlertsProvider = ({ children, id_lista_precios }) => {
     const fetchDataAlerts = async () => {
         setLoadingTable(true);
         try {
-            const allAlerts = await getAllAlerts(id_lista_precios);
-            setAlerts(allAlerts);
+            if(id_lista_precios != undefined) {
+                const allAlerts = await getAllAlerts(id_lista_precios);
+                setAlerts(allAlerts);
+            }
         } catch (error) {
             console.error("Error al obtener las alertas:", error);
         } finally {

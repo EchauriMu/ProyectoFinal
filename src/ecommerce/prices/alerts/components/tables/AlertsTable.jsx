@@ -28,6 +28,7 @@ const AlertsTable = ({ selectedListaPrecios }) => {
 
   useEffect(() => {
     if (selectedListaPrecios) {
+      console.log("lista seleccionada: ", selectedListaPrecios);
       fetchDataAlerts();
     }
   }, [selectedListaPrecios]); // Dependencia
@@ -86,12 +87,19 @@ const AlertsTable = ({ selectedListaPrecios }) => {
         initialState={{ density: "compact", showGlobalFilter: true }}
         muiTableBodyRowProps={({ row }) => ({
           onClick: () => {
-            setSelectedAlert(row.original);
-            setSelectedRowId(row.id);
+            // Si la fila actual es la seleccionada, deseleccionar
+            if (selectedRowId === row.id) {
+              setSelectedAlert(null);
+              setSelectedRowId(null);
+            } else {
+              // Si no, seleccionar la nueva fila
+              setSelectedAlert(row.original);
+              setSelectedRowId(row.id);
+            }
           },
           sx: {
             cursor: loadingTable ? "not-allowed" : "pointer",
-            backgroundColor: selectedRowId === row.id ? darken("#EFF999", 0.01) : "inherit",
+            backgroundColor: selectedRowId === row.id ? darken("#e0e0e0", 0.01) : "inherit",
           },
         })}
         renderTopToolbarCustomActions={() => (

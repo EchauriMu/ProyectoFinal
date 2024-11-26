@@ -6,13 +6,14 @@ import SaveIcon from "@mui/icons-material/Save";
 import { addAlert } from '../../services/remote/post/AddAlert';
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const AddAlertModal = ({ showModal, setShowModal, id_lista_precios }) => {
     const [Loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
-            _id: "",
             fecha: "",
             Activo: "S",
             Borrado: "N",
@@ -27,7 +28,6 @@ const AddAlertModal = ({ showModal, setShowModal, id_lista_precios }) => {
             ]
         },
         validationSchema: Yup.object({
-            _id: Yup.string().required("El ID es obligatorio"),
             fecha: Yup.date().required("La fecha es obligatoria"),
             reporte: Yup.boolean().required("El reporte es obligatorio"),
             mensaje: Yup.string().required("El mensaje es obligatorio")
@@ -37,6 +37,7 @@ const AddAlertModal = ({ showModal, setShowModal, id_lista_precios }) => {
             values.fecha = `${values.fecha}:00.000Z`;
             console.log("Valores enviados:", values);
             try {
+                //console.log("id: ", id_lista_precios);
                 await addAlert(id_lista_precios, values); // Llama a la API o función para agregar la alerta
                 setShowModal(false);
                 console.log("Alerta agregada con éxito:", values);
@@ -58,16 +59,6 @@ const AddAlertModal = ({ showModal, setShowModal, id_lista_precios }) => {
 
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column' }} dividers>
                     <TextField
-                        id="_id"
-                        label="ID"
-                        required
-                        value={formik.values._id}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={formik.touched._id && Boolean(formik.errors._id)}
-                        helperText={formik.touched._id && formik.errors._id}
-                    />
-                    <TextField
                         id="fecha"
                         label="Fecha"
                         type="datetime-local"
@@ -79,21 +70,18 @@ const AddAlertModal = ({ showModal, setShowModal, id_lista_precios }) => {
                         error={formik.touched.fecha && Boolean(formik.errors.fecha)}
                         helperText={formik.touched.fecha && formik.errors.fecha}
                     />
-                    <TextField
-                        id="reporte"
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                            id="reporte"
+                            checked={formik.values.reporte}
+                            onChange={(e) => formik.setFieldValue("reporte", e.target.checked)}
+                            onBlur={formik.handleBlur}
+                            />
+                        }
                         label="Reporte"
-                        select
-                        SelectProps={{ native: true }}
-                        required
-                        value={formik.values.reporte}
-                        onChange={(e) => formik.setFieldValue("reporte", e.target.value === "true")}
-                        onBlur={formik.handleBlur}
-                        error={formik.touched.reporte && Boolean(formik.errors.reporte)}
-                        helperText={formik.touched.reporte && formik.errors.reporte}
-                    >
-                        <option value={true}>Sí</option>
-                        <option value={false}>No</option>
-                    </TextField>
+                    />
+
                     <TextField
                         id="mensaje"
                         label="Mensaje*"

@@ -5,7 +5,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { putAlert } from '../../services/remote/put/putAlert';
+import { putAlert } from '../../services/remote/put/PutAlert';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 //import { addPrice } from '../../services/remote/post/AddPrice';
 //import MyAddLabels from "../elements/MyAddLabels"; 
 //import axios from 'axios';
@@ -73,16 +75,16 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
 
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column' }} dividers>
                 <TextField
-                        id="_id"
-                        label="ID"
-                        required
-                        value={formik.values._id}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={formik.touched._id && Boolean(formik.errors._id)}
-                        helperText={formik.touched._id && formik.errors._id}
-                        disabled
-                    />
+                    id="_id"
+                    label="ID"
+                    required
+                    value={formik.values._id}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched._id && Boolean(formik.errors._id)}
+                    helperText={formik.touched._id && formik.errors._id}
+                    style={{ display: 'none' }} // Estilo para ocultar el campo
+                />
                     <TextField
                         id="fecha"
                         label="Fecha"
@@ -96,21 +98,17 @@ const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) =
                         helperText={formik.touched.fecha && formik.errors.fecha}
                     />
 
-                    <TextField
-                        id="reporte"
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                            id="reporte"
+                            checked={formik.values.reporte}
+                            onChange={(e) => formik.setFieldValue("reporte", e.target.checked)}
+                            onBlur={formik.handleBlur}
+                            />
+                        }
                         label="Reporte"
-                        select
-                        SelectProps={{ native: true }}
-                        required
-                        value={formik.values.reporte}
-                        onChange={(e) => formik.setFieldValue("reporte", e.target.value === "true")}
-                        onBlur={formik.handleBlur}
-                        error={formik.touched.reporte && Boolean(formik.errors.reporte)}
-                        helperText={formik.touched.reporte && formik.errors.reporte}
-                    >
-                        <option value={true}>Sí</option>
-                        <option value={false}>No</option>
-                    </TextField>
+                    />
                     <TextField
                         id="mensaje"
                         label="Mensaje*"
