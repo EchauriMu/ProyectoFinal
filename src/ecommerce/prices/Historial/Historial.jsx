@@ -80,22 +80,23 @@ const Historial = () => {
  
 
 
-const handleDeleteRegistro = (registroId) => {
+const handleDeleteSelected = (registroIds) => {
   confirmAlert({
     title: 'Confirmación de eliminación',
-    message: '¿Estás seguro de eliminar este registro?',
+    message: '¿Estás seguro de eliminar los registros seleccionados?',
     buttons: [
       {
         label: 'Sí',
         onClick: () => {
-          axios
-            .delete(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${selectedPresentaOK.IdPresentaOK}/${registroId}`)
+          const deletePromises = registroIds.map((id) =>
+            axios.delete(`${import.meta.env.VITE_REST_API_PRECIOS}/historial/${selectedLista.IdListaOK}/historial/${selectedPresentaOK.IdPresentaOK}/${id}`)
+          );
+
+          Promise.all(deletePromises)
             .then(() => {
-              setRegistros((prevRegistros) =>
-                prevRegistros.filter((registro) => registro.Id !== registroId)
-              );
+              fetchRegistros(selectedPresentaOK.IdPresentaOK); // Recargar registros
             })
-            .catch((error) => console.error('Error al eliminar registro:', error));
+            .catch((error) => console.error('Error al eliminar registros:', error));
         },
       },
       { label: 'No' },
@@ -117,9 +118,9 @@ const handleDeleteRegistro = (registroId) => {
 
   const handlePresentaOKClick = (presentaOK) => {
     setSelectedPresentaOK(presentaOK);
-    fetchRegistros(presentaOK.IdPresentaOK); // Llamar a la función para obtener registros
+    setRegistros([]); // Limpia los registros actuales antes de cargar nuevos
+    fetchRegistros(presentaOK.IdPresentaOK); // Llama para obtener los nuevos registros
   };
-
 
 
 
@@ -144,12 +145,12 @@ const handleDeleteRegistro = (registroId) => {
 
         {selectedPresentaOK && (
           <RegistroHistorial
-            presentaOK={selectedPresentaOK}
-            registros={registros} // Pasar los registros dinámicos
-            onEditRegistro={handleEditRegistro}
-            onDeleteRegistro={handleDeleteRegistro}
-            onAddRegistro={handleAddRegistro}
-          />
+          presentaOK={selectedPresentaOK}
+          registros={registros}
+          onEditRegistro={handleEditRegistro}
+          onAddRegistro={handleAddRegistro}
+          onDeleteSelected={handleDeleteSelected} // Pasar la nueva función
+        />
         )}
 
 

@@ -60,6 +60,7 @@
   font-size: 14px;
   padding: 6px 8px 6px 0px;
   border-bottom: 1px solid #ddd;
+  padding-left: 12x;
 }
 
 .historialListas tbody tr {
@@ -438,4 +439,27 @@
 
 .encabezadoagregar button {
   margin-left: 10px; /* Espacio entre el texto y el botón si es necesario */
+}
+/* Estilo base para ocultar el checkbox original */
+.checkdeleteregistro {
+  appearance: none; /* Oculta el checkbox por defecto */
+  width: 24px; /* Tamaño del cuadro */
+  height: 24px; /* Tamaño del cuadro */
+  border: 2px solid #007bff; /* Borde azul */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin-left: 10px;
+}
+
+/* Estilo cuando el checkbox está marcado */
+.checkdeleteregistro:checked {
+  background-color: #007bff; /* Rellena de azul */
+  border-color: #0056b3; /* Cambia el borde a un azul más oscuro */
+}
+
+/* Opcional: Cambiar el ícono al pasar el mouse */
+.checkdeleteregistro:hover {
+  border-color: #0056b3; /* Borde azul oscuro */
 }

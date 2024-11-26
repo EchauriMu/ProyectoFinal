@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
-const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRegistro }) => {
+const RegistroHistorial = ({
+  presentaOK,
+  registros,
+  onEditRegistro,
+  onAddRegistro,
+  onDeleteSelected, // Nueva función para eliminar seleccionados
+}) => {
+  const [selectedRegistros, setSelectedRegistros] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -9,6 +16,16 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRe
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = registros.slice(indexOfFirstItem, indexOfLastItem); // Usar registros dinámicos
+
+  useEffect(() => {
+    setSelectedRegistros([]); // Reinicia selección
+    setCurrentPage(1); // Reinicia la paginación
+  }, [registros]);
+
+
+  useEffect(() => {
+    setCurrentPage(1); // Reiniciar la página al cargar nuevos registros
+  }, [registros]);
 
 
   const handleItemsPerPageChange = (e) => {
@@ -18,7 +35,7 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRe
 
 
   const handleNextPage = () => {
-    if (indexOfLastItem < presentaOK.historial.length) {
+    if (indexOfLastItem < registros.length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -29,6 +46,24 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRe
       setCurrentPage(currentPage - 1);
     }
   };
+
+
+  // Manejar selección de checkbox
+  const handleCheckboxChange = (id) => {
+    setSelectedRegistros((prev) =>
+      prev.includes(id) ? prev.filter((regId) => regId !== id) : [...prev, id]
+    );
+  };
+
+  // Seleccionar o deseleccionar todos
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedRegistros(currentItems.map((registro) => registro.Id));
+    } else {
+      setSelectedRegistros([]);
+    }
+  };
+  
 
 
 
@@ -42,10 +77,26 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRe
           <button className="btn-agregar-registro" onClick={onAddRegistro}>
             <i className="fa-solid fa-plus"></i>
           </button>
+         <i
+          className="fa-solid fa-trash action-icon delete"
+          style={{
+            color: selectedRegistros.length === 0 ? 'gray' : 'red',
+            cursor: selectedRegistros.length === 0 ? 'not-allowed' : 'pointer',
+            fontSize: '30px',
+          }}
+          onClick={() => selectedRegistros.length > 0 && onDeleteSelected(selectedRegistros)}
+        ></i>
         </div>
           <table>
             <thead>
               <tr>
+                  <th>
+                  <input
+                    type="checkbox" className='checkdeleteregistro'
+                    onChange={handleSelectAll}
+                    checked={selectedRegistros.length === registros.length && registros.length > 0}
+                  />
+                </th>
                 <th>ID</th>
                 <th>Fecha</th>
                 <th>Acciones</th>
@@ -54,6 +105,13 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRe
             <tbody>
             {currentItems.map((registro) => (
               <tr key={registro.Id}>
+                <td>
+                <input
+                  type="checkbox" className='checkdeleteregistro'
+                  checked={selectedRegistros.includes(registro.Id)}
+                  onChange={() => handleCheckboxChange(registro.Id)}
+                />
+              </td>
                 <td>{registro.Id}</td>
                 <td>{registro.detail_row?.detail_row_reg?.[0]?.FechaReg || 'Sin fecha'}</td>
                 <td>
@@ -62,11 +120,7 @@ const RegistroHistorial = ({ registros, onEditRegistro, onDeleteRegistro,onAddRe
                     style={{ color: 'blue', cursor: 'pointer' }}
                     onClick={() => onEditRegistro(registro)}
                   ></i>
-                  <i
-                    className="fa-solid fa-trash action-icon delete"
-                    style={{ color: 'red', cursor: 'pointer' }}
-                    onClick={() => onDeleteRegistro(registro.Id)}
-                  ></i>
+                  
                 </td>
               </tr>
             ))}
