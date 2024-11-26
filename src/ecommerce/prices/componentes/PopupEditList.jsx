@@ -28,17 +28,17 @@ const PopupEditList = ({ isVisible, setIsVisible, productToEdit, setProductToEdi
   }, [productToEdit]);
 
   // Guardar cambios
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault();
+
     if (!desLista || !fechaExpiraIni || !fechaExpiraFin) {
       Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
       return;
     }
 
-    // Obtener usuario y fecha de registro desde sessionStorage
-    const usuarioReg = sessionStorage.getItem('usuario') || 'UsuarioDesconocido'; // Valor predeterminado si no existe
-    const fechaReg = new Date().toISOString(); // Fecha actual en formato ISO
-
-    // Formar el cuerpo de solicitud de acuerdo al formato esperado por la API
+    // Preparar los datos para la actualización
+    const usuarioReg = sessionStorage.getItem('usuario') || 'UsuarioDesconocido';
+    const fechaReg = new Date().toISOString();
     const updatedData = {
       idListaOK: productToEdit.IdListaOK,
       desLista,
@@ -56,17 +56,41 @@ const PopupEditList = ({ isVisible, setIsVisible, productToEdit, setProductToEdi
       ],
     };
 
-    try {
-      // Enviar los datos a través del servicio Redux
-      dispatch(updateListaPrecios(updatedData));
-
-      // Mostrar mensaje de éxito
-      Swal.fire('Éxito', 'Lista de precios actualizada correctamente.', 'success');
-      setIsVisible(false);
-    } catch (error) {
-      Swal.fire('Error', 'No se pudo actualizar la lista de precios.', 'error');
-      console.error('Error al guardar los cambios:', error);
-    }
+    // Mostrar mensaje de confirmación
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres guardar los cambios en esta lista de precios?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, guardar!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Despachar la acción de Redux
+        dispatch(updateListaPrecios(updatedData))
+          .then(() => {
+            // Mostrar éxito
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Lista de precios actualizada correctamente!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setIsVisible(false); // Cerrar el popup
+          })
+          .catch((err) => {
+            console.error('Error al guardar:', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error al guardar',
+              text: err.message || 'Hubo un problema al actualizar la lista de precios.',
+            });
+          });
+      } else {
+        Swal.fire('Cancelado', 'No se realizaron cambios.', 'info');
+      }
+    });
   };
 
   return (
