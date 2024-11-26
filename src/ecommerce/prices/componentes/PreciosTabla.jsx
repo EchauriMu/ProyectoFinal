@@ -261,14 +261,9 @@ const handleCheckboxChange = (id) => {
           <td>{producto.detail_row?.detail_row_reg?.[0]?.UsuarioReg || "N/A"}</td>
           <td className="iconsActions">
             <i
-              className="fa-solid fa-pen-to-square"
-              title="Agregar a la lista"
-              style={{
-                color: "green",
-                cursor: "pointer",
-                fontWeight: "bold",
-                fontSize: "20px",
-              }}
+              className="fa-solid fa-plus"
+              title='Agregar a la lista'
+              style={{ color: 'green', cursor: 'pointer', fontWeight: 'bold', fontSize:'20px' }}
               onClick={(e) => {
                 e.stopPropagation(); // Evita que el clic en el ícono afecte la fila
                 handleEditClick(producto);
