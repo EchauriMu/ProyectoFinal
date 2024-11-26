@@ -63,7 +63,7 @@ const Graficas = ({ product }) => {
   if (error)
     return (
       <div className="error">
-        Error al cargar los datos: {error}
+        Error al cargar los datos: No se encuentran Precios (Lista vacia)
         <button onClick={handleRefresh} className="btn-retry">
           Reintentar
         </button>
