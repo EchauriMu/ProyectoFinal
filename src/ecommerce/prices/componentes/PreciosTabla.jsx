@@ -148,7 +148,7 @@ const handleCheckboxChange = (id) => {
   <span className="Aggbtn"  title="Agregar una lista nueva" onClick={handleAddList} >
   <i class="fa-solid fa-plus"></i>
   {/* Mostrar el PopUp solo cuando isAddListPopupVisible es true */}
-   Agregar Lista
+   
   </span>
   <PopUpAgregarLista 
           isAddListPopupVisible={isAddListPopupVisible}
@@ -164,7 +164,7 @@ const handleCheckboxChange = (id) => {
   onClick={() => dispatch(fetchListasTablasGeneral())} // Llama a la acción de actualizar listas cuando se hace clic en el botón
 >
   <i className="fa-solid fa-arrows-rotate"></i>
-  Refrescar
+ 
 </span>
 
   
