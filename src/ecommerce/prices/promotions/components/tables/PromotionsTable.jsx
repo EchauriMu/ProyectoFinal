@@ -77,7 +77,6 @@ const PromotionsTable = ({ selectedListaPrecios }) => {
       }
     }
   };
-  
 
   return (
     <Box>

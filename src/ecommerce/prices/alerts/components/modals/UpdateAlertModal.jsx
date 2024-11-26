@@ -6,10 +6,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { putAlert } from '../../services/remote/put/putAlert';
-//import { addPrice } from '../../services/remote/post/AddPrice';
-//import MyAddLabels from "../elements/MyAddLabels"; 
-//import axios from 'axios';
-//import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const UpdateAlertModal = ({ showModal, setShowModal, data , id_lista_precios}) => {
     const [loading, setLoading] = useState(false);

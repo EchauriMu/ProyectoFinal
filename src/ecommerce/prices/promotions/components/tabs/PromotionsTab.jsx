@@ -9,7 +9,7 @@ const PromotionsTab = () => {
     const [selectedListaPrecios, setSelectedListaPrecios] = useState(null); // Mueve esto dentro del componente
 
     return (
-        <div>
+        <div className='contenedorPromociones'>
             <PreciosProvider> 
                 <PreciosTablaSimple onRowClick={setSelectedListaPrecios} />
             </PreciosProvider>
