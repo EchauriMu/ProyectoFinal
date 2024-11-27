@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const putPrecio = async (id, data) => {
+export const putPrecio = async (id,idPresentaOK, data) => {
     return new Promise((resolve, reject) => {
         axios
-          .put(`${import.meta.env.VITE_REST_API_ECOMMERCE}/listas-precios/${id}`,data)
+          .put(`${import.meta.env.VITE_REST_API_ECOMMERCE}/listas-precios/${id}/precio/1`,data)
           .then((response) => {
             const data = response.data;
     

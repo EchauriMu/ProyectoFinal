@@ -35,8 +35,6 @@ export const PreciosProvider = ({ children }) => {
   //Validación de Yup
   const validationSchema = Yup.object({
     IdPresentaOK: Yup.number()
-    .typeError("La presentación debe ser un número.") // Mensaje si no es numérico
-    .integer("La presentación no puede tener decimales.") // Valida que sea un número entero
     .required("La presentación es obligatoria."),
     IdTipoFormulaOK: Yup.string().required("El tipo de fórmula es obligatorio."),
     Formula: Yup.string().required("La fórmula es obligatoria."),
